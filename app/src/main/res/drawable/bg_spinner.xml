@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <stroke
+                        android:width="@dimen/dp1"
+                        android:color="@color/color_border" />
+                    <solid android:color="@color/colorWhite" />
+                    <corners android:radius="@dimen/dp33" />
+                </shape>
+            </item>
+
+            <item
+                android:drawable="@drawable/ic_login_other"
+                android:gravity="center_vertical|end"
+                android:right="@dimen/dp12" />
+        </layer-list>
+    </item>
+</selector>

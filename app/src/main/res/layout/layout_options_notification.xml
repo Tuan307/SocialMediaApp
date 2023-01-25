@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:padding="@dimen/dp16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_wallet_balance"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_read"
+                fontPath="fonts/Roboto-Medium.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="@dimen/dp28"
+                android:paddingTop="@dimen/dp20"
+                android:paddingEnd="@dimen/dp28"
+                android:text="@string/str_tick"
+                android:paddingBottom="@dimen/dp16"
+                android:textColor="@color/color_body_text"
+                android:textSize="@dimen/sp14"
+                app:drawableStartCompat="@drawable/ic_tick" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp1"
+                android:background="@color/color_line"
+                android:paddingStart="@dimen/dp28"
+                android:paddingEnd="@dimen/dp28" />
+
+            <TextView
+                android:id="@+id/tv_delete"
+                fontPath="fonts/Roboto-Medium.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp16"
+                android:gravity="center"
+                android:paddingStart="@dimen/dp28"
+                android:paddingEnd="@dimen/dp28"
+                android:paddingBottom="@dimen/dp20"
+                android:text="@string/str_delete_notification"
+                android:textColor="@color/color_body_text"
+                android:textSize="@dimen/sp14"
+                app:drawableStartCompat="@drawable/ic_delete" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="@drawable/bg_wallet_balance"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp28"
+            android:paddingTop="@dimen/dp14"
+            android:paddingEnd="@dimen/dp28"
+            android:paddingBottom="@dimen/dp14"
+            android:text="@string/str_cancel"
+            android:textColor="@color/color_body_text"
+            android:textSize="@dimen/sp14"
+            app:drawableStartCompat="@drawable/ic_cancel" />
+
+    </LinearLayout>
+</layout>

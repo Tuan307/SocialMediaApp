@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#ff6c2f</color>
+    <color name="primaryLightColor">#ff9e5d</color>
+    <color name="primaryDarkColor">#c53a00</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="error_color">@android:color/holo_red_light</color>
+    <color name="light_text_color">#FFFFFFFF</color>
+    <color name="text_color">#333333</color>
+    <color name="hint_text_color">#B7B7B7</color>
+    <color name="regular_price_color">#cbcbcb</color>
+    <color name="inactive_text_color">#8D8D8D</color>
+    <color name="background_splash_color">#FF6C2F</color>
+    <color name="background_header_color">@color/primaryColor</color>
+    <color name="icon_color_bottom_normal">@color/primaryLightColor</color>
+    <color name="icon_color_bottom_selected">@color/primaryColor</color>
+    <color name="icon_color_normal">#B7B7B7</color>
+
+    <color name="colorPrimary">#03CB83</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#03CB83</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorOpacity">#32000000</color>
+    <color name="colorGrayBg">#F6F6F6</color>
+    <color name="colorGray">#F2F2F2</color>
+    <color name="colorGrayText">#B2B2B2</color>
+    <color name="colorGrayDark">#D9D9D9</color>
+    <color name="colorOpacityWhite">#32ffffff</color>
+    <color name="colorYellow">#FFEBAC</color>
+    <color name="colorYellowDark">#FFCD36</color>
+    <color name="color_border">#E8EFF3</color>
+    <color name="color_hint">#95A6B7</color>
+    <color name="color_text">#110E22</color>
+    <color name="color_bg_sp">#FBFCFE</color>
+    <color name="color_body_text">#707A8A</color>
+    <color name="color_background">#E5E5E5</color>
+    <color name="color_welcome">#322C68</color>
+    <color name="color_blue">#1593F6</color>
+    <color name="color_icon_focus">#03AD67</color>
+    <color name="color_icon_unfocus">#A6B0CF</color>
+    <color name="color_gray">#D5E1ED</color>
+    <color name="color_yellow">#FFA800</color>
+    <color name="color_red">#FF4B4B</color>
+    <color name="color_bg">#F6F8FD</color>
+    <color name="color_line">#E0E0E0</color>
+    <color name="color_out_of_stock">#FF7373</color>
+    <color name="color_message_content">#545F70</color>
+    <color name="color_message_title">#3A3B42</color>
+
+</resources>

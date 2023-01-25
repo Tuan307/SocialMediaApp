@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="InputEdittextCustom">
+        <attr name="titleEditText" format="string" />
+        <attr name="hintEditText" format="string" />
+        <attr name="inputPhone" format="boolean" />
+        <attr name="inputPass" format="boolean" />
+        <attr name="inputNumber" format="boolean" />
+        <attr name="maxLength" format="integer" />
+        <attr name="multiLine" format="boolean"/>
+        <attr name="actionDone" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="InfoProduct">
+        <attr name="goneLine" format="boolean" />
+    </declare-styleable>
+</resources>
