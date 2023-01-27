@@ -85,9 +85,4 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
         imagePath = uri?.let { getFileExtension(it) }
     }
 
-    private fun getFileExtension(uri: Uri): String? {
-        val contentResolver = contentResolver
-        val map = MimeTypeMap.getSingleton()
-        return map.getExtensionFromMimeType(contentResolver.getType(uri))
-    }
 }

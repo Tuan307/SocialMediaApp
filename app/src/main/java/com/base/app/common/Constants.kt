@@ -66,7 +66,7 @@ const val AUTO_DELETE = "AutoDelete"
 
 const val IMAGE_URL =
     "https://firebasestorage.googleapis.com/v0/b/social-app-5e237.appspot.com/o/images.png?alt=media&token=21412571-7fed-4592-9026-cded90f2f718"
-
+const val STORAGE_URL = "gs://social-app-5e237.appspot.com"
 const val FIREBASE_URL =
     "https://social-app-5e237-default-rtdb.asia-southeast1.firebasedatabase.app"
 //    "https://socialmobileapp-b0f74-default-rtdb.asia-southeast1.firebasedatabase.app"

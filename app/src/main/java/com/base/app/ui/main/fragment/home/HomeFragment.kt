@@ -9,8 +9,8 @@ import com.base.app.base.fragment.BaseFragment
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.PostItem
 import com.base.app.databinding.FragmentHome2Binding
+import com.base.app.ui.add_post.PostActivity
 import com.base.app.ui.comment.CommentActivity
-import com.esafirm.imagepicker.features.registerImagePicker
 
 class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     PostAdapter.IPostCallBack {
@@ -27,11 +27,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     private val viewModel by viewModels<HomeViewModel>()
     private lateinit var homeAdapter: PostAdapter
-    private val imagePickerLauncher = registerImagePicker {
-        imagesPicker.clear()
-        imagesPicker.addAll(it)
-        handleImagePicker()
-    }
+
 
     override fun getContentLayout(): Int {
         return R.layout.fragment_home2
@@ -51,7 +47,8 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun initListener() {
         binding.imgAdd.setOnClickListener {
-            //imagePickerLauncher.launch(createConfig(true, 1))
+            startActivity(Intent(requireContext(), PostActivity::class.java))
+
         }
         viewModel.getLastKey()
         viewModel.getData()
@@ -117,22 +114,5 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         //do later
     }
 
-    private fun handleImagePicker() {
-//        if (imagesPicker.size > 0) {
-//            viewModel.createImage(this, imagesPicker)
-//            val image = imagesPicker[0]
-//            val file = File(image.path)
-//            val requestFile = file
-//                .asRequestBody("image/jpg".toMediaTypeOrNull())
-//            val fileName =
-//                CommonUtils.getRandomString() + System.currentTimeMillis() + file.name
-//            body = MultipartBody.Part.createFormData(
-//                "image",
-//                fileName,
-//                requestFile
-//            )
-//            viewModel.uploadAvatar(body)
-//        }
-    }
 
 }

@@ -13,6 +13,7 @@ import com.base.app.databinding.FragmentMyProfileBinding
 import com.base.app.ui.edit_profile.EditProfileActivity
 import com.base.app.ui.main.MainViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
+import com.base.app.ui.options.OptionActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 
@@ -45,6 +46,9 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     override fun initListener() {
+        binding.imgOptions.setOnClickListener {
+            startActivity(Intent(requireContext(), OptionActivity::class.java))
+        }
         binding.btnFollowProfile.setOnClickListener {
             if (binding.btnFollowProfile.text.toString().lowercase() == "follow") {
                 viewModel.followUser(true, idKey)

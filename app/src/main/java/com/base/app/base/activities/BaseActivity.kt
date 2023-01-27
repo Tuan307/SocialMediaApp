@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
 import android.view.*
+import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -370,5 +372,11 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
         viewModel.isLoading.observe(viewLifecycleOwner, EventObserver { isShow ->
             showLoading(isShow)
         })
+    }
+
+    fun getFileExtension(uri: Uri): String? {
+        val contentResolver = contentResolver
+        val map = MimeTypeMap.getSingleton()
+        return map.getExtensionFromMimeType(contentResolver.getType(uri))
     }
 }

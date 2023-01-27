@@ -8,7 +8,9 @@ import com.base.app.base.network.NetworkErrorException
 import com.base.app.common.Event
 import com.base.app.common.FIREBASE_URL
 import com.base.app.common.PPREF_PIN_STATUS
+import com.base.app.common.STORAGE_URL
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -19,10 +21,11 @@ import kotlinx.coroutines.Job
 
 abstract class BaseViewModel : ViewModel() {
 
-    private val storage = Firebase.storage("gs://social-app-5e237.appspot.com")
+    private val storage = Firebase.storage(STORAGE_URL)
     val storageRef = storage.reference
     var uploadTask: UploadTask? = null
     val databaseReference: DatabaseReference = Firebase.database(FIREBASE_URL).reference
+    val auth = Firebase.auth
     val firebaseAuth = FirebaseAuth.getInstance()
     val firebaseUser = firebaseAuth.currentUser
     val isLoadingProgress: MutableLiveData<Boolean> = MutableLiveData()

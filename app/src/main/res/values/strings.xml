@@ -475,4 +475,9 @@
     <string name="add_a_comment">Add a comment...</string>
     <string name="post">Post</string>
     <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="description">Description</string>
+    <string name="upload">Upload</string>
+    <string name="notifications">Notifications</string>
 </resources>

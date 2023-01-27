@@ -62,7 +62,7 @@
                 android:layout_width="@dimen/dp80"
                 android:layout_height="@dimen/dp80"
                 android:layout_marginTop="@dimen/dp10"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/ic_image_example"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editProfileAppBar" />
