@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/colorBlack"
         tools:context=".ui.add_post.PostActivity">
 
         <androidx.appcompat.widget.Toolbar
@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp10"
-            android:background="@color/white"
             app:contentInsetLeft="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -44,8 +43,10 @@
             android:layout_marginTop="@dimen/dp20"
             android:ellipsize="end"
             android:hint="@string/description"
+            android:backgroundTint="@color/colorWhite"
             android:maxLines="5"
-            android:textColor="@color/black"
+            android:textColorHint="@color/color_app_text"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp18"
             app:layout_constraintTop_toBottomOf="@+id/imgUploadImage" />
 
@@ -56,9 +57,10 @@
             android:layout_marginHorizontal="@dimen/dp32"
             android:layout_marginBottom="@dimen/dp32"
             android:background="@drawable/bg_btn"
-            android:backgroundTint="@color/colorButton"
+            android:backgroundTint="@color/color_bottom_nav"
             android:text="@string/upload"
             android:textAllCaps="false"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/sp18"
             app:layout_constraintBottom_toBottomOf="parent"

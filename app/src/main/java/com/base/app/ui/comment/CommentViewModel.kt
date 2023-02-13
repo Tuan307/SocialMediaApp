@@ -19,7 +19,7 @@ class CommentViewModel : BaseViewModel() {
 
     var getImageResponse = MutableLiveData<String?>()
     fun getImage() {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseUser?.let {
                 databaseReference.child("Users").child(it.uid)
                     .addValueEventListener(object : ValueEventListener {
@@ -43,7 +43,7 @@ class CommentViewModel : BaseViewModel() {
         userName: TextView,
         publisherId: String
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseUser?.let {
                 databaseReference.child("Users").child(publisherId)
                     .addValueEventListener(object : ValueEventListener {
@@ -65,7 +65,8 @@ class CommentViewModel : BaseViewModel() {
     var getCommentResponse = MutableLiveData<ArrayList<Comment>>()
     private var comments = ArrayList<Comment>()
     fun readComments(postId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        showLoading(true)
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Comments").child(postId)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -77,6 +78,7 @@ class CommentViewModel : BaseViewModel() {
                             }
                         }
                         getCommentResponse.postValue(comments)
+                        registerJobFinish()
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -87,7 +89,7 @@ class CommentViewModel : BaseViewModel() {
 
     var addCommentResponse = MutableLiveData<Boolean>()
     fun addComments(postId: String, comment: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             val key = databaseReference.push().key.toString()
             val hashMap = HashMap<String, Any>()
             hashMap["comment"] = comment
@@ -101,6 +103,18 @@ class CommentViewModel : BaseViewModel() {
                         addCommentResponse.postValue(false)
                     }
                 }
+        }
+    }
+
+    fun addNotifications(postId: String, comment: String, publisherId: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            val hashMap = HashMap<String, Any>()
+            hashMap["userid"] = firebaseUser?.uid.toString()
+            hashMap["postid"] = postId
+            hashMap["text"] = "commented: $comment"
+            hashMap["ispost"] = true
+            databaseReference.child("Notifications").child(publisherId)
+                .push().setValue(hashMap)
         }
     }
 }

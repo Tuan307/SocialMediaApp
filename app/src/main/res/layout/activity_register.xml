@@ -7,11 +7,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FBFBFB"
+        android:background="@color/colorBlack"
         tools:context=".ui.register.RegisterActivity">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imgBack"
+            app:cardBackgroundColor="@color/colorBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp32"
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
             android:text="@string/str_register"
-            android:textColor="@color/black"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp24"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/imgBack"
@@ -45,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp4"
             android:text="@string/str_input"
-            android:textColor="@color/color_body_text"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp14"
             app:layout_constraintStart_toStartOf="@+id/txtRegister"
             app:layout_constraintTop_toBottomOf="@+id/txtRegister" />
@@ -122,6 +123,7 @@
             android:layout_marginTop="@dimen/dp20"
             android:textSize="@dimen/sp14"
             android:textStyle="normal"
+            android:textColor="@color/color_app_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnRegister"

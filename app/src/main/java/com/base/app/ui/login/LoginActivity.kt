@@ -16,7 +16,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     override fun getContentLayout(): Int = R.layout.activity_login
 
     override fun initView() {
-        //registerObserverLoadingEvent(viewModel, this)
+        registerObserverLoadingEvent(viewModel, this@LoginActivity)
         binding.tvRegister.text =
             HtmlCompat.fromHtml(
                 resources.getString(R.string.str_start_register),
@@ -24,8 +24,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             )
         binding.edtInputAccount.setInfoEdt(R.drawable.ic_user)
         binding.edtInputPassword.setInfoEdt(R.drawable.ic_password)
-        binding.edtInputPassword.setText("123456")
         binding.edtInputAccount.setText("tuanprokt44@gmail.com")
+        binding.edtInputPassword.setText("123456")
     }
 
     override fun initListener() {

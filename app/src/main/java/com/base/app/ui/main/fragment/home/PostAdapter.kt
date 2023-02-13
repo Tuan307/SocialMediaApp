@@ -1,10 +1,15 @@
 package com.base.app.ui.main.fragment.home
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper.getMainLooper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.base.app.R
+import com.base.app.common.CommonUtils
 import com.base.app.data.models.PostItem
 import com.base.app.databinding.LayoutHomeAdapterBinding
 import com.bumptech.glide.Glide
@@ -46,9 +51,60 @@ class PostAdapter(
                 data.postid?.let { viewModel.getPostLikes(txtLikeNumber, it) }
                 //data.postid?.let { viewModel.getPostDisLikes(txtUnLikeNumber, it) }
                 data.postid?.let { viewModel.countComments(txtViewAllComments, it) }
-
+                imgMore.setOnClickListener {
+                    val popupMenu = PopupMenu(context, it)
+                    popupMenu.inflate(R.menu.post_item)
+                    popupMenu.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.delete -> {
+                                data.postid?.let { it1 -> iPostCallBack.deleteImage(it1) }
+                            }
+                            R.id.edit -> {
+                                data.postid?.let { it1 -> iPostCallBack.editImage(it1) }
+                            }
+                            R.id.download -> {
+                                data.postimage?.let { it1 ->
+                                    iPostCallBack.downloadImage(
+                                        "Post from meme app",
+                                        it1
+                                    )
+                                }
+                            }
+                        }
+                        true
+                    }
+                    if (data.publicher != viewModel.firebaseUser?.uid.toString()) {
+                        popupMenu.menu.findItem(R.id.edit).isVisible = false
+                        popupMenu.menu.findItem(R.id.delete).isVisible = false
+                    }
+                    popupMenu.show()
+                }
+                imgPost.setOnClickListener {
+                    if (CommonUtils.isDoubleClick()) {
+                        imgDoubleClick.visibility = View.VISIBLE
+                        Handler(getMainLooper()).postDelayed({
+                            imgDoubleClick.visibility = View.INVISIBLE
+                        }, 1000)
+                        data.postid?.let { it1 ->
+                            data.publicher?.let { it2 ->
+                                iPostCallBack.doubleClickLikePost(
+                                    it1,
+                                    imgHeart.tag.toString(),
+                                    it2
+                                )
+                            }
+                        }
+                    }
+                }
                 imgHeart.setOnClickListener {
-                    data.postid?.let { it1 -> iPostCallBack.likePost(it1, imgHeart.tag.toString()) }
+                    data.postid?.let { it1 ->
+                        data.publicher?.let { it2 ->
+                            iPostCallBack.likePost(
+                                it1, imgHeart.tag.toString(),
+                                it2
+                            )
+                        }
+                    }
                 }
                 imgComment.setOnClickListener {
                     if (data.postid != null && data.publicher != null) {
@@ -90,10 +146,13 @@ class PostAdapter(
 
     interface IPostCallBack {
         fun clickPost(postId: String, publisherId: String)
-        fun likePost(postId: String, status: String)
-        fun disLikePost(postId: String)
+        fun likePost(postId: String, status: String, publisherId: String)
         fun commentPost(postId: String, publisherId: String)
         fun savePost(postId: String, status: String)
         fun sharePost(postId: String)
+        fun doubleClickLikePost(postId: String, status: String, publisherId: String)
+        fun downloadImage(fileName: String, postId: String)
+        fun editImage(postId: String)
+        fun deleteImage(postId: String)
     }
 }

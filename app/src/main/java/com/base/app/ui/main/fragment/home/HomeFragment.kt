@@ -1,9 +1,20 @@
 package com.base.app.ui.main.fragment.home
 
+import android.app.AlertDialog
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.widget.EditText
+import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
@@ -11,9 +22,12 @@ import com.base.app.data.models.PostItem
 import com.base.app.databinding.FragmentHome2Binding
 import com.base.app.ui.add_post.PostActivity
 import com.base.app.ui.comment.CommentActivity
+import com.base.app.ui.main.MainActivity
+import com.base.app.ui.main.MainViewModel
+import java.io.File
 
 class HomeFragment : BaseFragment<FragmentHome2Binding>(),
-    PostAdapter.IPostCallBack {
+    PostAdapter.IPostCallBack, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     private var key: String? = null
     private var lastKey: String? = null
@@ -27,14 +41,16 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     private val viewModel by viewModels<HomeViewModel>()
     private lateinit var homeAdapter: PostAdapter
-
+    private val homeViewModel by activityViewModels<MainViewModel>()
 
     override fun getContentLayout(): Int {
         return R.layout.fragment_home2
     }
 
     override fun initView() {
+        registerObserverLoadingEvent(viewModel, this@HomeFragment)
         initRecyclerView()
+        binding.homeRefresh.setOnRefreshListener(this@HomeFragment)
     }
 
     private fun initRecyclerView() {
@@ -82,6 +98,23 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
             getLastKey.observe(this@HomeFragment) {
                 lastKey = it
             }
+            deletePostResponse.observe(this@HomeFragment) {
+                if (it) {
+                    showToast(requireContext(), resources.getString(R.string.str_success))
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
+                    activity?.finish()
+                } else {
+                    showToast(requireContext(), resources.getString(R.string.str_error))
+                }
+            }
+        }
+        homeViewModel.apply {
+            doubleClick.observe(this@HomeFragment) {
+                if (it) {
+                    binding.rcvHome.smoothScrollToPosition(0)
+                    setRefresh(false)
+                }
+            }
         }
     }
 
@@ -92,12 +125,10 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         startActivity(intent)
     }
 
-    override fun likePost(postId: String, status: String) {
-        viewModel.likePost(postId, status)
+    override fun likePost(postId: String, status: String,publisherId: String) {
+        viewModel.likePost(postId, status,publisherId)
     }
 
-    override fun disLikePost(postId: String) {
-    }
 
     override fun commentPost(postId: String, publisherId: String) {
         val intent = Intent(context, CommentActivity::class.java)
@@ -115,4 +146,69 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     }
 
 
+    override fun doubleClickLikePost(postId: String, status: String,publisherId: String) {
+        if (status == "like") {
+            viewModel.likePost(postId, status, publisherId )
+        }
+    }
+
+    override fun downloadImage(fileName: String, postId: String) {
+        downloadImageByUri(fileName, postId)
+    }
+
+    override fun editImage(postId: String) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setTitle("Edit Post")
+
+        val editText = EditText(requireContext())
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        editText.layoutParams = layoutParams
+        alertDialog.setView(editText)
+        //getText(postid, editText)
+        //TODO need to be fixed later
+    }
+
+    override fun deleteImage(postId: String) {
+        viewModel.deletePost(postId)
+    }
+
+    private fun downloadImageByUri(fileName: String, postImage: String) {
+        try {
+            val downloadManager: DownloadManager =
+                requireContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val uri = Uri.parse(postImage)
+            val request = DownloadManager.Request(uri)
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverRoaming(false)
+                .setTitle(fileName)
+                .setMimeType("image/jpeg")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+                .setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_PICTURES,
+                    File.separator + fileName + ".jpg"
+                )
+            downloadManager.enqueue(request)
+            showToast(
+                requireContext(),
+                resources.getString(R.string.str_success),
+            )
+        } catch (e: Exception) {
+            showToast(
+                requireContext(),
+                resources.getString(R.string.str_error),
+            )
+        }
+    }
+
+    override fun onRefresh() {
+        viewModel.getLastKey()
+        viewModel.getData()
+        viewModel.isLoading.postValue(false)
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.homeRefresh.isRefreshing = false
+        }, 1500)
+    }
 }

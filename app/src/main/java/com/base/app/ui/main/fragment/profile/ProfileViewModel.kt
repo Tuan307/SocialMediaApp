@@ -41,7 +41,8 @@ class ProfileViewModel : BaseViewModel() {
     private var userResponse = MutableLiveData<User?>()
     val getUserResponse = userResponse as LiveData<User?>
     fun getUserInformation(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        showLoading(true)
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Users").child(id)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -51,6 +52,7 @@ class ProfileViewModel : BaseViewModel() {
                         } else {
                             responseMessage.postValue(ERROR)
                         }
+                        registerJobFinish()
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -63,7 +65,7 @@ class ProfileViewModel : BaseViewModel() {
     private var followerNumber = MutableLiveData<Long>()
     val getFollowerNumber = followerNumber as LiveData<Long>
     fun getFollower(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
 
             databaseReference.child("Follow").child(id).child("follower")
                 .addValueEventListener(object : ValueEventListener {
@@ -81,7 +83,7 @@ class ProfileViewModel : BaseViewModel() {
     private var followingNumber = MutableLiveData<Long>()
     val getFollowingNumber = followingNumber as LiveData<Long>
     fun getFollowing(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
 
             databaseReference.child("Follow").child(id).child("following")
                 .addValueEventListener(object : ValueEventListener {
@@ -100,7 +102,7 @@ class ProfileViewModel : BaseViewModel() {
     private var list = ArrayList<PostItem>()
     val getProfilePost = profilePost as LiveData<ArrayList<PostItem>>
     fun getProfilePost(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
 
             databaseReference.child("Posts").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -127,7 +129,7 @@ class ProfileViewModel : BaseViewModel() {
     private var keyList = ArrayList<String>()
     val getKeyList = keyListResponse as LiveData<ArrayList<String>>
     fun getSavePostKey(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
 
             databaseReference.child("Saves").child(id)
                 .addValueEventListener(object : ValueEventListener {
@@ -150,7 +152,7 @@ class ProfileViewModel : BaseViewModel() {
     private var listSave = ArrayList<PostItem>()
     val getSavePost = savePost as LiveData<ArrayList<PostItem>>
     fun getSavePost(strings: ArrayList<String>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Posts").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     listSave.clear()
@@ -208,5 +210,17 @@ class ProfileViewModel : BaseViewModel() {
                     }
                 })
         }
+    }
+
+    fun addNotifications(profileId: String) {
+        val hm = HashMap<String, Any>()
+        hm["userid"] = firebaseUser!!.uid
+        hm["postid"] = ""
+        hm["text"] = "started following you"
+        hm["ispost"] = false
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Notifications").child(profileId).push().setValue(hm)
+        }
+
     }
 }

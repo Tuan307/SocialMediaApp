@@ -1,6 +1,8 @@
 package com.base.app.ui.edit_profile
 
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,7 +19,8 @@ class EditProfileViewModel : BaseViewModel() {
     private var userInformation = MutableLiveData<User?>()
     val getUserInformation = userInformation as LiveData<User?>
     fun getInformation() {
-        viewModelScope.launch(Dispatchers.IO) {
+        showLoading(true)
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseUser?.let {
                 databaseReference.child("Users").child(it.uid)
                     .addValueEventListener(object : ValueEventListener {
@@ -26,6 +29,7 @@ class EditProfileViewModel : BaseViewModel() {
                             if (user != null) {
                                 userInformation.postValue(user)
                             }
+                            registerJobFinish()
                         }
 
                         override fun onCancelled(error: DatabaseError) {
@@ -44,7 +48,8 @@ class EditProfileViewModel : BaseViewModel() {
         imageUri: Uri?,
         imagePath: String?
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        showLoading(true)
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             val hashMap = HashMap<String, Any>()
             hashMap["fullname"] = fullName
             hashMap["username"] = userName
@@ -53,9 +58,13 @@ class EditProfileViewModel : BaseViewModel() {
                 databaseReference.child("Users").child(it.uid).updateChildren(hashMap)
                     .addOnCompleteListener { it1 ->
                         if (it1.isSuccessful) {
-                            updateProfileResponse.postValue(true)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                updateProfileResponse.postValue(true)
+                                registerJobFinish()
+                            }, 1000)
                         } else {
                             updateProfileResponse.postValue(false)
+                            registerJobFinish()
                         }
                     }
             }

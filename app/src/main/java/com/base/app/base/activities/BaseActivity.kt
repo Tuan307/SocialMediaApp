@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
+import android.util.Log
 import android.view.*
 import android.webkit.MimeTypeMap
 import android.widget.LinearLayout
@@ -27,7 +28,6 @@ import com.base.app.base.dialogs.ErrorDialog
 import com.base.app.base.dialogs.NotifyDialog
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.common.CommonUtils
-import com.base.app.common.EventObserver
 import com.base.app.common.RESULT_CODE_UPDATE_APP
 import com.esafirm.imagepicker.features.ImagePickerConfig
 import com.esafirm.imagepicker.features.ImagePickerMode
@@ -83,6 +83,7 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
         initView()
         initListener()
         observerLiveData()
+        showCustomUI()
         //transparentStatusBar()
     }
 
@@ -100,6 +101,29 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         return false
+    }
+
+    private fun setUpTransparentStatusBar() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+        )
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = Color.TRANSPARENT
+        window.navigationBarColor = Color.TRANSPARENT
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+    }
+
+    private fun setWindowFlag(bits: Int, on: Boolean) {
+        val win = window
+        val winParams = win.attributes
+        if (on) {
+            winParams.flags = winParams.flags or bits
+        } else {
+            winParams.flags = winParams.flags and bits.inv()
+        }
+        win.attributes = winParams
     }
 
     @SuppressLint("DiscouragedPrivateApi")
@@ -170,7 +194,7 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
         }
     }
 
-    fun setColorForStatusBar(color: Int) {
+    private fun setColorForStatusBar(color: Int) {
         // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
@@ -197,7 +221,7 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
     }
 
     fun transparentStatusBar() {
-        window.statusBarColor = 0x00000000
+        window.statusBarColor = 0x000000
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
@@ -365,13 +389,23 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
+    private fun showCustomUI() {
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        val decorView = window.decorView
+        decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    }
+
     protected fun registerObserverLoadingEvent(
         viewModel: BaseViewModel,
         viewLifecycleOwner: LifecycleOwner
     ) {
-        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver { isShow ->
+        Log.d("CheckLoading", viewModel.isLoading.value.toString())
+        viewModel.isLoading.observe(viewLifecycleOwner) { isShow ->
             showLoading(isShow)
-        })
+        }
     }
 
     fun getFileExtension(uri: Uri): String? {

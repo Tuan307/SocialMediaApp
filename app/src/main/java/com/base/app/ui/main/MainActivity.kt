@@ -61,7 +61,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_home -> {
-                binding.mainViewPager.currentItem = 0
+                if (isDoubleClick() && binding.mainViewPager.currentItem == 0) {
+                    viewModel.setRefresh(true)
+                } else {
+                    binding.mainViewPager.currentItem = 0
+                }
                 return true
             }
             R.id.navigation_feature -> {

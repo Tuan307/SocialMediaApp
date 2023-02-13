@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
+import com.base.app.common.CommonUtils
 import com.base.app.common.CommonUtils.hideSoftKeyboard
 import com.base.app.data.models.User
 import com.base.app.databinding.FragmentSearchBinding
@@ -75,6 +76,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(),
     }
 
     override fun itemClick(id: String) {
+        activity?.hideSoftKeyboard()
         if (dataManager.getString("id") != null) {
             dataManager.remove("id")
         }

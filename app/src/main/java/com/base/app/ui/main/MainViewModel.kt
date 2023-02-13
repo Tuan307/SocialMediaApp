@@ -18,4 +18,9 @@ class MainViewModel : BaseViewModel() {
     fun setSomething(t: Boolean) {
         something.postValue(t)
     }
+
+    var doubleClick = MutableLiveData<Boolean>(false)
+    fun setRefresh(t: Boolean) {
+        doubleClick.postValue(t)
+    }
 }

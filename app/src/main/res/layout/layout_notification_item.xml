@@ -7,7 +7,7 @@
         android:id="@+id/notificationItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/colorBlack"
         android:padding="@dimen/dp8">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -22,9 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp10"
-            android:textColor="@color/black"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp16"
-
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/imgNotificationPost"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
@@ -37,7 +36,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="5"
-            android:textColor="@color/black"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp15"
             app:layout_constraintEnd_toStartOf="@+id/imgNotificationPost"
             app:layout_constraintStart_toStartOf="@+id/txtUserName"

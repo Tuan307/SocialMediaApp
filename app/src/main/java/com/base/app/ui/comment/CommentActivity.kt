@@ -23,6 +23,7 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
     }
 
     override fun initView() {
+        registerObserverLoadingEvent(viewModel,this@CommentActivity)
         val intent = intent
         postId = intent.getStringExtra("postId").toString()
         publisherId = intent.getStringExtra("publisherId").toString()
@@ -47,6 +48,7 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
                     showToast(this@CommentActivity, "Please input your comment!")
                 } else {
                     viewModel.addComments(postId, edtComment.text.toString())
+                    viewModel.addNotifications(postId, edtComment.text.toString(), publisherId)
                 }
             }
         }

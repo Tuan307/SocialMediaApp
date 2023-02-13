@@ -7,14 +7,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/colorBlack"
         android:padding="@dimen/dp8">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgCommentAvatar"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
-            android:src="@mipmap/ic_launcher"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textColor="@color/black"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp16"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/imgCommentAvatar"
@@ -35,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="5"
-            android:textColor="@color/black"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp16"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@+id/txtCommentUserName"

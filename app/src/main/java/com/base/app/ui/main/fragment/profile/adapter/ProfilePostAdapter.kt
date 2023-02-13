@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridView
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,8 @@ import com.bumptech.glide.Glide
 
 class ProfilePostAdapter(
     val context: Context,
-    val list: ArrayList<PostItem>
+    val list: ArrayList<PostItem>,
+    val iClick: iCallBack
 ) : RecyclerView.Adapter<ProfilePostAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: View) :
@@ -45,7 +47,7 @@ class ProfilePostAdapter(
         if (holder.image != null) {
             Glide.with(context).load(data.postimage).into(holder.image)
             holder.image.setOnClickListener {
-                // do something later
+                iClick.onCLick(position)
                 Log.d("CheckAAA", data.postid.toString())
             }
         }
@@ -53,5 +55,9 @@ class ProfilePostAdapter(
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    interface iCallBack {
+        fun onCLick(id: Int)
     }
 }

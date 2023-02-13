@@ -14,7 +14,7 @@ class RegisterViewModel : BaseViewModel() {
     val getRegisterResponse = registerResponse as LiveData<Boolean>
     fun register(userName: String, fullName: String, email: String, password: String) {
         showLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
                     val uid = firebaseUser?.uid.toString()
@@ -32,12 +32,13 @@ class RegisterViewModel : BaseViewModel() {
                             } else {
                                 registerResponse.postValue(false)
                             }
+                            registerJobFinish()
                         }
                 } else {
                     registerResponse.postValue(false)
+                    registerJobFinish()
                 }
             }
         }
-        registerJobFinish()
     }
 }

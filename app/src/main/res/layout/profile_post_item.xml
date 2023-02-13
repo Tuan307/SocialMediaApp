@@ -2,9 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <GridLayout
+        android:id="@+id/grdProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/colorBlack">
 
         <ImageView
             android:id="@+id/imgImage"

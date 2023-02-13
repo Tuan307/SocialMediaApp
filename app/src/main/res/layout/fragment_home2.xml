@@ -14,7 +14,7 @@
             android:id="@+id/toolBarHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@color/colorBlack"
             android:padding="@dimen/dp10">
 
             <LinearLayout
@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:text="@string/app_name"
-                    android:textColor="@color/black"
+                    android:textColor="@color/color_app_text"
                     android:textSize="@dimen/sp25"
                     android:textStyle="bold" />
 
@@ -41,16 +41,22 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/black"
                     android:contentDescription="@string/todo"
                     android:src="@drawable/addimage" />
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvHome"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/homeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/layout_home_adapter" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 </layout>

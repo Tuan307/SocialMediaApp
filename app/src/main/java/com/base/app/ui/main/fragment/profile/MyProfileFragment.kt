@@ -11,14 +11,16 @@ import com.base.app.base.fragment.BaseFragment
 import com.base.app.data.models.PostItem
 import com.base.app.databinding.FragmentMyProfileBinding
 import com.base.app.ui.edit_profile.EditProfileActivity
+import com.base.app.ui.follow.FollowerActivity
 import com.base.app.ui.main.MainViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
 import com.base.app.ui.options.OptionActivity
+import com.base.app.ui.profile_detail_post.PostDetailActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 
 
-class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
+class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostAdapter.iCallBack {
 
     private val viewModel by viewModels<ProfileViewModel>()
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -37,10 +39,11 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
     }
 
     override fun initView() {
+        //registerObserverLoadingEvent(viewModel,this@MyProfileFragment)
         binding.rcvProfile.layoutManager =
             GridLayoutManager(requireContext(), 3)
         binding.rcvProfile.setHasFixedSize(true)
-        profileAdapter = ProfilePostAdapter(requireContext(), list)
+        profileAdapter = ProfilePostAdapter(requireContext(), list, this)
         binding.rcvProfile.adapter = profileAdapter
         viewModel.getKey(true)
     }
@@ -52,6 +55,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
         binding.btnFollowProfile.setOnClickListener {
             if (binding.btnFollowProfile.text.toString().lowercase() == "follow") {
                 viewModel.followUser(true, idKey)
+                viewModel.addNotifications(idKey)
             } else {
                 viewModel.followUser(false, idKey)
             }
@@ -61,6 +65,18 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
             mainViewModel.setSomething(false)
             mainViewModel.setCurrentIndex(1)
             //viewModel.key.postValue(viewModel.firebaseUser?.uid.toString())
+        }
+        binding.txtFollower.setOnClickListener {
+            val intent = Intent(context, FollowerActivity::class.java)
+            intent.putExtra("id", idKey)
+            intent.putExtra("title", "followers")
+            startActivity(intent)
+        }
+        binding.txtFollowing.setOnClickListener {
+            val intent = Intent(context, FollowerActivity::class.java)
+            intent.putExtra("id", idKey)
+            intent.putExtra("title", "following")
+            startActivity(intent)
         }
         binding.btnEditProfile.setOnClickListener {
             startActivity(Intent(requireContext(), EditProfileActivity::class.java))
@@ -170,6 +186,13 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>() {
                 viewModel.getProfilePost(idKey)
             }
         }
+    }
+
+    override fun onCLick(id: Int) {
+        val intent = Intent(requireContext(), PostDetailActivity::class.java)
+        intent.putExtra("idKey", idKey)
+        intent.putExtra("imageId", id)
+        startActivity(intent)
     }
 
 }

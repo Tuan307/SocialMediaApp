@@ -1,5 +1,6 @@
 package com.base.app.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,16 +13,17 @@ class LoginViewModel : BaseViewModel() {
     val getLoginResponse = loginResponse as LiveData<Boolean>
     fun login(email: String, password: String) {
         showLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        Log.d("CheckLoading", isLoading.value.toString())
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
                     loginResponse.postValue(true)
+                    registerJobFinish()
                 } else {
                     loginResponse.postValue(false)
                 }
             }
         }
-        registerJobFinish()
     }
 
     private var sendResetPasswordResponse = MutableLiveData<Boolean>()
@@ -32,11 +34,11 @@ class LoginViewModel : BaseViewModel() {
             firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener {
                 if (it.isSuccessful) {
                     sendResetPasswordResponse.postValue(true)
+                    registerJobFinish()
                 } else {
                     sendResetPasswordResponse.postValue(false)
                 }
             }
         }
-        registerJobFinish()
     }
 }

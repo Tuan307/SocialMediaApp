@@ -51,5 +51,9 @@
     <color name="color_out_of_stock">#FF7373</color>
     <color name="color_message_content">#545F70</color>
     <color name="color_message_title">#3A3B42</color>
-
+    <color name="color_app_text">#F9F9F9</color>
+    <color name="color_bottom_nav">#121212</color>
+    <color name="color_search_bar">#262626</color>
+    <color name="color_search_text">#8E8E93</color>
+    <color name="color_login_text">#3797EF</color>
 </resources>

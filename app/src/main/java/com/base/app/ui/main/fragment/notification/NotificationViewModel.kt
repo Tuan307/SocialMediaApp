@@ -23,7 +23,8 @@ class NotificationViewModel : BaseViewModel() {
     var listNotificationResponse = MutableLiveData<ArrayList<NotificationItem>>()
     private var list = ArrayList<NotificationItem>()
     fun readNotification() {
-        viewModelScope.launch(Dispatchers.IO) {
+        showLoading(true)
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Notifications").child(firebaseUser?.uid.toString())
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -35,6 +36,7 @@ class NotificationViewModel : BaseViewModel() {
                             }
                         }
                         listNotificationResponse.postValue(list)
+                        registerJobFinish()
                     }
 
                     override fun onCancelled(error: DatabaseError) {

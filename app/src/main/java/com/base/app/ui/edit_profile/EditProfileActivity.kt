@@ -1,7 +1,6 @@
 package com.base.app.ui.edit_profile
 
 import android.net.Uri
-import android.webkit.MimeTypeMap
 import androidx.activity.viewModels
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
@@ -25,7 +24,13 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
     }
 
     override fun initView() {
+        registerObserverLoadingEvent(viewModel, this@EditProfileActivity)
         viewModel.getInformation()
+        binding.apply {
+            edtEditBio.setInfoEdt(R.drawable.ic_edit)
+            edtEditName.setInfoEdt(R.drawable.ic_account)
+            edtEditUserName.setInfoEdt(R.drawable.ic_account)
+        }
     }
 
     override fun initListener() {

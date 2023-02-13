@@ -6,6 +6,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorBlack"
         tools:context=".ui.edit_profile.EditProfileActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,11 +19,9 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent">
 
-
                 <androidx.appcompat.widget.Toolbar
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white">
+                    android:layout_height="wrap_content">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -88,7 +87,7 @@
                 android:layout_marginStart="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp20"
                 android:text="@string/name"
-                android:textColor="@color/black"
+                android:textColor="@color/color_app_text"
                 android:textSize="@dimen/sp16"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +111,7 @@
                 android:layout_marginStart="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp20"
                 android:text="@string/str_user_name"
-                android:textColor="@color/black"
+                android:textColor="@color/color_app_text"
                 android:textSize="@dimen/sp16"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -136,7 +135,7 @@
                 android:layout_marginStart="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp20"
                 android:text="@string/bio"
-                android:textColor="@color/black"
+                android:textColor="@color/color_app_text"
                 android:textSize="@dimen/sp16"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"

@@ -22,6 +22,7 @@ class PostActivity : BaseActivity<ActivityPostBinding>() {
     override fun getContentLayout(): Int = R.layout.activity_post
 
     override fun initView() {
+        registerObserverLoadingEvent(viewModel, this@PostActivity)
     }
 
     override fun initListener() {

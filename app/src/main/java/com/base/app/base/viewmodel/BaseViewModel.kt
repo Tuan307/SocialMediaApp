@@ -37,8 +37,7 @@ abstract class BaseViewModel : ViewModel() {
     var networkException = MutableLiveData<Event<NetworkErrorException>>()
         protected set
 
-    var isLoading = MutableLiveData<Event<Boolean>>()
-        protected set
+    var isLoading = MutableLiveData<Boolean>()
 
     var onNavigateToPage = MutableLiveData<Event<Int>>()
         protected set
@@ -89,8 +88,8 @@ abstract class BaseViewModel : ViewModel() {
         networkException.postValue(Event(exception))
     }
 
-    protected fun showLoading(isShow: Boolean) {
-        isLoading.postValue(Event(isShow))
+    fun showLoading(isShow: Boolean) {
+        isLoading.postValue(isShow)
     }
 
     protected fun showLoadingMore(isShow: Boolean) {

@@ -5,17 +5,16 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
 import android.os.SystemClock
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.base.app.R
-import com.base.app.base.dialogs.ProgressDialog
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.common.CommonUtils
 import com.base.app.common.EventObserver
@@ -29,13 +28,13 @@ abstract class BaseFragment<BINDING : ViewDataBinding> :
     Fragment() {
 
     lateinit var binding: BINDING
-    lateinit var loadingDialog: ProgressDialog
+    var loadingDialog: AlertDialog? = null
     val imagesPicker = arrayListOf<Image>()
     private var mLastClickTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadingDialog = ProgressDialog.newInstance()
+        loadingDialog = setupProgressDialog()
     }
 
 
@@ -55,6 +54,7 @@ abstract class BaseFragment<BINDING : ViewDataBinding> :
         initView()
         initListener()
         observerLiveData()
+
     }
 
     abstract fun getContentLayout(): Int
@@ -67,6 +67,27 @@ abstract class BaseFragment<BINDING : ViewDataBinding> :
 
     protected fun paddingStatusBar(view: View) {
         view.setPadding(0, CommonUtils.getStatusBarHeight(context!!), 0, 0)
+    }
+
+    private fun setupProgressDialog(): AlertDialog? {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context!!, R.style.CustomDialog)
+        builder.setCancelable(false)
+
+        val myLayout = LayoutInflater.from(context!!)
+        val dialogView: View = myLayout.inflate(R.layout.fragment_progress_dialog, null)
+
+        builder.setView(dialogView)
+
+        val dialog: AlertDialog = builder.create()
+        val window: Window? = dialog.window
+        if (window != null) {
+            val layoutParams = WindowManager.LayoutParams()
+            layoutParams.copyFrom(dialog.window?.attributes)
+            layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+            dialog.window?.attributes = layoutParams
+        }
+        return dialog
     }
 
     open fun isDoubleClick(DOUBLE_PRESS_INTERVAL: Long): Boolean {
@@ -90,8 +111,25 @@ abstract class BaseFragment<BINDING : ViewDataBinding> :
         })
     }
 
+    protected fun registerObserverLoadingEvent(
+        viewModel: BaseViewModel,
+        viewLifecycleOwner: LifecycleOwner
+    ) {
+        viewModel.isLoading.observe(viewLifecycleOwner) { isShow ->
+            showLoading(isShow)
+        }
+    }
+
     fun showToast(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    open fun showLoading(isShow: Boolean) {
+        if (isShow) {
+            loadingDialog?.show()
+        } else {
+            loadingDialog?.dismiss()
+        }
     }
 
     protected fun showLoadingMore(isShow: Boolean) {
@@ -101,6 +139,7 @@ abstract class BaseFragment<BINDING : ViewDataBinding> :
     private fun getDefaultNotifyTitle(): String {
         return getString(R.string.default_notify_title)
     }
+
     fun createConfig(isSingleMode: Boolean, limitImage: Int): ImagePickerConfig {
         return ImagePickerConfig {
 

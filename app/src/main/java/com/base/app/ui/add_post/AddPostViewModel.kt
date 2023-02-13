@@ -1,6 +1,8 @@
 package com.base.app.ui.add_post
 
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
@@ -11,8 +13,9 @@ class AddPostViewModel : BaseViewModel() {
 
     var uploadImageResponse = MutableLiveData<Boolean>()
     fun uploadImage(uri: Uri?, path: String?, description: String) {
+        showLoading(true)
         if (uri != null && path != null) {
-            viewModelScope.launch(Dispatchers.IO) {
+            parentJob = viewModelScope.launch(Dispatchers.IO) {
                 val ref = storageRef.child("new_posts").child(
                     System.currentTimeMillis().toString() + "." +
                             path
@@ -35,12 +38,17 @@ class AddPostViewModel : BaseViewModel() {
                         hashMap["description"] = description
                         hashMap["publicher"] = firebaseUser?.uid.toString()
                         databaseReference.child("Posts").child(postId).setValue(hashMap)
-                        uploadImageResponse.postValue(true)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            uploadImageResponse.postValue(true)
+                            registerJobFinish()
+                        }, 1000)
                     } else {
                         uploadImageResponse.postValue(false)
+                        registerJobFinish()
                     }
                 }.addOnFailureListener {
                     uploadImageResponse.postValue(false)
+                    registerJobFinish()
                 }
             }
         }

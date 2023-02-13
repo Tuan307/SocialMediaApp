@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/colorBlack"
         tools:context=".ui.options.OptionActivity">
 
         <ImageView
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp5"
             android:gravity="center_horizontal"
-            android:textColor="@color/black"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp18"
             android:textStyle="normal"
             app:layout_constraintTop_toBottomOf="@+id/imgAvatar"
@@ -48,7 +48,7 @@
             android:layout_marginHorizontal="@dimen/dp20"
             android:layout_marginTop="@dimen/dp20"
             android:text="@string/settings"
-            android:textColor="@color/black"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp20"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
@@ -69,7 +69,8 @@
             android:layout_marginHorizontal="@dimen/dp20"
             android:layout_marginTop="@dimen/dp10"
             android:text="@string/dark_mode"
-            android:textColor="@color/black"
+            android:enabled="true"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp20"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +89,7 @@
         <Button
             android:id="@+id/btnLogOut"
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp40"
             android:layout_marginBottom="@dimen/dp40"

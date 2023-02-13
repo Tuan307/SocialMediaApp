@@ -67,7 +67,7 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(), ConfirmDialog.Conf
             logOutResponse.observe(this@OptionActivity) {
                 if (it) {
                     startActivity(Intent(this@OptionActivity, WelcomeActivity::class.java))
-                    finish()
+                    finishAffinity()
                 }
             }
         }

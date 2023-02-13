@@ -2,6 +2,8 @@ package com.base.app.ui.main.fragment.home
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel : BaseViewModel() {
 
     fun countComments(text: TextView, postId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Comments").child(postId)
                 .addValueEventListener(object : ValueEventListener {
                     @SuppressLint("SetTextI18n")
@@ -38,7 +40,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun getPostLikes(text: TextView, postId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Likes").child(postId)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -74,7 +76,7 @@ class HomeViewModel : BaseViewModel() {
         txtPublisher: TextView,
         publisher: String?
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             if (publisher != null) {
                 databaseReference.child("Users").child(publisher)
                     .addValueEventListener(object : ValueEventListener {
@@ -100,7 +102,7 @@ class HomeViewModel : BaseViewModel() {
     val getListResponse = listResponse as LiveData<ArrayList<PostItem>>
     fun getData() {
         showLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Posts").orderByKey().limitToFirst(20)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -111,7 +113,10 @@ class HomeViewModel : BaseViewModel() {
                                 dataList.add(post)
                             }
                         }
-                        listResponse.postValue(dataList)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            listResponse.postValue(dataList)
+                            registerJobFinish()
+                        }, 1000)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -119,13 +124,12 @@ class HomeViewModel : BaseViewModel() {
                     }
                 })
         }
-        registerJobFinish()
     }
 
     var getListOnLoadMore = MutableLiveData<ArrayList<PostItem>>()
     private var loadMoreList = ArrayList<PostItem>()
     fun getDataOnLoadMore(key: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Posts").orderByKey().startAfter(key).limitToFirst(20)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -146,7 +150,7 @@ class HomeViewModel : BaseViewModel() {
 
     var getLastKey = MutableLiveData<String>()
     fun getLastKey() {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             val query = databaseReference.child("Posts").orderByKey().limitToLast(1)
             query.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -162,13 +166,14 @@ class HomeViewModel : BaseViewModel() {
 
     }
 
-    fun likePost(postId: String, status: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun likePost(postId: String, status: String, publisherId: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             if (status == "like") {
                 databaseReference.child("Likes").child(postId).child(firebaseUser?.uid ?: "none")
                     .setValue(true)
-                //TO DO add notifications here
-                //code later
+                if (publisherId != firebaseUser?.uid.toString()) {
+                    addNotifications(postId, publisherId)
+                }
             } else {
                 databaseReference.child("Likes").child(postId).child(firebaseUser?.uid ?: "none")
                     .removeValue()
@@ -177,8 +182,20 @@ class HomeViewModel : BaseViewModel() {
 
     }
 
+    fun addNotifications(postId: String, publisherId: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            val hashMap = HashMap<String, Any>()
+            hashMap["userid"] = firebaseUser?.uid.toString()
+            hashMap["postid"] = postId
+            hashMap["text"] = "liked your post!"
+            hashMap["ispost"] = true
+            databaseReference.child("Notifications").child(publisherId)
+                .push().setValue(hashMap)
+        }
+    }
+
     fun savePost(postId: String, status: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             val uid = firebaseUser?.uid
             if (status == "save") {
                 if (uid != null) {
@@ -193,7 +210,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun isLikePost(postId: String, image: ImageView) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Likes").child(postId)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -217,7 +234,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun isSavedPost(postId: String, image: ImageView) {
-        viewModelScope.launch(Dispatchers.IO) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
             val uid = firebaseUser?.uid
             if (uid != null) {
                 databaseReference.child("Saves").child(uid)
@@ -236,6 +253,48 @@ class HomeViewModel : BaseViewModel() {
                         }
                     })
             }
+        }
+    }
+
+    var deletePostResponse = MutableLiveData<Boolean>()
+    fun deletePost(postId: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Posts").child(postId).removeValue().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    deletePostResponse.postValue(true)
+                } else {
+                    deletePostResponse.postValue(false)
+                }
+            }
+        }
+    }
+
+    private var dataListDetail = ArrayList<PostItem>()
+    private var listResponseDetail = MutableLiveData<ArrayList<PostItem>>()
+    val getListResponseDetail = listResponseDetail as LiveData<ArrayList<PostItem>>
+    fun getDataDetail(id: String) {
+        showLoading(true)
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Posts")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        dataListDetail.clear()
+                        for (dataSnapshot in snapshot.children) {
+                            val post = dataSnapshot.getValue(PostItem::class.java)
+                            if (post != null && post.publicher == id) {
+                                dataListDetail.add(post)
+                            }
+                        }
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            listResponseDetail.postValue(dataListDetail)
+                            registerJobFinish()
+                        }, 1000)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.d("CheckAAA", "Yes Here")
+                    }
+                })
         }
     }
 }

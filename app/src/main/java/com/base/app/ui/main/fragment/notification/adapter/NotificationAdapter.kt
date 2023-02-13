@@ -20,6 +20,7 @@ class NotificationAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NotificationItem) {
             binding.apply {
+                txtNotification.text = data.text
                 viewModel.getUserInformation(context, imgAvatar, txtUserName, data.userid)
                 if (data.ispost) {
                     imgNotificationPost.visibility = View.VISIBLE

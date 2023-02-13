@@ -27,6 +27,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
     }
 
     override fun initView() {
+        //registerObserverLoadingEvent(viewModel,this@NotificationFragment)
         binding.apply {
             rcvNotification.layoutManager = LinearLayoutManager(requireContext())
             rcvNotification.setHasFixedSize(true)
