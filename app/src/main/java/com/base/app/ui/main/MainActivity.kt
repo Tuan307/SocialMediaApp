@@ -73,6 +73,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
                 return true
             }
             R.id.navigation_reel -> {
+                viewModel.setReelClick(true)
                 binding.mainViewPager.currentItem = 2
                 return true
             }

@@ -16,11 +16,11 @@ apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
 
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.base.app"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -199,4 +199,7 @@ dependencies {
     //In app update
     implementation("com.google.android.play:app-update:2.0.1")
     implementation("com.google.android.play:app-update-ktx:2.0.1")
+
+    //exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
 }

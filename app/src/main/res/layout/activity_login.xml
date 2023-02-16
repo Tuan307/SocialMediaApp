@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp32"
             android:layout_marginTop="70dp"
-            app:cardBackgroundColor="@color/colorBlack"
             android:elevation="@dimen/dp10"
+            app:cardBackgroundColor="@color/colorBlack"
             app:cardElevation="@dimen/dp10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -125,8 +125,8 @@
         <TextView
             android:id="@+id/tvRegister"
             android:layout_width="wrap_content"
-            android:textColor="@color/color_app_text"
             android:layout_height="wrap_content"
+            android:textColor="@color/color_app_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

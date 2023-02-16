@@ -21,7 +21,6 @@ class PostAdapter(
     val dataSet: ArrayList<PostItem>,
 ) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
-    // private lateinit var viewPagerAdapter: ImageViewPagerAdapter
 
     inner class ViewHolder(
         val binding: LayoutHomeAdapterBinding,
@@ -29,9 +28,14 @@ class PostAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val data = dataSet[position]
+//            var picAdapter = PostInPostAdapter(context, data.postimage)
+//            binding.apply {
+//                imgPost.layoutManager =
+//                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//                imgPost.setHasFixedSize(true)
+//            }
             Glide.with(context).load(data.postimage).into(binding.imgPost)
-            // viewPagerAdapter = ImageViewPagerAdapter(context, list)
-            //binding.homePager.adapter = viewPagerAdapter
+
             binding.apply {
                 if (data.description.equals("")) {
                     txtDescription.visibility = View.GONE

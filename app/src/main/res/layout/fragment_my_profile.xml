@@ -54,6 +54,17 @@
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/dp20"
                         android:src="@drawable/ic_menu" />
+
+                    <ImageView
+                        android:id="@+id/imgAddImage"
+                        android:layout_width="@dimen/dp32"
+                        android:layout_height="@dimen/dp32"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/dp20"
+                        android:layout_toLeftOf="@+id/imgOptions"
+                        android:src="@drawable/addimage" />
+
+
                 </RelativeLayout>
 
             </androidx.appcompat.widget.Toolbar>
@@ -251,11 +262,11 @@
             android:id="@+id/rcvProfile"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:listitem="@layout/profile_post_item"
             android:layout_marginTop="@dimen/dp8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayoutProfile" />
+            app:layout_constraintTop_toBottomOf="@+id/tabLayoutProfile"
+            tools:listitem="@layout/profile_post_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

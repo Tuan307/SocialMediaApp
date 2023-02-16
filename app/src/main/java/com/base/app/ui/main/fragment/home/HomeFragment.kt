@@ -21,6 +21,7 @@ import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.PostItem
 import com.base.app.databinding.FragmentHome2Binding
 import com.base.app.ui.add_post.PostActivity
+import com.base.app.ui.add_video_post.AddVideoActivity
 import com.base.app.ui.comment.CommentActivity
 import com.base.app.ui.main.MainActivity
 import com.base.app.ui.main.MainViewModel
@@ -63,8 +64,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun initListener() {
         binding.imgAdd.setOnClickListener {
-            startActivity(Intent(requireContext(), PostActivity::class.java))
-
+            startActivity(Intent(requireContext(), AddVideoActivity::class.java))
         }
         viewModel.getLastKey()
         viewModel.getData()
