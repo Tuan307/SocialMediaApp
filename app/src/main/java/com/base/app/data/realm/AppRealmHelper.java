@@ -29,6 +29,7 @@ public class AppRealmHelper implements RealmHelper {
         Realm.init(context);
         RealmConfiguration config = new RealmConfiguration
                 .Builder()
+                .name("socialApp.realm")
                 .schemaVersion(0)
                 .migration(new MyMigration())
                 .build();

@@ -17,6 +17,7 @@ import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 
 class ReelAdapter(
@@ -31,26 +32,30 @@ class ReelAdapter(
         RecyclerView.ViewHolder(binding.root) {
         lateinit var exoPlayer: ExoPlayer
         lateinit var mediaSource: MediaSource
-        fun setVideoPath(url: String) {
+        fun setVideoPath(data: Video) {
             mainViewModel.getUser(
                 context,
                 binding.imgAvatar,
                 binding.txtUserName,
-                binding.txtDescription
             )
+            binding.txtDescription.text = data.desciption
+            binding.reelVideoPlayer.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
             binding.imgPlay.tag = "play"
             binding.imgPlay.visibility = View.INVISIBLE
             exoPlayer = ExoPlayer.Builder(context).build()
             exoPlayer.addListener(object : Player.Listener {
                 override fun onPlayerError(error: PlaybackException) {
                     super.onPlayerError(error)
-                    Toast.makeText(context, "Can't play this video", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "Can't play this video", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
                     if (playWhenReady) {
+                        binding.videoProgress.visibility = View.INVISIBLE
                         binding.imgPlay.tag = "play"
                         binding.imgPlay.visibility = View.INVISIBLE
+                    } else {
+                        binding.videoProgress.visibility = View.VISIBLE
                     }
                 }
             })
@@ -59,7 +64,7 @@ class ReelAdapter(
             exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
             val dataSourceFactory = DefaultDataSource.Factory(context)
             mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(MediaItem.fromUri(Uri.parse(url)))
+                .createMediaSource(MediaItem.fromUri(Uri.parse(data.url)))
             exoPlayer.setMediaSource(mediaSource)
             exoPlayer.prepare()
             if (absoluteAdapterPosition == 0) {
@@ -95,7 +100,7 @@ class ReelAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model = list[position]
-        holder.setVideoPath(model.url)
+        holder.setVideoPath(model)
     }
 
     override fun getItemCount(): Int {

@@ -42,7 +42,7 @@ class MainViewModel : BaseViewModel() {
 
     //fake data
     var userResponse = MutableLiveData<User>()
-    fun getUser(context: Context, image: CircleImageView, text1: TextView, text2: TextView) {
+    fun getUser(context: Context, image: CircleImageView, text1: TextView) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Users").child(firebaseUser?.uid.toString())
                 .addValueEventListener(object : ValueEventListener {
@@ -51,7 +51,7 @@ class MainViewModel : BaseViewModel() {
                         if (user != null) {
                             Glide.with(context).load(user.imageurl).into(image)
                             text1.text = user.username
-                            text2.text = user.username
+
                         }
                     }
 
