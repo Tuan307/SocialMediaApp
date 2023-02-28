@@ -6,28 +6,18 @@ import com.base.app.base.activities.BaseActivity
 import com.base.app.databinding.ActivityMain3Binding
 
 
-class MainActivity2 : BaseActivity<ActivityMain3Binding>() {
+class MainActivity2 : BaseActivity<ActivityMain3Binding>(), StudyAdapter.clickDelete {
 
     private lateinit var adapter: StudyAdapter
-    val list = ArrayList<String>()
+    val list = ArrayList<Person>()
     override fun getContentLayout(): Int {
         return R.layout.activity_main3
     }
 
     override fun initView() {
-        list.add("Kotlin")
-        list.add("Java")
-        list.add("C++")
-        list.add("Python")
-        list.add("Dart")
-        list.add("Swift")
-        list.add("Kotlin")
-        list.add("Java")
-        list.add("C++")
-        list.add("Python")
-        list.add("Dart")
-        list.add("Swift")
-        adapter = StudyAdapter(list)
+        list.add(Person("Kotlin", "Kotlin"))
+
+        adapter = StudyAdapter(this@MainActivity2, list, this@MainActivity2)
         binding.rcvStudy.layoutManager = LinearLayoutManager(this@MainActivity2)
         binding.rcvStudy.setHasFixedSize(true)
         binding.rcvStudy.adapter = adapter
@@ -38,5 +28,13 @@ class MainActivity2 : BaseActivity<ActivityMain3Binding>() {
     }
 
     override fun observerLiveData() {
+    }
+
+    override fun deleteItem(item: Int) {
+
+    }
+
+    override fun clickItem(item: Int) {
+
     }
 }

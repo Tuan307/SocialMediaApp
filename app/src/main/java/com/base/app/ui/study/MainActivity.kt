@@ -3,8 +3,12 @@ package com.base.app.ui.study
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.view.ContextMenu
+import android.view.MenuItem
+import android.view.View
 import android.widget.DatePicker
 import android.widget.TimePicker
+import android.widget.Toast
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.databinding.ActivityMain2Binding
@@ -18,6 +22,7 @@ class MainActivity : BaseActivity<ActivityMain2Binding>(),
     }
 
     override fun initView() {
+        registerForContextMenu(binding.btnContextMenu)
     }
 
     override fun initListener() {
@@ -65,4 +70,20 @@ class MainActivity : BaseActivity<ActivityMain2Binding>(),
         binding.txtTime.text = a
     }
 
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.post_item, menu)
+
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.edit) {
+            Toast.makeText(this@MainActivity, "HEHEHE", Toast.LENGTH_SHORT).show()
+        }
+        return super.onContextItemSelected(item)
+    }
 }

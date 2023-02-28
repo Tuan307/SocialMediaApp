@@ -35,9 +35,9 @@ class MainViewModel : BaseViewModel() {
         doubleClick.postValue(t)
     }
 
-    var reelClick = MutableLiveData<Boolean>(false)
-    fun setReelClick(t: Boolean) {
-        reelClick.postValue(t)
+    var reelClick = MutableLiveData<Int>(0)
+    fun setReelClick() {
+        reelClick.postValue(reelClick.value?.plus(1) ?: 1)
     }
 
     //fake data

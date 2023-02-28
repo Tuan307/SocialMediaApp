@@ -117,4 +117,46 @@ class CommentViewModel : BaseViewModel() {
                 .push().setValue(hashMap)
         }
     }
+
+    var getVideoCommentResponse = MutableLiveData<ArrayList<Comment>>()
+    private var videoComments = ArrayList<Comment>()
+    fun getVideoComment(videoId: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("VideoComment").child(videoId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        videoComments.clear()
+                        for (data in snapshot.children) {
+                            val com = data.getValue(Comment::class.java)
+                            if (com != null) {
+                                videoComments.add(com)
+                            }
+                        }
+                        getVideoCommentResponse.postValue(videoComments)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+        }
+    }
+
+    var addVideoCommentResponse = MutableLiveData<Boolean>()
+    fun addVideoComments(postId: String, comment: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            val key = databaseReference.push().key.toString()
+            val hashMap = HashMap<String, Any>()
+            hashMap["comment"] = comment
+            hashMap["publisher"] = firebaseUser!!.uid
+            hashMap["commentid"] = key
+            databaseReference.child("VideoComment").child(postId)
+                .child(key).setValue(hashMap).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        addVideoCommentResponse.postValue(true)
+                    } else {
+                        addVideoCommentResponse.postValue(false)
+                    }
+                }
+        }
+    }
 }

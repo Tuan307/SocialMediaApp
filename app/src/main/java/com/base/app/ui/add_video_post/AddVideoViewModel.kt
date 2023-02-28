@@ -6,13 +6,14 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.common.EMPTY_STRING
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AddVideoViewModel : BaseViewModel() {
 
     var uploadVideoResponse = MutableLiveData<Boolean>()
-    fun uploadVideo(uri: Uri?, path: String?) {
+    fun uploadVideo(uri: Uri?, path: String?, description: String?) {
         showLoading(true)
         if (uri != null && path != null) {
             parentJob = viewModelScope.launch(Dispatchers.IO) {
@@ -36,6 +37,7 @@ class AddVideoViewModel : BaseViewModel() {
                         hashMap["videoId"] = postId
                         hashMap["id"] = firebaseUser?.uid.toString()
                         hashMap["url"] = downloadUri
+                        hashMap["description"] = description ?: EMPTY_STRING
                         databaseReference.child("Videos").child(postId).setValue(hashMap)
                         Handler(Looper.getMainLooper()).postDelayed({
                             uploadVideoResponse.postValue(true)

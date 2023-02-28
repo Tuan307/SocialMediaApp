@@ -1,6 +1,5 @@
 package com.base.app.ui.main.fragment.home
 
-import android.app.AlertDialog
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -8,8 +7,8 @@ import android.net.Uri
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.widget.EditText
-import android.widget.LinearLayout
+import android.view.View
+import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +19,6 @@ import com.base.app.base.fragment.BaseFragment
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.PostItem
 import com.base.app.databinding.FragmentHome2Binding
-import com.base.app.ui.add_post.PostActivity
 import com.base.app.ui.add_video_post.AddVideoActivity
 import com.base.app.ui.comment.CommentActivity
 import com.base.app.ui.main.MainActivity
@@ -125,8 +123,8 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         startActivity(intent)
     }
 
-    override fun likePost(postId: String, status: String,publisherId: String) {
-        viewModel.likePost(postId, status,publisherId)
+    override fun likePost(postId: String, status: String, publisherId: String) {
+        viewModel.likePost(postId, status, publisherId)
     }
 
 
@@ -146,9 +144,9 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     }
 
 
-    override fun doubleClickLikePost(postId: String, status: String,publisherId: String) {
+    override fun doubleClickLikePost(postId: String, status: String, publisherId: String) {
         if (status == "like") {
-            viewModel.likePost(postId, status, publisherId )
+            viewModel.likePost(postId, status, publisherId)
         }
     }
 
@@ -156,19 +154,29 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         downloadImageByUri(fileName, postId)
     }
 
-    override fun editImage(postId: String) {
-        val alertDialog = AlertDialog.Builder(requireContext())
-        alertDialog.setTitle("Edit Post")
-
-        val editText = EditText(requireContext())
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        editText.layoutParams = layoutParams
-        alertDialog.setView(editText)
+    override fun editImage(postId: String, view: View) {
+//        val alertDialog = AlertDialog.Builder(requireContext())
+//        alertDialog.setTitle("Edit Post")
+//
+//        val editText = EditText(requireContext())
+//        val layoutParams = LinearLayout.LayoutParams(
+//            LinearLayout.LayoutParams.MATCH_PARENT,
+//            LinearLayout.LayoutParams.MATCH_PARENT
+//        )
+//        editText.layoutParams = layoutParams
+//        alertDialog.setView(editText)
         //getText(postid, editText)
         //TODO need to be fixed later
+
+        val popupMenu = PopupMenu(context, view)
+        popupMenu.inflate(R.menu.post_item)
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+
+            }
+            true
+        }
+        popupMenu.show()
     }
 
     override fun deleteImage(postId: String) {

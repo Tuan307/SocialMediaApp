@@ -64,7 +64,7 @@ class PostAdapter(
                                 data.postid?.let { it1 -> iPostCallBack.deleteImage(it1) }
                             }
                             R.id.edit -> {
-                                data.postid?.let { it1 -> iPostCallBack.editImage(it1) }
+                                data.postid?.let { it1 -> iPostCallBack.editImage(it1,it) }
                             }
                             R.id.download -> {
                                 data.postimage?.let { it1 ->
@@ -156,7 +156,7 @@ class PostAdapter(
         fun sharePost(postId: String)
         fun doubleClickLikePost(postId: String, status: String, publisherId: String)
         fun downloadImage(fileName: String, postId: String)
-        fun editImage(postId: String)
+        fun editImage(postId: String,view:View)
         fun deleteImage(postId: String)
     }
 }

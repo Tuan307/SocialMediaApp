@@ -3,7 +3,7 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorBlack</item>
+        <item name="colorPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorBlack</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -56,7 +56,7 @@
     </style>
 
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@color/colorWhite</item>
     </style>
 
     <style name="body_text_style">

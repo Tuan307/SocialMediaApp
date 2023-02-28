@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.activity.viewModels
@@ -67,8 +68,8 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapte
         startActivity(intent)
     }
 
-    override fun likePost(postId: String, status: String,publisherId: String) {
-        viewModel.likePost(postId, status,publisherId)
+    override fun likePost(postId: String, status: String, publisherId: String) {
+        viewModel.likePost(postId, status, publisherId)
     }
 
 
@@ -87,9 +88,9 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapte
         //do later
     }
 
-    override fun doubleClickLikePost(postId: String, status: String,publisherId: String) {
+    override fun doubleClickLikePost(postId: String, status: String, publisherId: String) {
         if (status == "like") {
-            viewModel.likePost(postId, status,publisherId)
+            viewModel.likePost(postId, status, publisherId)
         }
     }
 
@@ -97,7 +98,7 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapte
         downloadImageByUri(fileName, postId)
     }
 
-    override fun editImage(postId: String) {
+    override fun editImage(postId: String, view: View) {
         val alertDialog = AlertDialog.Builder(this@PostDetailActivity)
         alertDialog.setTitle("Edit Post")
 

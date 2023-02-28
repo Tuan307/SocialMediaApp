@@ -5,6 +5,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintStudy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -12,7 +13,8 @@
             android:id="@+id/imgAvatar"
             android:layout_width="@dimen/dp45"
             android:layout_height="@dimen/dp45"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/ic_account"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="@dimen/sp20"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnDelete"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Hello" />
@@ -33,8 +35,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="@dimen/sp20"
-            app:layout_constraintEnd_toEndOf="parent"
-
+            app:layout_constraintEnd_toStartOf="@id/btnDelete"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toBottomOf="@+id/txtStudy"
             tools:text="Hello" />
@@ -46,10 +47,21 @@
             android:layout_marginBottom="@dimen/dp10"
             android:textColor="@color/black"
             android:textSize="@dimen/sp20"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toBottomOf="@+id/txtStudy1"
             tools:text="Hello" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

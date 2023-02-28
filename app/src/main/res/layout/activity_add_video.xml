@@ -35,6 +35,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/videoTlb" />
 
+            <EditText
+                android:id="@+id/edtVideoDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp15"
+                android:backgroundTint="@color/colorWhite"
+                android:ellipsize="end"
+                android:hint="@string/description"
+                android:maxLines="5"
+                android:textColor="@color/color_app_text"
+                android:textColorHint="@color/color_app_text"
+                android:textSize="@dimen/sp18"
+                app:layout_constraintTop_toBottomOf="@+id/vdVideo" />
+
             <Button
                 android:id="@+id/btnChooseVideo"
                 android:layout_width="match_parent"
@@ -46,7 +61,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp18"
-                app:layout_constraintTop_toBottomOf="@+id/vdVideo" />
+                app:layout_constraintTop_toBottomOf="@+id/edtVideoDescription" />
 
             <Button
                 android:id="@+id/btnPost"

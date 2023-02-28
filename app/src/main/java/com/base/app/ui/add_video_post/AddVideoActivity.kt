@@ -32,7 +32,7 @@ class AddVideoActivity : BaseActivity<ActivityAddVideoBinding>() {
                 chooseVideo()
             }
             btnPost.setOnClickListener {
-                viewModel.uploadVideo(videoUri, videoPath)
+                viewModel.uploadVideo(videoUri, videoPath, edtVideoDescription.text.toString())
             }
         }
     }

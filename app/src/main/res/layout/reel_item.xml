@@ -3,80 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/reelConstraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black">
 
+        <VideoView
+            android:id="@+id/reelVideoPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            app:use_controller="false" />
+
         <ProgressBar
             android:id="@+id/videoProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.exoplayer2.ui.StyledPlayerView
-            android:id="@+id/reelVideoPlayer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:use_controller="false" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
 
         <ImageView
             android:id="@+id/imgPlay"
             android:layout_width="@dimen/dp80"
             android:layout_height="@dimen/dp80"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_play"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="gone" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAvatar"
             android:layout_width="@dimen/dp45"
             android:layout_height="@dimen/dp45"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/dp16"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@mipmap/ic_launcher" />
 
         <ImageView
             android:id="@+id/imgHeart"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
+            android:layout_width="@dimen/dp45"
+            android:layout_height="@dimen/dp45"
+            android:layout_below="@+id/imgAvatar"
+            android:layout_alignStart="@+id/imgAvatar"
+            android:layout_alignEnd="@id/imgAvatar"
             android:layout_marginTop="@dimen/dp20"
-            android:src="@drawable/ic_heart_double_click"
-            app:layout_constraintEnd_toEndOf="@id/imgAvatar"
-            app:layout_constraintStart_toStartOf="@+id/imgAvatar"
-            app:layout_constraintTop_toBottomOf="@+id/imgAvatar" />
+            android:src="@drawable/ic_heart_double_click" />
+
+        <ImageView
+            android:id="@+id/imgComment"
+            android:layout_width="@dimen/dp35"
+            android:layout_height="@dimen/dp35"
+            android:layout_below="@+id/txtLikeCount"
+            android:layout_alignStart="@+id/imgAvatar"
+            android:layout_alignEnd="@id/imgAvatar"
+            android:layout_marginTop="@dimen/dp15"
+            android:src="@drawable/ic_comment_white" />
+
+        <TextView
+            android:id="@+id/txtCommentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgComment"
+            android:layout_alignStart="@+id/imgHeart"
+            android:layout_alignEnd="@+id/imgHeart"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp16"
+            tools:text="10" />
+
+        <TextView
+            android:id="@+id/txtLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgHeart"
+            android:layout_alignStart="@+id/imgHeart"
+            android:layout_alignEnd="@+id/imgHeart"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/sp16"
+            tools:text="10000" />
 
         <TextView
             android:id="@+id/txtUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@id/txtDescription"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp10"
             android:textColor="@color/white"
             android:textSize="@dimen/sp20"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/txtDescription"
             tools:text="Hello there" />
 
         <TextView
             android:id="@+id/txtDescription"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp10"
             android:maxLines="3"
             android:textColor="@color/white"
             android:textSize="@dimen/sp16"
             android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Welcome to my videoooooooooooooooo \naaaaaaaa" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

@@ -483,7 +483,8 @@
     <string name="all_users">All users</string>
     <string name="choose_video">Choose Video</string>
     <string name="post_video">Post Video</string>
-
+    <string name="strVideoComment">Bình luận</string>
+    <string name="strInputVideoComment">Vui lòng nhập bình luận...</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>

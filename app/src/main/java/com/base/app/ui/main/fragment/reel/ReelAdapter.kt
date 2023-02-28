@@ -1,91 +1,79 @@
 package com.base.app.ui.main.fragment.reel
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.base.app.data.models.ExoPlayerItem
+import com.base.app.common.CommonUtils
 import com.base.app.data.models.Video
 import com.base.app.databinding.ReelItemBinding
 import com.base.app.ui.main.MainViewModel
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.upstream.DefaultDataSource
 
 class ReelAdapter(
     private val list: ArrayList<Video>,
     private val context: Context,
-    var videoPreparedListener: OnVideoPreparedListener,
-    val mainViewModel: MainViewModel
+    val mainViewModel: MainViewModel,
+    val viewModel: ReelViewModel,
+    val listener: onVideoClick
 ) :
     RecyclerView.Adapter<ReelAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ReelItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        lateinit var exoPlayer: ExoPlayer
-        lateinit var mediaSource: MediaSource
+
         fun setVideoPath(data: Video) {
+            var mediaPlayer: MediaPlayer? = null
             mainViewModel.getUser(
                 context,
                 binding.imgAvatar,
                 binding.txtUserName,
             )
-            binding.txtDescription.text = data.desciption
-            binding.reelVideoPlayer.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-            binding.imgPlay.tag = "play"
-            binding.imgPlay.visibility = View.INVISIBLE
-            exoPlayer = ExoPlayer.Builder(context).build()
-            exoPlayer.addListener(object : Player.Listener {
-                override fun onPlayerError(error: PlaybackException) {
-                    super.onPlayerError(error)
-                    //Toast.makeText(context, "Can't play this video", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                    if (playWhenReady) {
-                        binding.videoProgress.visibility = View.INVISIBLE
-                        binding.imgPlay.tag = "play"
-                        binding.imgPlay.visibility = View.INVISIBLE
-                    } else {
-                        binding.videoProgress.visibility = View.VISIBLE
-                    }
-                }
-            })
-            binding.reelVideoPlayer.player = exoPlayer
-            exoPlayer.seekTo(0)
-            exoPlayer.repeatMode = Player.REPEAT_MODE_ONE
-            val dataSourceFactory = DefaultDataSource.Factory(context)
-            mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(MediaItem.fromUri(Uri.parse(data.url)))
-            exoPlayer.setMediaSource(mediaSource)
-            exoPlayer.prepare()
-            if (absoluteAdapterPosition == 0) {
-                exoPlayer.playWhenReady = true
-                exoPlayer.play()
+            viewModel.isLikeVideo(data.videoId, binding.imgHeart)
+            viewModel.getVideoLikeCount(data.videoId, binding.txtLikeCount)
+            viewModel.getVideoCommentCount(data.videoId, binding.txtCommentCount)
+            binding.txtDescription.text = data.description
+            binding.reelVideoPlayer.setVideoURI(Uri.parse(data.url))
+            binding.videoProgress.visibility = View.VISIBLE
+            binding.reelVideoPlayer.setOnPreparedListener {
+                it.start()
+                mediaPlayer = it
+                binding.videoProgress.visibility = View.GONE
             }
-            videoPreparedListener.onVideoPrepared(ExoPlayerItem(exoPlayer, absoluteAdapterPosition))
+            binding.reelVideoPlayer.setOnCompletionListener {
+                it.start()
+                mediaPlayer = it
+            }
+
+            binding.imgHeart.setOnClickListener {
+                listener.likeVideo(data.videoId, binding.imgHeart.tag.toString())
+            }
+            binding.imgComment.setOnClickListener {
+                listener.commentVideo(data.videoId)
+            }
             binding.reelConstraint.setOnClickListener {
-                if (binding.imgPlay.tag.equals("play")) {
-                    exoPlayer.pause()
-                    exoPlayer.playWhenReady = false
-                    binding.imgPlay.tag = "stop"
-                    binding.imgPlay.visibility = View.VISIBLE
+                if (!CommonUtils.isDoubleClick()) {
+                    if (binding.reelVideoPlayer.isPlaying) {
+                        binding.imgPlay.visibility = View.VISIBLE
+                        binding.reelVideoPlayer.pause()
+                        if (mediaPlayer != null) {
+                            mediaPlayer?.pause()
+                        }
+                    } else {
+                        binding.imgPlay.visibility = View.GONE
+                        if (mediaPlayer != null) {
+                            mediaPlayer?.start()
+                        }
+                    }
                 } else {
-                    exoPlayer.playWhenReady = true
-                    exoPlayer.play()
-                    binding.imgPlay.tag = "play"
-                    binding.imgPlay.visibility = View.INVISIBLE
+                    listener.doubleClickLikePost(data.videoId, binding.imgHeart.tag.toString())
                 }
             }
         }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -101,13 +89,17 @@ class ReelAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model = list[position]
         holder.setVideoPath(model)
+
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    interface OnVideoPreparedListener {
-        fun onVideoPrepared(exoPlayerItem: ExoPlayerItem)
+
+    interface onVideoClick {
+        fun likeVideo(videoId: String, status: String)
+        fun doubleClickLikePost(postId: String, status: String)
+        fun commentVideo(videoId: String)
     }
 }
