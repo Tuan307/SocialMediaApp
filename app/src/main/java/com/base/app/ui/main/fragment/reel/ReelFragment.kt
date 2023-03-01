@@ -1,7 +1,6 @@
 package com.base.app.ui.main.fragment.reel
 
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.base.app.R
@@ -23,6 +22,7 @@ class ReelFragment : BaseFragment<FragmentReelBinding>(),
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<ReelViewModel>()
     var currentPosition = 0
+    private var isClick = false
 
     companion object {
         fun newInstance(): ReelFragment {
@@ -63,6 +63,7 @@ class ReelFragment : BaseFragment<FragmentReelBinding>(),
         super.onPause()
         videos.clear()
         adapter.notifyDataSetChanged()
+        viewModel.clearAllData()
     }
 
 
@@ -83,4 +84,5 @@ class ReelFragment : BaseFragment<FragmentReelBinding>(),
         fragment.arguments = bundle
         fragment.show(childFragmentManager, "ActionBottomDialog")
     }
+
 }

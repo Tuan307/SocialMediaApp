@@ -44,6 +44,11 @@ class ReelViewModel : BaseViewModel() {
         }
     }
 
+    fun clearAllData() {
+        list.clear()
+        videoListResponse.postValue(list)
+    }
+
     fun likeVideo(videoId: String, status: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             if (status == "like") {
@@ -92,6 +97,7 @@ class ReelViewModel : BaseViewModel() {
                 })
         }
     }
+
     fun getVideoCommentCount(videoId: String, textView: TextView) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("VideoComment").child(videoId)
@@ -106,4 +112,6 @@ class ReelViewModel : BaseViewModel() {
                 })
         }
     }
+
+
 }

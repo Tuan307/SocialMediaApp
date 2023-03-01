@@ -40,6 +40,11 @@ class MainViewModel : BaseViewModel() {
         reelClick.postValue(reelClick.value?.plus(1) ?: 1)
     }
 
+    var callGetVideo = MutableLiveData<Boolean>()
+    fun setUpIsReelClick(t: Boolean) {
+        callGetVideo.postValue(t)
+    }
+
     //fake data
     var userResponse = MutableLiveData<User>()
     fun getUser(context: Context, image: CircleImageView, text1: TextView) {
