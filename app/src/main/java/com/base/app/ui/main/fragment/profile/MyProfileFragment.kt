@@ -2,6 +2,7 @@ package com.base.app.ui.main.fragment.profile
 
 import android.content.Intent
 import android.view.View
+import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,6 +11,8 @@ import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
 import com.base.app.data.models.PostItem
 import com.base.app.databinding.FragmentMyProfileBinding
+import com.base.app.ui.add_post.PostActivity
+import com.base.app.ui.add_video_post.AddVideoActivity
 import com.base.app.ui.edit_profile.EditProfileActivity
 import com.base.app.ui.follow.FollowerActivity
 import com.base.app.ui.main.MainViewModel
@@ -49,6 +52,22 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
     }
 
     override fun initListener() {
+        binding.imgAddImage.setOnClickListener {
+            val popupMenu = PopupMenu(requireContext(), it)
+            popupMenu.inflate(R.menu.add_item)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.postVideo -> {
+                        startActivity(Intent(requireContext(), AddVideoActivity::class.java))
+                    }
+                    R.id.postImage -> {
+                        startActivity(Intent(requireContext(), PostActivity::class.java))
+                    }
+                }
+                true
+            }
+            popupMenu.show()
+        }
         binding.imgOptions.setOnClickListener {
             startActivity(Intent(requireContext(), OptionActivity::class.java))
         }

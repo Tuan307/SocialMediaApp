@@ -66,7 +66,6 @@ class ProfileViewModel : BaseViewModel() {
     val getFollowerNumber = followerNumber as LiveData<Long>
     fun getFollower(id: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
-
             databaseReference.child("Follow").child(id).child("follower")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {

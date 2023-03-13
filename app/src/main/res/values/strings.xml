@@ -3,8 +3,6 @@
     <string name="str_download_complete">Tải xuống thành công</string>
     <string name="str_setup">CÀI ĐẶT</string>
     <string name="str_retry">Thử lại</string>
-    <string name="str_update_fail">Cập nhật thất bại. Thử lại trong lần mở ứng dụng tiếp theo</string>
-    <string name="str_no_email_client_installed">Không có ứng dụng nào để gửi mail</string>
     <string name="str_done">XONG</string>
 
     <string name="app_name">Social App</string>
@@ -43,60 +41,32 @@
     <string name="str_input_phone">Nhập số điện thoại...</string>
     <string name="str_input_pass">Nhập mật khẩu...</string>
     <string name="str_input_account">Nhập tài khoản...</string>
-    <string name="str_input_referral_code">Nhập mã giới thiệu...</string>
-    <string name="str_input_transaction_code">Nhập mã giao dịch</string>
-    <string name="str_referral_code">Mã giới thiệu</string>
     <string name="str_phone">Số điện thoại</string>
-    <string name="str_agree_terms">Đồng ý với điều khoản của Bytepay</string>
     <string name="str_start_login"><string name="str_activity_register"><![CDATA[<font color=#707A8A>Bạn đã có tài khoản?</font> <font color=#03CB83><b>Đăng nhập</b></font><font color=#707A8A> ngay</font>]]></string></string>
     <string name="str_introduce">Giới thiệu</string>
-    <string name="str_login_instructions">Hướng dẫn đăng nhập</string>
-    <string name="str_login_instructions_account">Hướng dẫn đăng nhập tài khoản</string>
-    <string name="str_register_instructions">Hướng dẫn đăng ký</string>
-    <string name="str_register_instructions_account">Hướng dẫn đăng ký tài khoản</string>
     <string name="str_input_account_and_pass">Nhập tài khoản và mật khẩu của bạn</string>
     <string name="str_account">Tài khoản</string>
     <string name="str_memo_login">Ghi nhớ đăng nhập</string>
     <string name="str_start_register"><![CDATA[<font color=#707A8A>Chưa có tài khoản?</font> <font color=#03CB83><b>Đăng ký</b></font><font color=#707A8A> ngay</font>]]></string>
     <string name="str_back_press">Nhấn lần nữa để thoát!</string>
     <string name="str_hello">Xin chào</string>
-    <string name="str_wallet_balance">Số dư của bạn</string>
-    <string name="str_my_link">Link của tôi</string>
-    <string name="str_create_link">Tạo link</string>
     <string name="str_by_date">Theo ngày</string>
     <string name="str_by_month">Theo tháng</string>
     <string name="str_by_year">Theo năm</string>
-    <string name="str_transaction">Giao dịch</string>
-    <string name="str_code_transaction"><![CDATA[<font color=#110E22>Mã giao dịch: </font> <font color=#707A8A><b>%s</b></font>]]></string>
-    <string name="str_code_order"><![CDATA[<font color=#110E22>Mã đơn hàng: </font> <font color=#707A8A><b>%s</b></font>]]></string>
     <string name="str_processing">Đang xử lý</string>
     <string name="str_success">Thành công</string>
     <string name="str_copy_success">Sao chép thành công</string>
     <string name="str_error">Thất bại</string>
-    <string name="str_unverified">Chưa nhập mã PIN</string>
     <string name="str_refuse">Từ chối</string>
     <string name="str_confirmed">Đã xác nhận</string>
     <string name="str_new">Mới</string>
     <string name="str_history">Lịch sử</string>
     <string name="str_all_notification">Tất cả thông báo</string>
-    <string name="str_tick">Đánh dấu đã đọc</string>
     <string name="str_delete_notification">Xóa thông báo</string>
-    <string name="str_transaction_info">Thông tin giao dịch</string>
-    <string name="str_expiration_date">Ngày hết hạn</string>
     <string name="str_birth_day">Ngày sinh</string>
-    <string name="str_not_expire">Không hết hạn</string>
     <string name="str_note">Ghi chú</string>
-    <string name="create_new_payment_link">Tạo mới payment link</string>
-    <string name="str_amount_of_money"><![CDATA[<font color=#707A8A>Số tiền(VNĐ)</font><font color=#FF7373> *</font>]]></string>
-    <string name="str_advanced">Nâng cao</string>
     <string name="str_continue">Tiếp tục</string>
-    <string name="str_products_services">Sản phẩm dịch vụ</string>
-    <string name="str_name_product">Tên sản phẩm/Dịch vụ</string>
     <string name="str_min">1</string>
-    <string name="str_price">Giá</string>
-    <string name="str_tax">Thuế suất GTGT</string>
-    <string name="str_total_price">Tổng tiền:</string>
-    <string name="str_x">X</string>
     <string name="str_customer_name"><![CDATA[<font color=#707A8A>Họ tên khách hàng</font><font color=#FF7373> *</font>]]></string>
     <string name="str_customer_phone"><![CDATA[<font color=#707A8A>Số điện thoại</font><font color=#FF7373> *</font>]]></string>
     <string name="str_create_payment_link_success">Tạo link thanh toán thành công</string>
@@ -104,76 +74,12 @@
     <string name="str_qr_code">QR code</string>
     <string name="str_copy">Sao chép</string>
     <string name="str_download">Tải xuống</string>
-    <string name="str_day_trading">Giao dịch theo ngày</string>
-    <string name="str_customer_info">Thông tin khách hàng</string>
-    <string name="str_number_of_transactions">Số lượng giao dịch:</string>
-    <string name="str_money_of_transactions">Số tiền giao dịch:</string>
-    <string name="str_transaction_details">Chi tiết giao dịch</string>
-    <string name="str_code">Mã đơn hàng:</string>
-    <string name="str_code1">Mã đơn hàng</string>
-    <string name="str_money_in">Số tiền vào ví:</string>
-    <string name="str_payment_amount">Số tiền thanh toán:</string>
-    <string name="str_no_expiration">Không hết hạn</string>
-    <string name="str_create_time">Thời gian tạo:</string>
-    <string name="str_transaction_time">Thời gian giao dịch:</string>
-    <string name="str_payments">Hình thức thanh toán:</string>
-    <string name="str_payments_status">Trạng thái thanh toán:</string>
-    <string name="str_link_status">Trạng thái payment link:</string>
     <string name="str_used">Đã sử dụng</string>
-    <string name="str_payment_link_detail">Chi tiết payment link</string>
-    <string name="str_verification_account">Xác thực tài khoản, tăng cường bảo mật</string>
-    <string name="str_verification_now">Xác thực tài khoản ngay</string>
-    <string name="str_my_wallet">Số dư của tôi</string>
-    <string name="str_bank_account_link">Liên kết tài khoản Ngân hàng</string>
-    <string name="str_setting_payment_link">Cài đặt link thanh toán</string>
-    <string name="str_setting_code">Cài đặt mã pin</string>
-    <string name="str_manage_support_requests">Quản lý yêu cầu hỗ trợ</string>
     <string name="str_change_password">Đổi mật khẩu</string>
     <string name="str_logout">Đăng xuất</string>
-    <string name="str_long_text">https://docs.google.com/document/d/1usuuIflJogZuxi0fHXv40PVrMdHzpK-vzedX8GBHoyc/edithttps://docs.google.com/docum/docs.google.com/document/d/1usuuIflJogZuxi0fHXv40PVrMdHzpK-vzedX8GBHoyc/edithttps://docs.google.com/docum/docs.google.com/document/d/1usuuIflJogZuxi0fHXv40PVrMdHzpK-vzedX8GBHoyc/edithttps://docs.google.com/document/d/1usuuIflJogZuxi0fHXv40PVrMdHzpK-vzedX8GBHoyc/edit</string>
-    <string name="str_create_product">Tạo đơn hàng</string>
-    <string name="str_first_date_test">Ngày 02, tháng 01 năm 2021</string>
-    <string name="str_dash">-</string>
-    <string name="str_by_week">Theo tuần</string>
-    <string name="str_payment_link">Payment link</string>
-    <string name="str_input_link">Nhập link</string>
     <string name="str_personal_information">Thông tin cá nhân</string>
     <string name="str_email_login">Email đăng nhập</string>
-    <string name="str_cccd">Số CMND/CCCD/Hộ chiếu</string>
-    <string name="str_address">Địa chỉ</string>
     <string name="str_account_status">Tình trạng tài khoản</string>
-    <string name="str_unconfirmed">Chưa xác thực</string>
-    <string name="str_contact_info">Thông tin liên hệ</string>
-    <string name="str_verification_info">Xác thực thông tin cá nhân</string>
-    <string name="str_business_information">Thông tin doanh nghiệp</string>
-    <string name="str_verify_business_info">Xác thực thông tin doanh nghiệp</string>
-    <string name="str_verify_account">Xác thực tài khoản</string>
-    <string name="str_name1"><![CDATA[<font color=#707A8A>Họ tên</font><font color=#FF7373> *</font>]]></string>
-    <string name="str_birth_day1"><![CDATA[<font color=#707A8A>Ngày Sinh</font><font color=#FF7373> *</font>]]></string>
-    <string name="str_address1"><![CDATA[<font color=#707A8A>Địa chỉ</font><font color=#FF7373> *</font>]]></string>
-    <string name="str_id_card"><![CDATA[<font color=#707A8A>Số CMND/CCCD/Hộ chiếu</font><font color=#FF7373> *</font>]]></string>
-    <string name="str_verify_by_id_card">Xác thực tài khoản bằng CMND/CCCD</string>
-    <string name="str_cmnd_cccd">CMND/CCCD</string>
-    <string name="str_passport">Hộ chiếu</string>
-    <string name="str_verify_by_passport">Xác thực tài khoản bằng Hộ chiếu</string>
-    <string name="str_id_card_front">Ảnh CMND/CCCD mặt trước</string>
-    <string name="str_id_card_back_side">Ảnh CMND/CCCD mặt sau</string>
-    <string name="str_selfie">Ảnh selfie cầm CMND/CCCD</string>
-    <string name="str_tap_to_select">Nhấn để chọn</string>
-    <string name="str_passport_photo">Ảnh hộ chiếu</string>
-    <string name="str_selfie_with_passport">Ảnh selfie cầm Hộ chiếu</string>
-    <string name="str_enter_business_info">Nhập thông tin doanh nghiệp</string>
-    <string name="str_type_of_business">Loại hình doanh nghiệp</string>
-    <string name="str_company_name">Tên doanh nghiệp</string>
-    <string name="str_license_number">Số giấy phép ĐKKD</string>
-    <string name="str_registration_address">Địa chỉ nơi ĐKKD</string>
-    <string name="str_dkkd_front">Ảnh ĐKKD mặt trước</string>
-    <string name="str_dkkd_after">Ảnh ĐKKD mặt sau</string>
-    <string name="str_manage_wallet">Quản lý số dư</string>
-    <string name="str_total_payment">Tổng tiền thanh toán:</string>
-    <string name="str_amount_withdrawn">Số tiền đã rút:</string>
-    <string name="str_affiliate_account">Tài khoản liên kết</string>
-    <string name="str_amount_to_withdraw">Số tiền cần rút</string>
     <string name="str_enter_the_amount">Nhập số tiền (tối thiểu 200.000đ)</string>
     <string name="str_fee">Phí rút tiền</string>
     <string name="str_money_received">Số tiền thực nhận:</string>
@@ -485,6 +391,16 @@
     <string name="post_video">Post Video</string>
     <string name="strVideoComment">Bình luận</string>
     <string name="strInputVideoComment">Vui lòng nhập bình luận...</string>
+    <string name="post_image">Post Image</string>
+    <string name="strChat">Chat</string>
+    <string name="str_dash">Hi</string>
+    <string name="str_transaction">Hi</string>
+    <string name="str_tick">H</string>
+    <string name="str_update_fail">Cập nhật thất bại</string>
+    <string name="str_no_email_client_installed">Email không hợp lệ</string>
+    <string name="str_first_date_test">Hi</string>
+    <string name="strMessage">Nhắn tin...</string>
+    <string name="strPleaseInputMessage">Mời bạn nhập tin nhắn...</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>
