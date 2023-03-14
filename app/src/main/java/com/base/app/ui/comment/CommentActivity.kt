@@ -7,10 +7,14 @@ import com.base.app.base.activities.BaseActivity
 import com.base.app.common.CommonUtils.hideSoftKeyboard
 import com.base.app.common.EMPTY_STRING
 import com.base.app.data.models.Comment
+import com.base.app.data.models.NotificationData
+import com.base.app.data.models.PushNotification
 import com.base.app.databinding.ActivityCommentBinding
 import com.base.app.ui.comment.adapter.CommentAdapter
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CommentActivity : BaseActivity<ActivityCommentBinding>() {
 
     private val viewModel by viewModels<CommentViewModel>()
@@ -18,12 +22,14 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
     private var publisherId = EMPTY_STRING
     private var lists = ArrayList<Comment>()
     private lateinit var commentAdapter: CommentAdapter
+    private var name = EMPTY_STRING
+    private var uToken = EMPTY_STRING
     override fun getContentLayout(): Int {
         return R.layout.activity_comment
     }
 
     override fun initView() {
-        registerObserverLoadingEvent(viewModel,this@CommentActivity)
+        registerObserverLoadingEvent(viewModel, this@CommentActivity)
         val intent = intent
         postId = intent.getStringExtra("postId").toString()
         publisherId = intent.getStringExtra("publisherId").toString()
@@ -49,6 +55,11 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
                 } else {
                     viewModel.addComments(postId, edtComment.text.toString())
                     viewModel.addNotifications(postId, edtComment.text.toString(), publisherId)
+                    val notification = PushNotification(
+                        NotificationData("Message", "$name đã comment vào ảnh của bạn", "Comment"),
+                        uToken
+                    )
+                    viewModel.sendNotification(notification)
                 }
             }
         }
@@ -58,7 +69,9 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
         viewModel.apply {
             getImageResponse.observe(this@CommentActivity) {
                 if (it != null) {
-                    Glide.with(this@CommentActivity).load(it).into(binding.imgCommentAvatar)
+                    name = it.username.toString()
+                    Glide.with(this@CommentActivity).load(it.imageurl)
+                        .into(binding.imgCommentAvatar)
                 }
             }
             getCommentResponse.observe(this@CommentActivity) {
@@ -73,6 +86,12 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
                 } else {
                     showToast(this@CommentActivity, resources.getString(R.string.error))
                 }
+            }
+            userResponse.observe(this@CommentActivity) {
+                viewModel.getReceiverToken(it.id.toString())
+            }
+            tokenResponse.observe(this@CommentActivity) {
+                uToken = ""
             }
         }
     }

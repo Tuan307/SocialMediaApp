@@ -13,19 +13,24 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
+import com.base.app.common.EMPTY_STRING
+import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PostItem
+import com.base.app.data.models.PushNotification
 import com.base.app.databinding.FragmentPostDetailBinding
 import com.base.app.ui.comment.CommentActivity
-import com.base.app.ui.main.fragment.home.HomeViewModel
-import com.base.app.ui.main.fragment.home.PostAdapter
+import com.base.app.ui.profile_detail_post.adapter.ProfilePostAdapterDetail
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
-class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapter.IPostCallBack {
-
-    private val viewModel by viewModels<HomeViewModel>()
+@AndroidEntryPoint
+class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
+    ProfilePostAdapterDetail.IPostCallBack {
+    private val viewModel by viewModels<PostDetailViewModel>()
     private var list: ArrayList<PostItem> = ArrayList()
     private var imageId = 0
-    private lateinit var postAdapter: PostAdapter
+    private var txtName = ""
+    private lateinit var postAdapter: ProfilePostAdapterDetail
     override fun getContentLayout(): Int {
         return R.layout.fragment_post_detail
     }
@@ -37,8 +42,14 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapte
         imageId = intent.getIntExtra("imageId", 0)
         binding.rcvPhoto.layoutManager = LinearLayoutManager(this@PostDetailActivity)
         binding.rcvPhoto.setHasFixedSize(true)
-        postAdapter = PostAdapter(this@PostDetailActivity, this, viewModel, list)
+        postAdapter = ProfilePostAdapterDetail(
+            this@PostDetailActivity,
+            list,
+            this@PostDetailActivity,
+            viewModel
+        )
         binding.rcvPhoto.adapter = postAdapter
+        viewModel.getCurrentUserInformation()
         viewModel.getDataDetail(idKey.toString())
 
     }
@@ -58,7 +69,22 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapte
 
                 binding.rcvPhoto.scrollToPosition(imageId)
             }
+            userResponse.observe(this@PostDetailActivity) {
+                txtName = it.username.toString()
+            }
+            tokenResponse.observe(this@PostDetailActivity) {
+                val notification = PushNotification(
+                    to = it,
+                    data = NotificationData(
+                        "Thông Báo",
+                        "$txtName đã thích ảnh của bạn",
+                        EMPTY_STRING
+                    )
+                )
+                viewModel.sendNotification(notification)
+            }
         }
+
     }
 
     override fun clickPost(postId: String, publisherId: String) {
@@ -70,6 +96,11 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapte
 
     override fun likePost(postId: String, status: String, publisherId: String) {
         viewModel.likePost(postId, status, publisherId)
+        if (publisherId != viewModel.firebaseUser?.uid.toString()
+            && status == "like"
+        ) {
+            viewModel.getReceiverToken(publisherId)
+        }
     }
 
 
@@ -91,6 +122,9 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(), PostAdapte
     override fun doubleClickLikePost(postId: String, status: String, publisherId: String) {
         if (status == "like") {
             viewModel.likePost(postId, status, publisherId)
+            if (publisherId != viewModel.firebaseUser?.uid.toString()) {
+                viewModel.getReceiverToken(publisherId)
+            }
         }
     }
 

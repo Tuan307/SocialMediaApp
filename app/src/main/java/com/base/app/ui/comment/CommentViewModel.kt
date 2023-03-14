@@ -6,18 +6,26 @@ import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.data.apis.Api
 import com.base.app.data.models.Comment
+import com.base.app.data.models.PushNotification
 import com.base.app.data.models.User
+import com.base.app.data.models.mToken
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CommentViewModel : BaseViewModel() {
+@HiltViewModel
+class CommentViewModel @Inject constructor(
+    private val api: Api
+) : BaseViewModel() {
 
-    var getImageResponse = MutableLiveData<String?>()
+    var getImageResponse = MutableLiveData<User>()
     fun getImage() {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseUser?.let {
@@ -26,7 +34,7 @@ class CommentViewModel : BaseViewModel() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val user = snapshot.getValue(User::class.java)
                             if (user != null) {
-                                getImageResponse.postValue(user.imageurl)
+                                getImageResponse.postValue(user)
                             }
                         }
 
@@ -37,6 +45,7 @@ class CommentViewModel : BaseViewModel() {
         }
     }
 
+    var userResponse: MutableLiveData<User> = MutableLiveData()
     fun getInformation(
         context: Context,
         image: ImageView,
@@ -44,21 +53,22 @@ class CommentViewModel : BaseViewModel() {
         publisherId: String
     ) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
-            firebaseUser?.let {
-                databaseReference.child("Users").child(publisherId)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val user = snapshot.getValue(User::class.java)
-                            if (user != null) {
-                                Glide.with(context).load(user.imageurl).into(image)
-                                userName.text = user.username
+            databaseReference.child("Users").child(publisherId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val user = snapshot.getValue(User::class.java)
+                        if (user != null) {
+                            if (publisherId != firebaseUser?.uid.toString()) {
+                                userResponse.postValue(user)
                             }
+                            Glide.with(context).load(user.imageurl).into(image)
+                            userName.text = user.username
                         }
+                    }
 
-                        override fun onCancelled(error: DatabaseError) {
-                        }
-                    })
-            }
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
         }
     }
 
@@ -157,6 +167,36 @@ class CommentViewModel : BaseViewModel() {
                         addVideoCommentResponse.postValue(false)
                     }
                 }
+        }
+    }
+
+    var sendNotificationResponse = MutableLiveData<Boolean>()
+    fun sendNotification(notification: PushNotification) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = api.postNotification(notification)
+            if (response.isSuccessful) {
+                sendNotificationResponse.postValue(true)
+            } else {
+                sendNotificationResponse.postValue(false)
+            }
+        }
+    }
+
+    var tokenResponse = MutableLiveData<String>()
+    fun getReceiverToken(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Tokens").child(id)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val token = snapshot.getValue(mToken::class.java)
+                        if (token != null) {
+                            tokenResponse.postValue(token.token)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
         }
     }
 }

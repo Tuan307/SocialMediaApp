@@ -10,10 +10,8 @@ import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
 import com.base.app.databinding.ActivityDetailChatBinding
 import com.bumptech.glide.Glide
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
-const val TOPIC = "/topics/myTopic"
 
 @AndroidEntryPoint
 class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
@@ -29,7 +27,6 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
     }
 
     override fun initView() {
-        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
         val intent = intent
         chatId = intent.getStringExtra("id") ?: EMPTY_STRING
         chatName = intent.getStringExtra("name") ?: EMPTY_STRING
@@ -63,7 +60,7 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
                 }
                 if (idToken != "") {
                     val notification = PushNotification(
-                        NotificationData("Message", message, true),
+                        NotificationData("Message", message, EMPTY_STRING),
                         idToken
                     )
                     viewModel.sendNotification(notification)

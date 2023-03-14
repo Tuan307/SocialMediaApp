@@ -16,7 +16,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel : BaseViewModel() {
+class MainViewModel() : BaseViewModel() {
     var currentIndex = MutableLiveData<Int>(0)
     fun setCurrentIndex(i: Int) {
         currentIndex.postValue(i)
@@ -46,8 +46,24 @@ class MainViewModel : BaseViewModel() {
         callGetVideo.postValue(t)
     }
 
-    //fake data
     var userResponse = MutableLiveData<User>()
+    fun getCurrentUserInformation() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Users").child(firebaseUser?.uid.toString())
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val user = snapshot.getValue(User::class.java)
+                        if (user != null) {
+                            userResponse.postValue(user)
+                        }
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+        }
+    }
+
+    //fake reel information data
     fun getUser(context: Context, image: CircleImageView, text1: TextView) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Users").child(firebaseUser?.uid.toString())
@@ -73,4 +89,6 @@ class MainViewModel : BaseViewModel() {
             databaseReference.child("Tokens").child(firebaseUser.uid).setValue(mToken)
         }
     }
+
+
 }

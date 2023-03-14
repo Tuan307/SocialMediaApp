@@ -16,21 +16,27 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
+import com.base.app.common.EMPTY_STRING
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
+import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PostItem
+import com.base.app.data.models.PushNotification
 import com.base.app.databinding.FragmentHome2Binding
 import com.base.app.ui.chat.ChatActivity
 import com.base.app.ui.comment.CommentActivity
 import com.base.app.ui.main.MainActivity
 import com.base.app.ui.main.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     PostAdapter.IPostCallBack, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     private var key: String? = null
     private var lastKey: String? = null
     private var listAll: ArrayList<PostItem> = ArrayList()
+    private var txtName = EMPTY_STRING
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -48,7 +54,9 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun initView() {
         registerObserverLoadingEvent(viewModel, this@HomeFragment)
+        homeViewModel.getCurrentUserInformation()
         initRecyclerView()
+
         binding.homeRefresh.setOnRefreshListener(this@HomeFragment)
     }
 
@@ -105,6 +113,21 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
                     showToast(requireContext(), resources.getString(R.string.str_error))
                 }
             }
+            tokenResponse.observe(this@HomeFragment) {
+                var message = txtName
+                if (message == EMPTY_STRING) {
+                    message = "Ai đó"
+                }
+                val notification = PushNotification(
+                    to = it,
+                    data = NotificationData(
+                        "Thông Báo",
+                        "$message đã thích ảnh của bạn",
+                        EMPTY_STRING
+                    )
+                )
+                viewModel.sendNotification(notification)
+            }
         }
         homeViewModel.apply {
             doubleClick.observe(this@HomeFragment) {
@@ -112,6 +135,9 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
                     binding.rcvHome.smoothScrollToPosition(0)
                     setRefresh(false)
                 }
+            }
+            userResponse.observe(this@HomeFragment) {
+                txtName = it.username.toString()
             }
         }
     }
@@ -125,6 +151,11 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun likePost(postId: String, status: String, publisherId: String) {
         viewModel.likePost(postId, status, publisherId)
+        if (publisherId != viewModel.firebaseUser?.uid.toString()
+            && status == "like"
+        ) {
+            viewModel.getReceiverToken(publisherId)
+        }
     }
 
 
@@ -147,6 +178,9 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     override fun doubleClickLikePost(postId: String, status: String, publisherId: String) {
         if (status == "like") {
             viewModel.likePost(postId, status, publisherId)
+            if (publisherId != viewModel.firebaseUser?.uid.toString()) {
+                viewModel.getReceiverToken(publisherId)
+            }
         }
     }
 

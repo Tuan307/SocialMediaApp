@@ -17,7 +17,9 @@ import com.base.app.ui.main.fragment.reel.ReelFragment
 import com.base.app.ui.main.fragment.search.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(),
     BottomNavigationView.OnNavigationItemSelectedListener {
 

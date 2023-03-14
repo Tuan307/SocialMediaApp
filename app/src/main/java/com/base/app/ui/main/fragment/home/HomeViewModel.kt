@@ -12,17 +12,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.R
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.data.apis.Api
 import com.base.app.data.models.PostItem
+import com.base.app.data.models.PushNotification
 import com.base.app.data.models.User
+import com.base.app.data.models.mToken
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : BaseViewModel() {
+@HiltViewModel
+
+class HomeViewModel @Inject constructor(
+    private val api: Api
+) : BaseViewModel() {
 
     fun countComments(text: TextView, postId: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
@@ -182,7 +191,7 @@ class HomeViewModel : BaseViewModel() {
 
     }
 
-    fun addNotifications(postId: String, publisherId: String) {
+    private fun addNotifications(postId: String, publisherId: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             val hashMap = HashMap<String, Any>()
             hashMap["userid"] = firebaseUser?.uid.toString()
@@ -293,6 +302,36 @@ class HomeViewModel : BaseViewModel() {
 
                     override fun onCancelled(error: DatabaseError) {
                         Log.d("CheckAAA", "Yes Here")
+                    }
+                })
+        }
+    }
+
+    var sendNotificationResponse = MutableLiveData<Boolean>()
+    fun sendNotification(notification: PushNotification) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = api.postNotification(notification)
+            if (response.isSuccessful) {
+                sendNotificationResponse.postValue(true)
+            } else {
+                sendNotificationResponse.postValue(false)
+            }
+        }
+    }
+
+    var tokenResponse = MutableLiveData<String>()
+    fun getReceiverToken(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Tokens").child(id)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val token = snapshot.getValue(mToken::class.java)
+                        if (token != null) {
+                            tokenResponse.postValue(token.token)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
                     }
                 })
         }
