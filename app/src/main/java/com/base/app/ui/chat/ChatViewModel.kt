@@ -139,20 +139,18 @@ class ChatViewModel @Inject constructor(
     var tokenResponse = MutableLiveData<String>()
     fun getReceiverToken(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val query = databaseReference.child("Tokens").orderByKey().equalTo(id)
-            query.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (data in snapshot.children) {
-                        val token = data.getValue(mToken::class.java)
+            databaseReference.child("Tokens").child(id)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val token = snapshot.getValue(mToken::class.java)
                         if (token != null) {
                             tokenResponse.postValue(token.token)
                         }
                     }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
         }
     }
 }

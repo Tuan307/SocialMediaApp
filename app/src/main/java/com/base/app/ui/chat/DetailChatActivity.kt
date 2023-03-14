@@ -61,7 +61,7 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
                 }
                 if (idToken != "") {
                     val notification = PushNotification(
-                        NotificationData("Message", message),
+                        NotificationData("Message", message, true),
                         idToken
                     )
                     viewModel.sendNotification(notification)

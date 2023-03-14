@@ -11,8 +11,9 @@ import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.base.app.common.FIREBASE_URL
 import com.base.app.data.models.mToken
-import com.base.app.ui.chat.DetailChatActivity
+import com.base.app.ui.splash.WelcomeActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -24,7 +25,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        val intent = Intent(this, DetailChatActivity::class.java)
+        val intent = Intent(this, WelcomeActivity::class.java)
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationId = 1000
@@ -66,7 +67,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun updateToken(token1: String) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         val databaseReference =
-            FirebaseDatabase.getInstance("https://social-app-5e237-default-rtdb.asia-southeast1.firebasedatabase.app")
+            FirebaseDatabase.getInstance(FIREBASE_URL)
                 .getReference("Tokens")
         val token = mToken(token1)
         databaseReference.child(firebaseUser?.uid.toString()).setValue(token)
