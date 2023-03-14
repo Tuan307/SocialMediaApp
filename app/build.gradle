@@ -31,8 +31,7 @@ android {
         debug {
             try {
                 minifyEnabled false
-                buildConfigField("String", "API_URL", "\"https://m.bytepay.vn/\"")
-                buildConfigField "String", "API_URL_WEB", "\"https://api.bytepay.vn/\""
+                buildConfigField("String", "API_URL", apikeyProperties['API_URL_DEV'])
                 debuggable true
             } catch (e) {
                 // add gradle.properties file with the following property:
@@ -93,6 +92,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.1.0'
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.1.0'
 
 
     // constraint layout

@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.databinding.ActivityChatBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClick {
 
     private val viewModel by viewModels<ChatViewModel>()

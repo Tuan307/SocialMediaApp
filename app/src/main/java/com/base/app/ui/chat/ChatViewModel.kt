@@ -4,20 +4,26 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.base.app.CustomApplication
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.data.apis.Api
 import com.base.app.data.models.ChatModel
+import com.base.app.data.models.PushNotification
 import com.base.app.data.models.User
+import com.base.app.data.models.mToken
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class ChatViewModel : BaseViewModel() {
-
+@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val api: Api
+) : BaseViewModel() {
 
 
     private var followerResponse = MutableLiveData<ArrayList<String>>()
@@ -115,6 +121,38 @@ class ChatViewModel : BaseViewModel() {
             }.addOnFailureListener {
                 sendChatResponse.postValue(false)
             }
+        }
+    }
+
+    var sendNotificationResponse = MutableLiveData<Boolean>()
+    fun sendNotification(notification: PushNotification) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = api.postNotification(notification)
+            if (response.isSuccessful) {
+                sendNotificationResponse.postValue(true)
+            } else {
+                sendNotificationResponse.postValue(false)
+            }
+        }
+    }
+
+    var tokenResponse = MutableLiveData<String>()
+    fun getReceiverToken(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val query = databaseReference.child("Tokens").orderByKey().equalTo(id)
+            query.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (data in snapshot.children) {
+                        val token = data.getValue(mToken::class.java)
+                        if (token != null) {
+                            tokenResponse.postValue(token.token)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
         }
     }
 }

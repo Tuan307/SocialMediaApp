@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.data.models.User
+import com.base.app.data.models.mToken
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -63,6 +64,13 @@ class MainViewModel : BaseViewModel() {
                     override fun onCancelled(error: DatabaseError) {
                     }
                 })
+        }
+    }
+
+    fun updateToken(token: String) {
+        if (firebaseUser != null) {
+            val mToken = mToken(token)
+            databaseReference.child("Tokens").child(firebaseUser.uid).setValue(mToken)
         }
     }
 }

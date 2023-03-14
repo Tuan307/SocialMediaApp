@@ -1,5 +1,7 @@
 package com.base.app.ui.main
 
+import android.text.TextUtils
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -14,6 +16,7 @@ import com.base.app.ui.main.fragment.profile.MyProfileFragment
 import com.base.app.ui.main.fragment.reel.ReelFragment
 import com.base.app.ui.main.fragment.search.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : BaseActivity<ActivityMainBinding>(),
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -30,12 +33,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     }
 
     override fun initView() {
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            if (!TextUtils.isEmpty(token)) {
+            } else {
+                Log.e("Token", "token should not be null...")
+            }
+        }.addOnCompleteListener {
+            viewModel.updateToken(it.result)
+        }
+
         viewModel.saveId()
         binding.apply {
             bottomNav.setOnNavigationItemSelectedListener(this@MainActivity)
         }
         initPagerFragment()
     }
+
 
     private fun initPagerFragment() {
         mPagerAdapter = PagerFragmentAdapter(supportFragmentManager)

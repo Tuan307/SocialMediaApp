@@ -5,13 +5,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.common.EMPTY_STRING
+import com.base.app.data.models.NotificationData
+import com.base.app.data.models.PushNotification
 import com.base.app.databinding.ActivityDetailChatBinding
 import com.bumptech.glide.Glide
+import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 
+const val TOPIC = "/topics/myTopic"
+
+@AndroidEntryPoint
 class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
     private var chatId: String = ""
     private var chatName: String = ""
     private var url: String = ""
+    private var idToken = ""
     private val viewModel by viewModels<ChatViewModel>()
     private lateinit var adapter: DetailChatAdapter
     override fun getContentLayout(): Int {
@@ -19,11 +27,13 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
     }
 
     override fun initView() {
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
         val intent = intent
         chatId = intent.getStringExtra("id") ?: EMPTY_STRING
         chatName = intent.getStringExtra("name") ?: EMPTY_STRING
         url = intent.getStringExtra("url") ?: EMPTY_STRING
         viewModel.getPrivateChat(chatId)
+        viewModel.getReceiverToken(chatId)
         binding.apply {
             txtUserName.text = chatName
             Glide.with(this@DetailChatActivity).load(url).into(imgAvatar)
@@ -49,6 +59,13 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
                         resources.getString(R.string.strPleaseInputMessage)
                     )
                 }
+                if (idToken != "") {
+                    val notification = PushNotification(
+                        NotificationData("Message", message),
+                        idToken
+                    )
+                    viewModel.sendNotification(notification)
+                }
                 edtInputText.text.clear()
             }
         }
@@ -73,6 +90,9 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
             if (it.size > 0) {
                 binding.rcvDetailChat.smoothScrollToPosition(it.size - 1)
             }
+        }
+        viewModel.tokenResponse.observe(this@DetailChatActivity) {
+            idToken = it
         }
     }
 

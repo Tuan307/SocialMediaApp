@@ -70,3 +70,8 @@ const val STORAGE_URL = "gs://social-app-5e237.appspot.com"
 const val FIREBASE_URL =
     "https://social-app-5e237-default-rtdb.asia-southeast1.firebasedatabase.app"
 //    "https://socialmobileapp-b0f74-default-rtdb.asia-southeast1.firebasedatabase.app"
+
+const val BASE_URL = "https://fcm.googleapis.com"
+const val SERVER_KEY =
+    "AAAAdKlNv-I:APA91bGOUlShPSSfnCPoeddGOQTBpVVcgBWrCTrc_06mgWx2xALrjf0EQ_969RqhVaPpF0DdpaRVFR5gwgkVFWJME7GiDZRYqbk0ubJKlVwZB5aCgifyS0gcxVnbJdF_pEzUke5rT9Jz"
+const val CONTENT_TYPE = "application/json"

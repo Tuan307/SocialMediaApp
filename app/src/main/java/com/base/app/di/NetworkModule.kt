@@ -20,10 +20,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
-
-
     @Provides
-    fun provideBytePayApi(@ApiMobile retrofit: Retrofit): Api {
+    fun provideBytePayApi(retrofit: Retrofit): Api {
         return retrofit.create(Api::class.java)
     }
 
@@ -56,7 +54,6 @@ class NetworkModule {
         httpLoggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
-
         builder.interceptors().add(httpLoggingInterceptor)
         return builder.build()
     }
@@ -75,7 +72,4 @@ class NetworkModule {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         return MoshiConverterFactory.create(moshi)
     }
-
-
-
 }
