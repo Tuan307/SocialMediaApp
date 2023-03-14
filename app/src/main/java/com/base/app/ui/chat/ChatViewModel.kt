@@ -76,7 +76,6 @@ class ChatViewModel @Inject constructor(
 
     var chatListResponse = MutableLiveData<ArrayList<ChatModel>>()
     private var chatList = ArrayList<ChatModel>()
-
     fun getPrivateChat(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Chats").addValueEventListener(object : ValueEventListener {

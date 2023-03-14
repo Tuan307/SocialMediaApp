@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.common.EMPTY_STRING
+import com.base.app.data.models.ChatModel
 import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
 import com.base.app.databinding.ActivityDetailChatBinding
@@ -20,6 +21,7 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
     private var chatName: String = ""
     private var url: String = ""
     private var idToken = ""
+    private var list: ArrayList<ChatModel> = ArrayList()
     private val viewModel by viewModels<ChatViewModel>()
     private lateinit var adapter: DetailChatAdapter
     override fun getContentLayout(): Int {
@@ -39,7 +41,7 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
             Glide.with(this@DetailChatActivity).load(url).into(imgAvatar)
             rcvDetailChat.layoutManager = LinearLayoutManager(this@DetailChatActivity)
             rcvDetailChat.setHasFixedSize(true)
-            adapter = DetailChatAdapter(viewModel.firebaseUser?.uid.toString())
+            adapter = DetailChatAdapter(viewModel.firebaseUser?.uid.toString(), list)
             rcvDetailChat.adapter = adapter
         }
     }
@@ -73,12 +75,7 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
 
     override fun observerLiveData() {
         viewModel.sendChatResponse.observe(this@DetailChatActivity) {
-            if (it) {
-                showToast(
-                    this@DetailChatActivity,
-                    resources.getString(R.string.str_success)
-                )
-            } else {
+            if (!it) {
                 showToast(
                     this@DetailChatActivity,
                     resources.getString(R.string.str_error)
@@ -86,9 +83,11 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
             }
         }
         viewModel.chatListResponse.observe(this@DetailChatActivity) {
-            adapter.differ.submitList(it)
-            if (it.size > 0) {
-                binding.rcvDetailChat.smoothScrollToPosition(it.size - 1)
+            list.clear()
+            list.addAll(it)
+            adapter.notifyDataSetChanged()
+            if (list.size > 0) {
+                binding.rcvDetailChat.smoothScrollToPosition(list.size - 1)
             }
         }
         viewModel.tokenResponse.observe(this@DetailChatActivity) {
