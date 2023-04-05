@@ -1,8 +1,10 @@
 package com.base.app.ui.study
 
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
@@ -26,6 +28,8 @@ class MainActivity : BaseActivity<ActivityMain2Binding>(),
     }
 
     override fun initListener() {
+        val intent = Intent(this@MainActivity, MainActivity2::class.java)
+        startActivityForResult(intent, 1000)
         binding.apply {
             btnDate.setOnClickListener {
                 val calendar = Calendar.getInstance()
@@ -55,6 +59,19 @@ class MainActivity : BaseActivity<ActivityMain2Binding>(),
             }
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Toast.makeText(
+                    this@MainActivity,
+                    data.getStringExtra("result").toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     override fun observerLiveData() {

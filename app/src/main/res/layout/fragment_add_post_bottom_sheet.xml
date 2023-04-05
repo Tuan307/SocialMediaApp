@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/dp16"
+        tools:context=".ui.main.fragment.home.bottom_sheet.AddPostBottomSheetFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp16"
+            android:text="@string/action"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginVertical="@dimen/dp16"
+            android:background="@color/colorOpacity" />
+
+        <TextView
+            android:id="@+id/textPostImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp16"
+            android:text="@string/post_image"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginHorizontal="@dimen/dp16"
+            android:layout_marginVertical="@dimen/dp16"
+            android:background="@color/colorOpacity" />
+
+        <TextView
+            android:id="@+id/textPostVideo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp16"
+            android:text="@string/post_video"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20" />
+    </LinearLayout>
+</layout>

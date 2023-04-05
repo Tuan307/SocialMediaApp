@@ -1,5 +1,7 @@
 package com.base.app.ui.study
 
+import android.app.Activity
+import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
@@ -15,6 +17,11 @@ class MainActivity2 : BaseActivity<ActivityMain3Binding>(), StudyAdapter.clickDe
     }
 
     override fun initView() {
+
+        val intent = Intent()
+        intent.putExtra("result", "yes")
+        setResult(Activity.RESULT_OK, intent)
+
         list.add(Person("Kotlin", "Kotlin"))
 
         adapter = StudyAdapter(this@MainActivity2, list, this@MainActivity2)

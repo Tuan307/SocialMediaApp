@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel : BaseViewModel() {
 
-
     private var key = MutableLiveData<String?>()
     val getKey = key as LiveData<String?>
     fun getKey(t: Boolean) {

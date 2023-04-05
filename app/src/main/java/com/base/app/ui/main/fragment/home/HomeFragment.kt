@@ -26,6 +26,7 @@ import com.base.app.ui.chat.ChatActivity
 import com.base.app.ui.comment.CommentActivity
 import com.base.app.ui.main.MainActivity
 import com.base.app.ui.main.MainViewModel
+import com.base.app.ui.main.fragment.home.bottom_sheet.AddPostBottomSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -68,11 +69,15 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         }
     }
 
-    override fun initListener() {
+    override fun initListener() = with(binding) {
         viewModel.getLastKey()
         viewModel.getData()
-        binding.imgDM.setOnClickListener {
+        imgDM.setOnClickListener {
             startActivity(Intent(requireContext(), ChatActivity::class.java))
+        }
+        imgAddPost.setOnClickListener {
+            val fragment = AddPostBottomSheetFragment.newInstance()
+            fragment.show(childFragmentManager, "ActionBottomDialog")
         }
     }
 

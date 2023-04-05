@@ -15,8 +15,9 @@ import com.base.app.ui.comment.adapter.CommentAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
         const val TAG = "ActionBottomDialog"
