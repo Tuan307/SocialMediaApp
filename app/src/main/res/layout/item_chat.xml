@@ -18,15 +18,16 @@
 
         <TextView
             android:id="@+id/txtChat1"
-            android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp10"
             android:background="@drawable/item_edt_chat_bg"
-            android:backgroundTint="@color/color_gray"
-            android:padding="@dimen/dp5"
+            android:backgroundTint="#F6F3F3"
+            android:gravity="center"
+            android:padding="@dimen/dp10"
             android:textColor="@color/black"
             android:textSize="@dimen/sp18"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/chatGuideline"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,17 +39,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp10"
-            android:background="@drawable/item_edt_chat_bg"
+            android:background="@drawable/send_round_box"
             android:backgroundTint="@color/color_blue"
-            android:padding="@dimen/dp5"
+            android:gravity="center"
+            android:padding="@dimen/dp10"
             android:textColor="@color/white"
             android:textSize="@dimen/sp18"
-            android:gravity="center"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/chatGuideline"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Some chat in here" />
+            tools:text="Some chat text in here" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

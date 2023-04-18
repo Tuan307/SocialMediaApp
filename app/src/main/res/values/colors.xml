@@ -20,6 +20,14 @@
     <color name="icon_color_bottom_selected">@color/primaryColor</color>
     <color name="icon_color_normal">#B7B7B7</color>
 
+    <color name="greenLight">#11F311</color>
+    <color name="greenDark">#0EC20E</color>
+    <color name="redLight">#D53232</color>
+    <color name="redDark">#952323</color>
+    <color name="greyLight">#ADA9A9</color>
+
+
+
     <color name="colorPrimary">#03CB83</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#03CB83</color>

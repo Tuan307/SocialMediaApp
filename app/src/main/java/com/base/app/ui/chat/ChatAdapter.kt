@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 
 class ChatAdapter(
     private val context: Context,
-    private val listener: OnItemClick
+    private val listener: OnItemClick,
 ) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemChatUserBinding) :
         RecyclerView.ViewHolder(binding.root) {

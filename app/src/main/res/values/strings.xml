@@ -402,6 +402,7 @@
     <string name="strMessage">Nhắn tin...</string>
     <string name="strPleaseInputMessage">Mời bạn nhập tin nhắn...</string>
     <string name="action">Action</string>
+    <string name="strSend">Gửi</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>

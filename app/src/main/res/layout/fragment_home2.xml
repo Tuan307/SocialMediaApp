@@ -47,13 +47,13 @@
 
                 <ImageView
                     android:id="@+id/imgDM"
-                    android:layout_width="@dimen/dp32"
-                    android:layout_height="@dimen/dp32"
+                    android:layout_width="@dimen/dp30"
+                    android:layout_height="@dimen/dp30"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_weight="1"
                     android:contentDescription="@string/todo"
-                    android:src="@drawable/dmme"
+                    android:src="@drawable/messanger"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -1,14 +1,17 @@
 package com.base.app.ui.chat
 
+import android.content.Intent
+import android.view.View
 import androidx.activity.viewModels
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.common.EMPTY_STRING
-import com.base.app.data.models.ChatModel
 import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
 import com.base.app.databinding.ActivityDetailChatBinding
+import com.base.app.ui.video_call.MainActivity
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,7 +22,6 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
     private var chatName: String = ""
     private var url: String = ""
     private var idToken = ""
-    private var list: ArrayList<ChatModel> = ArrayList()
     private val viewModel by viewModels<ChatViewModel>()
     private lateinit var adapter: DetailChatAdapter
     override fun getContentLayout(): Int {
@@ -31,14 +33,14 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
         chatId = intent.getStringExtra("id") ?: EMPTY_STRING
         chatName = intent.getStringExtra("name") ?: EMPTY_STRING
         url = intent.getStringExtra("url") ?: EMPTY_STRING
-        viewModel.getPrivateChat(chatId)
+        viewModel.getPrivateChat(chatId, viewModel.firebaseUser?.uid.toString())
         viewModel.getReceiverToken(chatId)
         binding.apply {
             txtUserName.text = chatName
             Glide.with(this@DetailChatActivity).load(url).into(imgAvatar)
             rcvDetailChat.layoutManager = LinearLayoutManager(this@DetailChatActivity)
             rcvDetailChat.setHasFixedSize(true)
-            adapter = DetailChatAdapter(viewModel.firebaseUser?.uid.toString(), list)
+            adapter = DetailChatAdapter(viewModel.firebaseUser?.uid.toString())
             rcvDetailChat.adapter = adapter
         }
     }
@@ -50,7 +52,7 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
             }
             imgSend.setOnClickListener {
                 val message = edtInputText.text.toString()
-                if (!message.isNullOrEmpty()) {
+                if (message.isNotEmpty()) {
                     viewModel.sendMessage(message, chatId)
                 } else {
                     showToast(
@@ -67,6 +69,16 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
                 }
                 edtInputText.text.clear()
             }
+            edtInputText.doOnTextChanged { text, _, _, _ ->
+                if (!text.isNullOrEmpty()) {
+                    imgSend.visibility = View.VISIBLE
+                } else {
+                    imgSend.visibility = View.GONE
+                }
+            }
+            imgVideoCall.setOnClickListener {
+                startActivity(Intent(this@DetailChatActivity, MainActivity::class.java))
+            }
         }
     }
 
@@ -80,11 +92,9 @@ class DetailChatActivity : BaseActivity<ActivityDetailChatBinding>() {
             }
         }
         viewModel.chatListResponse.observe(this@DetailChatActivity) {
-            list.clear()
-            list.addAll(it)
-            adapter.notifyDataSetChanged()
-            if (list.size > 0) {
-                binding.rcvDetailChat.smoothScrollToPosition(list.size - 1)
+            adapter.submitList(it.toList())
+            if (it.size > 0) {
+                binding.rcvDetailChat.smoothScrollToPosition(it.size - 1)
             }
         }
         viewModel.tokenResponse.observe(this@DetailChatActivity) {

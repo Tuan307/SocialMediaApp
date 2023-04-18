@@ -59,6 +59,16 @@
                         app:layout_constraintStart_toEndOf="@+id/imgAvatar"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@string/str_user_name" />
+
+                    <ImageView
+                        android:id="@+id/imgVideoCall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp15"
+                        android:src="@drawable/ic_video_call"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -72,13 +82,18 @@
             app:layout_constraintBottom_toTopOf="@+id/lnChat"
             app:layout_constraintTop_toBottomOf="@+id/detailChatAppBar" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/lnChat" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lnChat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp12"
             android:layout_marginBottom="@dimen/dp15"
-            android:background="@drawable/item_edt_chat_bg"
             android:orientation="horizontal"
             android:padding="@dimen/dp10"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -99,12 +114,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <TextView
                 android:id="@+id/imgSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp10"
-                android:src="@drawable/dmme"
+                android:text="@string/strSend"
+                android:textColor="@color/color_blue"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

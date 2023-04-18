@@ -74,9 +74,10 @@ class ChatViewModel @Inject constructor(
             })
     }
 
-    var chatListResponse = MutableLiveData<ArrayList<ChatModel>>()
+    private var _chatListResponse = MutableLiveData<ArrayList<ChatModel>>()
+    val chatListResponse = _chatListResponse as LiveData<ArrayList<ChatModel>>
     private var chatList = ArrayList<ChatModel>()
-    fun getPrivateChat(id: String) {
+    fun getPrivateChat(id: String, uid: String) {
         viewModelScope.launch(Dispatchers.IO) {
             databaseReference.child("Chats").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -84,14 +85,14 @@ class ChatViewModel @Inject constructor(
                     for (data in snapshot.children) {
                         val chat = data.getValue(ChatModel::class.java)
                         if (chat != null) {
-                            if ((chat.receiver == id && chat.sender == firebaseUser?.uid.toString()
-                                        ) || (chat.sender == id && chat.receiver == firebaseUser?.uid.toString())
+                            if ((chat.receiver == id && chat.sender == uid)
+                                || (chat.sender == id && chat.receiver == uid)
                             ) {
                                 chatList.add(chat)
                             }
                         }
                     }
-                    chatListResponse.postValue(chatList)
+                    _chatListResponse.postValue(chatList)
                 }
 
                 override fun onCancelled(error: DatabaseError) {

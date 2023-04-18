@@ -26,7 +26,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
             return CustomBottomSheetFragment()
         }
     }
-
     private var list: ArrayList<Comment> = ArrayList()
     private lateinit var binding: BottomSheetCommentBinding
     private lateinit var commentAdapter: CommentAdapter

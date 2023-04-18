@@ -202,4 +202,8 @@ dependencies {
 
     //exoplayer
     implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
+
+    //video call
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.stringee.sdk.android:stringee-android-sdk:1.9.0'
 }
