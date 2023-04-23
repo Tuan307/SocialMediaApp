@@ -1,6 +1,7 @@
 package com.base.app.ui.main.fragment.home
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper.getMainLooper
 import android.view.LayoutInflater
@@ -64,7 +65,7 @@ class PostAdapter(
                                 data.postid?.let { it1 -> iPostCallBack.deleteImage(it1) }
                             }
                             R.id.edit -> {
-                                data.postid?.let { it1 -> iPostCallBack.editImage(it1,it) }
+                                data.postid?.let { it1 -> iPostCallBack.editImage(it1, it) }
                             }
                             R.id.download -> {
                                 data.postimage?.let { it1 ->
@@ -116,7 +117,7 @@ class PostAdapter(
                     }
                 }
                 imgShare.setOnClickListener {
-                    data.postid?.let { it1 -> iPostCallBack.sharePost(it1) }
+                    data.postid?.let { it1 -> iPostCallBack.sharePost(imgPost.drawable) }
                 }
                 imgSave.setOnClickListener {
                     data.postid?.let { it1 -> iPostCallBack.savePost(it1, imgSave.tag.toString()) }
@@ -153,10 +154,10 @@ class PostAdapter(
         fun likePost(postId: String, status: String, publisherId: String)
         fun commentPost(postId: String, publisherId: String)
         fun savePost(postId: String, status: String)
-        fun sharePost(postId: String)
+        fun sharePost(post: Drawable)
         fun doubleClickLikePost(postId: String, status: String, publisherId: String)
         fun downloadImage(fileName: String, postId: String)
-        fun editImage(postId: String,view:View)
+        fun editImage(postId: String, view: View)
         fun deleteImage(postId: String)
     }
 }

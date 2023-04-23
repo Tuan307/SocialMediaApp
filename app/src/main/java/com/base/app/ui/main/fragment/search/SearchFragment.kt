@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
-import com.base.app.common.CommonUtils
 import com.base.app.common.CommonUtils.hideSoftKeyboard
 import com.base.app.data.models.User
 import com.base.app.databinding.FragmentSearchBinding
@@ -32,6 +31,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(),
     }
 
     override fun initView() {
+        viewModel.getRecentSearchKey()
         searchAdapter = SearchAdapter(lists, requireContext(), this)
         binding.apply {
             rcvSearch.layoutManager =
@@ -62,6 +62,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(),
 
     private fun searchUser(s: String) {
         if (s != "") {
+            searchAdapter.isRecent = false
             viewModel.searchUser(s)
         }
     }
@@ -72,7 +73,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(),
             lists.addAll(it)
             searchAdapter.notifyDataSetChanged()
         }
-
+        viewModel.searchKeyResponse.observe(this@SearchFragment) {
+            if (it.isNotEmpty()) {
+                searchAdapter.isRecent = true
+                viewModel.getRecentSearch(it)
+            }
+        }
     }
 
     override fun itemClick(id: String) {
@@ -83,6 +89,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(),
         dataManager.save("id", id)
         mainViewModel.setCurrentIndex(4)
         mainViewModel.setSomething(true)
+        viewModel.setRecent(id)
+    }
+
+    override fun removeSearch(id: String) {
+        viewModel.removeRecent(id)
     }
 
 }

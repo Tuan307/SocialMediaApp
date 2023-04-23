@@ -3,12 +3,16 @@ package com.base.app.ui.main.fragment.home
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.PopupMenu
+import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +33,9 @@ import com.base.app.ui.main.MainViewModel
 import com.base.app.ui.main.fragment.home.bottom_sheet.AddPostBottomSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHome2Binding>(),
@@ -38,6 +45,8 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     private var lastKey: String? = null
     private var listAll: ArrayList<PostItem> = ArrayList()
     private var txtName = EMPTY_STRING
+    private var imageUri: Uri? = null
+
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -175,10 +184,36 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         viewModel.savePost(postId, status)
     }
 
-    override fun sharePost(postId: String) {
-        //do later
+    override fun sharePost(postId: Drawable) {
+        // convert to bitmap
+        val bitmap = postId.toBitmap()
+        // get uri
+        imageUri = getImageToShare(bitmap);
+        val intent = Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
+        intent.type = "image/*";
+        context?.startActivity(Intent.createChooser(intent, "Share Image"));
     }
 
+    private fun getImageToShare(bitmap: Bitmap): Uri? {
+        val folder = File(context!!.filesDir, "images")
+        var uri: Uri? = null
+        try {
+            folder.mkdir()
+            val file = File(folder, "shared_images.jpg")
+            val fileOutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            uri = FileProvider.getUriForFile(context!!, "com.base.app.ui.main.fragment.home", file)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return uri
+    }
 
     override fun doubleClickLikePost(postId: String, status: String, publisherId: String) {
         if (status == "like") {
