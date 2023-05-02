@@ -76,7 +76,6 @@
             android:layout_height="@dimen/dp80"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
-            android:src="@mipmap/ic_launcher"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarProfile" />
 

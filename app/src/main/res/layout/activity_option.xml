@@ -39,7 +39,7 @@
             android:textSize="@dimen/sp18"
             android:textStyle="normal"
             app:layout_constraintTop_toBottomOf="@+id/imgAvatar"
-            tools:text="dthuong171" />
+            tools:text="ptuan307" />
 
         <TextView
             android:id="@+id/txtSettings"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp20"
             android:layout_marginTop="@dimen/dp20"
-            android:text="@string/settings"
+            android:text="@string/strChatBot"
             android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp20"
             android:textStyle="bold"

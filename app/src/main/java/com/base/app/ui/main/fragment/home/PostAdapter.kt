@@ -29,7 +29,7 @@ class PostAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val data = dataSet[position]
-//            var picAdapter = PostInPostAdapter(context, data.postimage)
+//            var picAdapter = PostInPostAdapter(context, data.postqimage)
 //            binding.apply {
 //                imgPost.layoutManager =
 //                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -70,7 +70,7 @@ class PostAdapter(
                             R.id.download -> {
                                 data.postimage?.let { it1 ->
                                     iPostCallBack.downloadImage(
-                                        "Post from meme app",
+                                        "ảnh được tải từ social app",
                                         it1
                                     )
                                 }

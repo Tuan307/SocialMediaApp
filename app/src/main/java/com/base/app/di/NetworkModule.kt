@@ -14,16 +14,51 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
-
+object NetworkModule {
+    private const val TIME_OUT: Long = 10000
+    private const val mChatToken = "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"
     @Provides
     fun provideBytePayApi(retrofit: Retrofit): Api {
         return retrofit.create(Api::class.java)
     }
+    @Provides
+    fun provideChatBotApi(@Named("ChatApiSite") retrofit: Retrofit): ChatBotAPI {
+        return retrofit.create(ChatBotAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("ChatApiSite")
+    fun provideChatBotRetrofit(
+        moshiConverterFactory: MoshiConverterFactory
+    ): Retrofit {
+        val httpClient = OkHttpClient.Builder()
+        httpClient.connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+        httpClient.readTimeout(TIME_OUT, TimeUnit.SECONDS)
+        httpClient.addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $mChatToken")
+                .build()
+            chain.proceed(request)
+        }
+
+        if (BuildConfig.DEBUG) {
+            val logging = HttpLoggingInterceptor()
+            logging.level = HttpLoggingInterceptor.Level.BODY
+            httpClient.addInterceptor(logging) // <-- this is the important line!
+        }
+        return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
+            .baseUrl(BuildConfig.BASE_URL_CHAT_BOT)
+            .client(httpClient.build())
+            .build()
+    }
+
+
 
     @Provides
     @Singleton

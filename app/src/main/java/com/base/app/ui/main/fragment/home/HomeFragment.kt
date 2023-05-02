@@ -95,7 +95,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
             getListResponse.observe(this@HomeFragment) {
                 key = it[it.size - 1].postid
                 listAll.clear()
-                listAll.addAll(it)
+                listAll.addAll(it.asReversed())
                 homeAdapter = PostAdapter(requireContext(), this@HomeFragment, viewModel, listAll)
                 binding.rcvHome.adapter = homeAdapter
 
@@ -111,7 +111,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
             }
             getListOnLoadMore.observe(this@HomeFragment) {
-                listAll.addAll(it)
+                listAll.addAll(it.asReversed())
                 key = it[it.size - 1].postid
                 homeAdapter.notifyDataSetChanged()
             }

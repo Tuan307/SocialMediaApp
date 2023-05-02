@@ -8,6 +8,7 @@ import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.base.dialogs.ConfirmDialog
 import com.base.app.databinding.ActivityOptionBinding
+import com.base.app.ui.chat_bot.ChatBotActivity
 import com.base.app.ui.splash.WelcomeActivity
 import com.bumptech.glide.Glide
 
@@ -25,7 +26,7 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(), ConfirmDialog.Conf
                 finish()
             }
             txtSettings.setOnClickListener {
-                // do something here
+                startActivity(Intent(this@OptionActivity, ChatBotActivity::class.java))
             }
             btnLogOut.setOnClickListener {
                 showLogoutDialog()

@@ -42,8 +42,7 @@
             android:layout_height="@dimen/dp55"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dp16"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_marginEnd="@dimen/dp16" />
 
         <ImageView
             android:id="@+id/imgHeart"

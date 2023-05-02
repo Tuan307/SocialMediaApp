@@ -53,7 +53,7 @@ class ReelFragment : BaseFragment<FragmentReelBinding>(),
         }
         viewModel.videoListResponse.observe(this@ReelFragment) {
             videos.clear()
-            videos.addAll(it)
+            videos.addAll(it.asReversed())
             adapter.notifyDataSetChanged()
         }
     }
