@@ -46,8 +46,8 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
 
     override fun onItemCLick(id: String, name: String, url: String) {
         val intent = Intent(this@ChatActivity, DetailChatActivity::class.java)
-        intent.putExtra("id", id)
-        intent.putExtra("name", name)
+        intent.putExtra("chatId", id)
+        intent.putExtra("chatName", name)
         intent.putExtra("url", url)
         startActivity(intent)
     }

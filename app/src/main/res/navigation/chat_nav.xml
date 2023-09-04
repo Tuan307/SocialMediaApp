@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chat_nav">
+
+    <fragment
+        android:id="@+id/detailChatFragment"
+        android:name="com.base.app.ui.chat.DetailChatFragment"
+        android:label="DetailChatFragment"
+        tools:layout="@layout/fragment_detail_chat">
+        <argument
+            android:name="chatId"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="chatName"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="url"
+            android:defaultValue=""
+            app:argType="string" />
+        <action
+            android:id="@+id/action_detailChatFragment_to_detailChatImageFragment"
+            app:destination="@id/detailChatImageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailChatImageFragment"
+        android:name="com.base.app.ui.chat.DetailChatImageFragment"
+        android:label="DetailChatImageFragment"
+        tools:layout="@layout/fragment_detail_chat_image" >
+        <argument
+            android:name="chatUrl"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+</navigation>

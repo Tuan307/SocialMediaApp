@@ -19,6 +19,7 @@
     <color name="icon_color_bottom_normal">@color/primaryLightColor</color>
     <color name="icon_color_bottom_selected">@color/primaryColor</color>
     <color name="icon_color_normal">#B7B7B7</color>
+    <color name="color_chat_text_hint">#676767</color>
 
     <color name="greenLight">#11F311</color>
     <color name="greenDark">#0EC20E</color>

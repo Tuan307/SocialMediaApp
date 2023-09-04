@@ -29,12 +29,6 @@ class PostAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val data = dataSet[position]
-//            var picAdapter = PostInPostAdapter(context, data.postqimage)
-//            binding.apply {
-//                imgPost.layoutManager =
-//                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//                imgPost.setHasFixedSize(true)
-//            }
             Glide.with(context).load(data.postimage).into(binding.imgPost)
 
             binding.apply {

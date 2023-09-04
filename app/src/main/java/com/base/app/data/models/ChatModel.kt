@@ -5,7 +5,9 @@ data class ChatModel(
     var message: String?,
     var sender: String?,
     var receiver: String?,
-    var timestamp: String?
+    var timestamp: String?,
+    var type: String,
+    var imageUrl: String?,
 ) {
-    constructor() : this(null, null, null, null, null)
+    constructor() : this(null, null, null, null, null, "", null)
 }

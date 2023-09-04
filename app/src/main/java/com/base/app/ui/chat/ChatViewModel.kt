@@ -1,6 +1,13 @@
 package com.base.app.ui.chat
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -25,7 +32,9 @@ class ChatViewModel @Inject constructor(
     private val api: Api
 ) : BaseViewModel() {
 
-
+    private var _isLoadingResponse: MutableLiveData<Boolean> = MutableLiveData()
+    val isLoadingResponse: LiveData<Boolean>
+        get() = _isLoadingResponse
     private var followerResponse = MutableLiveData<ArrayList<String>>()
     val getFollowerResponse = followerResponse as LiveData<ArrayList<String>>
     private var followerList: ArrayList<String> = ArrayList()
@@ -116,11 +125,71 @@ class ChatViewModel @Inject constructor(
             hm["sender"] = firebaseUser?.uid.toString()
             hm["timestamp"] = time
             hm["receiver"] = id
+            hm["type"] = "message"
+            hm["imageUrl"] = ""
             databaseReference.child("Chats").child(key).setValue(hm).addOnSuccessListener {
                 sendChatResponse.postValue(true)
             }.addOnFailureListener {
                 sendChatResponse.postValue(false)
             }
+        }
+    }
+
+    var uploadImageMessageResponse = MutableLiveData<Boolean>()
+
+    @SuppressLint("SimpleDateFormat")
+    fun uploadImageMessage(uri: Uri?, id: String) {
+        _isLoadingResponse.value = true
+        if (uri != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val ref =
+                    storageRef.child("message_posts").child(System.currentTimeMillis().toString())
+                uploadTask = ref.putFile(uri)
+                uploadTask!!.continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                    ref.downloadUrl
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUri = task.result.toString()
+                        val postId = databaseReference.child("Chats").push().key.toString()
+                        val hm = HashMap<String, String>()
+                        val calendar = Calendar.getInstance()
+                        val sdf = SimpleDateFormat("hh:mm:ss aa dd/MM/yyyy")
+                        val time = sdf.format(calendar.time)
+                        Log.d("CheckHere", downloadUri)
+                        hm["id"] = postId
+                        hm["message"] = ""
+                        hm["sender"] = firebaseUser?.uid.toString()
+                        hm["timestamp"] = time
+                        hm["receiver"] = id
+                        hm["type"] = "image"
+                        hm["imageUrl"] = downloadUri
+                        databaseReference.child("Chats").child(postId).setValue(hm)
+                            .addOnSuccessListener {
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    uploadImageMessageResponse.postValue(true)
+                                    _isLoadingResponse.value = false
+                                }, 1000)
+                            }.addOnFailureListener {
+                                uploadImageMessageResponse.postValue(false)
+                                _isLoadingResponse.value = false
+                            }
+                    } else {
+                        Log.d("CheckHere1", "downloadUri")
+                        uploadImageMessageResponse.postValue(false)
+                        _isLoadingResponse.value = false
+                    }
+                }.addOnFailureListener {
+                    uploadImageMessageResponse.postValue(false)
+                    _isLoadingResponse.value = false
+                }
+            }
+        }else{
+            _isLoadingResponse.value = false
         }
     }
 
@@ -152,5 +221,30 @@ class ChatViewModel @Inject constructor(
                     }
                 })
         }
+    }
+
+    private var _listOfImages = MutableLiveData<List<String>>()
+    val listOfImages: LiveData<List<String>>
+        get() = _listOfImages
+
+    fun getAllImagesFromGallery(context: Context) {
+        val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val cursor: Cursor?
+        val listOfAllImages = ArrayList<String>()
+        var absolutePathOfImage: String? = null
+
+        val projection =
+            arrayOf(MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+
+        cursor = context.contentResolver!!.query(uri, projection, null, null, null)
+
+        val columnIndexData: Int = cursor!!.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+        val columnIndexFolderName: Int = cursor!!
+            .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
+        while (cursor!!.moveToNext()) {
+            absolutePathOfImage = cursor!!.getString(columnIndexData)
+            listOfAllImages.add(absolutePathOfImage)
+        }
+        _listOfImages.value = listOfAllImages.reversed()
     }
 }
