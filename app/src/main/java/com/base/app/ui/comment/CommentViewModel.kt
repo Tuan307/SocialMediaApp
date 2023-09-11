@@ -1,8 +1,12 @@
 package com.base.app.ui.comment
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
@@ -113,6 +117,56 @@ class CommentViewModel @Inject constructor(
                         addCommentResponse.postValue(false)
                     }
                 }
+        }
+    }
+
+    private var _addReplyCommentResponse = MutableLiveData<Boolean>()
+    val addReplyCommentResponse: LiveData<Boolean>
+        get() = _addReplyCommentResponse
+
+    fun addReplyComments(commentId: String, replyComment: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            val key = databaseReference.push().key.toString()
+            val hashMap = HashMap<String, Any>()
+            hashMap["comment"] = replyComment
+            hashMap["publisher"] = firebaseUser!!.uid
+            hashMap["commentid"] = key
+            databaseReference.child("ReplyComment").child(commentId)
+                .child(key).setValue(hashMap).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        _addReplyCommentResponse.postValue(true)
+                    } else {
+                        _addReplyCommentResponse.postValue(false)
+                    }
+                }
+        }
+    }
+
+    fun getReplyCommentsNumber(
+        commentId: String,
+        text: AppCompatTextView,
+        view: View,
+        viewLine1: View
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("ReplyComment").child(commentId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.childrenCount != 0.toLong()) {
+                            text.isVisible = true
+                            text.text = "Xem ${snapshot.childrenCount} phản hồi khác"
+                            view.isVisible = true
+                            viewLine1.isVisible = true
+                        } else {
+                            text.isVisible = false
+                            view.isVisible = false
+                            viewLine1.isVisible = false
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
         }
     }
 

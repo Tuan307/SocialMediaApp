@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CustomBottomSheetFragment : BottomSheetDialogFragment() {
+class CustomBottomSheetFragment : BottomSheetDialogFragment(),CommentAdapter.OnReplyComment {
     companion object {
         const val TAG = "ActionBottomDialog"
         fun newInstance(): CustomBottomSheetFragment {
@@ -55,7 +55,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         binding.apply {
             rcvVideoComeent.layoutManager = LinearLayoutManager(requireContext())
             rcvVideoComeent.setHasFixedSize(true)
-            commentAdapter = CommentAdapter(list, requireContext(), viewModel)
+            commentAdapter = CommentAdapter(list, requireContext(), viewModel,this@CustomBottomSheetFragment)
             rcvVideoComeent.adapter = commentAdapter
         }
         val bundle = this.arguments
@@ -135,6 +135,10 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         val layoutParams = bottomSheet.layoutParams
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
         bottomSheet.layoutParams = layoutParams
+    }
+
+    override fun replyComment(data: Comment, userName: String) {
+
     }
 
 }

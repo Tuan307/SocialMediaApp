@@ -406,6 +406,7 @@
     <string name="strRecent">Gần đây</string>
     <string name="strChatBot">Chat Bot</string>
     <string name="strMessageChatBot">Nhập tin nhắn...</string>
+    <string name="text_reply_comment">Phản hồi</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>

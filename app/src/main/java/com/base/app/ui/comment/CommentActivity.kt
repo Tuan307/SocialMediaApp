@@ -11,11 +11,12 @@ import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
 import com.base.app.databinding.ActivityCommentBinding
 import com.base.app.ui.comment.adapter.CommentAdapter
+import com.base.app.ui.comment.adapter.ReplyCommentAdapter
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CommentActivity : BaseActivity<ActivityCommentBinding>() {
+class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.OnReplyComment {
 
     private val viewModel by viewModels<CommentViewModel>()
     private var postId = EMPTY_STRING
@@ -24,6 +25,8 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
     private lateinit var commentAdapter: CommentAdapter
     private var name = EMPTY_STRING
     private var uToken = EMPTY_STRING
+    private var commentId = ""
+    private var isReplyComment = false
     override fun getContentLayout(): Int {
         return R.layout.activity_comment
     }
@@ -35,8 +38,8 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
         publisherId = intent.getStringExtra("publisherId").toString()
         viewModel.getImage()
         viewModel.readComments(postId)
-        commentAdapter = CommentAdapter(lists, this@CommentActivity, viewModel)
-
+        commentAdapter =
+            CommentAdapter(lists, this@CommentActivity, viewModel, this@CommentActivity)
         binding.apply {
             rcvComment.layoutManager = LinearLayoutManager(this@CommentActivity)
             rcvComment.setHasFixedSize(true)
@@ -53,10 +56,19 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
                 if (edtComment.text.isEmpty()) {
                     showToast(this@CommentActivity, "Please input your comment!")
                 } else {
-                    viewModel.addComments(postId, edtComment.text.toString())
-                    viewModel.addNotifications(postId, edtComment.text.toString(), publisherId)
+                    if (!isReplyComment) {
+                        viewModel.addComments(postId, edtComment.text.toString())
+                        viewModel.addNotifications(postId, edtComment.text.toString(), publisherId)
+                    } else {
+                        isReplyComment = false
+                        viewModel.addReplyComments(commentId, edtComment.text.toString())
+                    }
                     val notification = PushNotification(
-                        NotificationData("Message", "$name đã comment vào ảnh của bạn", "Comment"),
+                        NotificationData(
+                            "Message",
+                            "$name đã comment vào ảnh của bạn",
+                            "Comment"
+                        ),
                         uToken
                     )
                     viewModel.sendNotification(notification)
@@ -87,6 +99,15 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
                     showToast(this@CommentActivity, resources.getString(R.string.error))
                 }
             }
+            addReplyCommentResponse.observe(this@CommentActivity) {
+                if (it) {
+                    binding.edtComment.setText("")
+                    binding.edtComment.hint = getString(R.string.add_a_comment)
+                    hideSoftKeyboard()
+                } else {
+                    showToast(this@CommentActivity, resources.getString(R.string.error))
+                }
+            }
             userResponse.observe(this@CommentActivity) {
                 viewModel.getReceiverToken(it.id.toString())
             }
@@ -94,6 +115,12 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>() {
                 uToken = ""
             }
         }
+    }
+
+    override fun replyComment(data: Comment, userName: String) {
+        binding.edtComment.hint = "Đang trả lời $userName"
+        commentId = data.commentid.toString()
+        isReplyComment = true
     }
 
 }
