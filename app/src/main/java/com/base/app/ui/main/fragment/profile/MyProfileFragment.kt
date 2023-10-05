@@ -6,10 +6,12 @@ import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
-import com.base.app.data.models.response.post.ImagesList
+import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.response.post.PostContent
 import com.base.app.databinding.FragmentMyProfileBinding
 import com.base.app.ui.add_post.PostActivity
@@ -29,9 +31,11 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
 
     private val viewModel by viewModels<ProfileViewModel>()
     private val mainViewModel by activityViewModels<MainViewModel>()
+    private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     private lateinit var profileAdapter: ProfilePostAdapter
-    private var list = ArrayList<PostContent>()
+    private var postList = ArrayList<PostContent>()
     private var idKey: String = ""
+    private var tabType: Int = 0
 
     companion object {
         fun newInstance(): MyProfileFragment {
@@ -43,13 +47,40 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         return R.layout.fragment_my_profile
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (postList.isNotEmpty()) {
+            postList.clear()
+        }
+        if (tabType == 0) {
+            viewModel.getProfilePost(idKey, 20, 1)
+        } else {
+            viewModel.getSavePost(idKey, 20, 1)
+        }
+
+    }
+
     override fun initView() {
-        //registerObserverLoadingEvent(viewModel,this@MyProfileFragment)
+        viewModel.getProfilePost(idKey, 20, 1)
         binding.rcvProfile.layoutManager =
             GridLayoutManager(requireContext(), 3)
         binding.rcvProfile.setHasFixedSize(true)
-        profileAdapter = ProfilePostAdapter(requireContext(), list, this)
+        profileAdapter = ProfilePostAdapter(requireContext(), postList, this)
         binding.rcvProfile.adapter = profileAdapter
+        endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
+            binding.rcvProfile.layoutManager as LinearLayoutManager
+        ) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                if (page > 1) {
+                    if (tabType == 0) {
+                        viewModel.getProfilePost(idKey, 20, page)
+                    } else {
+                        viewModel.getSavePost(idKey, 20, page)
+                    }
+                }
+            }
+        }
+        binding.rcvProfile.addOnScrollListener(endlessRecyclerViewScrollListener)
         viewModel.getKey(true)
     }
 
@@ -110,13 +141,17 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     0 -> {
+                        tabType = 0
+                        endlessRecyclerViewScrollListener.resetState()
                         viewModel.getProfilePost(idKey, 50, 1)
                     }
                     1 -> {
-                        if (list.isNotEmpty()) {
-                            list.clear()
+                        tabType = 1
+                        if (postList.isNotEmpty()) {
+                            postList.clear()
                         }
-                        viewModel.getSavePostKey(idKey)
+                        endlessRecyclerViewScrollListener.resetState()
+                        viewModel.getSavePost(idKey, 50, 1)
                     }
                 }
             }
@@ -130,12 +165,12 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
     }
 
     override fun observerLiveData() {
-        mainViewModel.apply {
+        with(mainViewModel) {
             something.observe(this@MyProfileFragment) {
                 viewModel.getKey(it)
             }
         }
-        viewModel.apply {
+        with(viewModel) {
             statusId.observe(this@MyProfileFragment) {
                 if (!it) {
                     binding.imgBackProfile.visibility = View.VISIBLE
@@ -147,17 +182,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                     binding.btnEditProfile.visibility = View.VISIBLE
                 }
 
-            }
-
-            getUserResponse.observe(this@MyProfileFragment) {
-                if (it != null) {
-                    binding.apply {
-                        txtUserName.text = it.username
-                        txtBio.text = it.bio
-                        txtFullName.text = it.fullname
-                        Glide.with(requireContext()).load(it.imageurl).into(imgAvatar)
-                    }
-                }
             }
             getUserRemoteResponse.observe(this@MyProfileFragment) {
                 if (it != null) {
@@ -181,32 +205,55 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                 }
             }
             getProfilePost.observe(this@MyProfileFragment) {
-                list.clear()
-                list.addAll(it)
-                binding.txtPostNumber.text = list.size.toString()
+                postList.clear()
+                postList.addAll(it)
+                binding.txtPostNumber.text = postList.size.toString()
                 profileAdapter.notifyDataSetChanged()
             }
-            getKeyList.observe(this@MyProfileFragment) {
-                viewModel.getSavePost(it)
+            getMoreProfilePost.observe(this@MyProfileFragment) {
+                postList.addAll(it)
+                binding.txtPostNumber.text = postList.size.toString()
+                profileAdapter.notifyDataSetChanged()
             }
-            getSavePost.observe(this@MyProfileFragment) {
-                if (list.isNotEmpty()) {
-                    list.clear()
+            getSavedPostResponse.observe(this@MyProfileFragment) {
+                if (postList.isNotEmpty()) {
+                    postList.clear()
                 }
-                list.addAll(it.map { data ->
-                    PostContent(
-                        postId = data.postid,
-                        description = data.postid,
-                        imagesList = arrayListOf(ImagesList(null, data.postimage)),
-                        checkInTimestamp = "123456789",
-                        checkInAddress = null,
-                        checkInLatitude = 20.0,
-                        checkInLongitude = 20.0,
-                        type = "image",
-                        videoUrl = null,
-                        postUserId = null
-                    )
-                })
+                if (it.data != null) {
+                    postList.addAll(it.data.map { data ->
+                        PostContent(
+                            postId = data.post_saved_id?.postId,
+                            description = data.post_saved_id?.description,
+                            imagesList = data.post_saved_id?.imagesList,
+                            checkInTimestamp = data.post_saved_id?.checkInTimestamp,
+                            checkInAddress = data.post_saved_id?.checkInAddress,
+                            checkInLatitude = data.post_saved_id?.checkInLatitude,
+                            checkInLongitude = data.post_saved_id?.checkInLongitude,
+                            type = data.post_saved_id?.type,
+                            videoUrl = data.post_saved_id?.videoUrl,
+                            postUserId = data.post_saved_id?.postUserId
+                        )
+                    })
+                }
+                profileAdapter.notifyDataSetChanged()
+            }
+            getMoreSavedPostResponse.observe(this@MyProfileFragment) {
+                if (it.data != null) {
+                    postList.addAll(it.data.map { data ->
+                        PostContent(
+                            postId = data.post_saved_id?.postId,
+                            description = data.post_saved_id?.description,
+                            imagesList = data.post_saved_id?.imagesList,
+                            checkInTimestamp = data.post_saved_id?.checkInTimestamp,
+                            checkInAddress = data.post_saved_id?.checkInAddress,
+                            checkInLatitude = data.post_saved_id?.checkInLatitude,
+                            checkInLongitude = data.post_saved_id?.checkInLongitude,
+                            type = data.post_saved_id?.type,
+                            videoUrl = data.post_saved_id?.videoUrl,
+                            postUserId = data.post_saved_id?.postUserId
+                        )
+                    })
+                }
                 profileAdapter.notifyDataSetChanged()
             }
             followResponse.observe(this@MyProfileFragment) {
@@ -220,11 +267,14 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                 idKey = it ?: viewModel.firebaseUser?.uid.toString()
                 viewModel.isFollowing(idKey)
                 viewModel.setId(idKey)
-                //viewModel.getUserInformation(idKey)
                 viewModel.getRemoteUserInformation(idKey)
                 viewModel.getFollowing(idKey)
                 viewModel.getFollower(idKey)
-                viewModel.getProfilePost(idKey, 50, 1)
+                if (tabType == 0) {
+                    viewModel.getProfilePost(idKey, 20, 1)
+                } else {
+                    viewModel.getSavePost(idKey, 20, 1)
+                }
             }
         }
     }

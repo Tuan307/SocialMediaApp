@@ -30,4 +30,27 @@ class UserProfileRepository @Inject constructor(
                 }
             }
         }
+
+    suspend fun getUserProfile(userId: String) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.getUserProfile(userId) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+    suspend fun getAllSavedPost(userId: String, pageCount: Int, pageNumber: Int) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.getAllSavedPost(userId, pageCount, pageNumber) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
 }

@@ -17,7 +17,4 @@ data class DatingUser(
     val email: String,
     val latitude: Double,
     val longitude: Double,
-    val postItemList: Any?,
-    val savedPostItems: Any?,
-    val notificationModelList: Any?
 )

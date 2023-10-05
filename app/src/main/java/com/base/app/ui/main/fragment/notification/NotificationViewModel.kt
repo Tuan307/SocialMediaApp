@@ -9,6 +9,7 @@ import com.base.app.data.repositories.notification.NotificationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val repository: NotificationRepository
@@ -18,11 +19,21 @@ class NotificationViewModel @Inject constructor(
         MutableLiveData()
     val getAllNotificationResponse: LiveData<GetNotificationResponse>
         get() = _getAllNotificationResponse
+    private var _getMoreNotificationResponse: MutableLiveData<GetNotificationResponse> =
+        MutableLiveData()
+    val getMoreNotificationResponse: LiveData<GetNotificationResponse>
+        get() = _getMoreNotificationResponse
 
-    fun getAllNotification() {
+    fun getAllNotification(pageCount: Int, pageNumber: Int) {
         viewModelScope.launch {
-            val result = repository.getAllNotification(firebaseUser?.uid.toString(), 10, 1)
-            _getAllNotificationResponse.value = result
+            val result =
+                repository.getAllNotification(firebaseUser?.uid.toString(), pageCount, pageNumber)
+            if (pageNumber == 1) {
+                _getAllNotificationResponse.value = result
+            } else {
+                _getMoreNotificationResponse.value = result
+            }
         }
     }
+
 }

@@ -30,7 +30,7 @@ import retrofit2.http.Query
 interface DatingAPI {
 
     @GET("users/{id}")
-    suspend fun getUserProfile(@Path("id") id: String): UserProfileResponseResult
+    suspend fun getUserProfile(@Path("id") id: String): Response<UserProfileResponseResult>
 
     @POST("users/register")
     suspend fun registerUser(@Body user: RegisterRequest): Response<UserProfileResponseResult>

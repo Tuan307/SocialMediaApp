@@ -51,7 +51,7 @@ data class PostContent(
     val description: String?,
     val imagesList: List<ImagesList>?,
     @SerializedName("checkInTimestamp")
-    val checkInTimestamp: String,
+    val checkInTimestamp: String?,
     @SerializedName("checkInAddress")
     val checkInAddress: String?,
     @SerializedName("checkInLatitude")

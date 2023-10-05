@@ -107,7 +107,11 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
                             postId = data.postId,
                             description = data.description,
                             imagesList = data.imagesList,
-                            checkInTimestamp = prettyTime.format(Date(data.checkInTimestamp.toLong())),
+                            checkInTimestamp = prettyTime.format(data.checkInTimestamp?.let { it1 ->
+                                Date(
+                                    it1.toLong()
+                                )
+                            }),
                             checkInAddress = data.checkInAddress,
                             checkInLatitude = data.checkInLatitude,
                             checkInLongitude = data.checkInLongitude,
@@ -126,7 +130,11 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
                             postId = data.postId,
                             description = data.description,
                             imagesList = data.imagesList,
-                            checkInTimestamp = prettyTime.format(Date(data.checkInTimestamp.toLong())),
+                            checkInTimestamp = prettyTime.format(data.checkInTimestamp?.let { it1 ->
+                                Date(
+                                    it1.toLong()
+                                )
+                            }),
                             checkInAddress = data.checkInAddress,
                             checkInLatitude = data.checkInLatitude,
                             checkInLongitude = data.checkInLongitude,

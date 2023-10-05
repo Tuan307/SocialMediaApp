@@ -111,11 +111,11 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
                 }
             }
             uploadImageList.observe(this@PostActivity) {
-//                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
-//                    viewModel.postNewsFeedRequest = it
-//                } else {
+                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
+                    viewModel.postNewsFeedRequest = it
+                } else {
                 uploadImagePostToDB(it)
-                //}
+                }
             }
         }
     }

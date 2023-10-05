@@ -27,20 +27,4 @@ class WelcomeViewModel @Inject constructor(
             }
         }
     }
-
-    private var _getUserProfile: MutableLiveData<DatingUser> = MutableLiveData()
-    val getUserProfileResponse: LiveData<DatingUser>
-        get() = _getUserProfile
-
-    fun getUserProfile() {
-        Log.d("CheckHere", firebaseUser?.uid.toString())
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = api.getUserProfile("1cCHibSQmjQuc65S3VhIfKJ16Nmu2")
-            if (result.status.code == 200.toLong()) {
-                _getUserProfile.postValue(result.data!!)
-            } else {
-                Log.d("CheckErr", "Here ${result.status.message}")
-            }
-        }
-    }
 }

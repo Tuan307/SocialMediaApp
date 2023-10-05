@@ -95,9 +95,6 @@ class SearchViewModel @Inject constructor(
                                 "",
                                 20.0,
                                 20.0,
-                                null,
-                                null,
-                                null
                             )
                         })
                     }

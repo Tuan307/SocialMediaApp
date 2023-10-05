@@ -5,7 +5,7 @@
         android:id="@+id/grdProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlack">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/imgImage"
