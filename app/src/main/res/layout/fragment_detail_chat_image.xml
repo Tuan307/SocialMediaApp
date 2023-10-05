@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                app:srcCompat="@drawable/ic_close_black" />
+                app:srcCompat="@drawable/ic_close_white" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -35,6 +35,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

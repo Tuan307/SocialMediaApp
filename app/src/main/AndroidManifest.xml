@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <uses-feature
@@ -39,15 +41,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".ui.chat_bot.ChatBotActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ui.study.PagerActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -79,26 +75,19 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.study.MainActivity3"
-            android:exported="true"></activity>
-        <activity
             android:name=".ui.add_video_post.AddVideoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile_detail_post.PostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.study.MainActivity2"
-            android:exported="true" />
-        <activity
-            android:name=".ui.study.MainActivity"
-            android:exported="true"></activity>
-        <activity
             android:name=".ui.follow.FollowerActivity"
             android:exported="false" />
         <activity
             android:name=".ui.add_post.PostActivity"
-            android:exported="false" />
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".ui.options.OptionActivity"
             android:exported="false" />
@@ -126,6 +115,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.main.fragment.home.DetailHomePostActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.video_call.MainActivity"
             android:exported="true"

@@ -7,13 +7,13 @@
         android:id="@+id/notificationItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlack"
+        android:background="@color/colorWhite"
         android:padding="@dimen/dp8">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAvatar"
-            android:layout_width="@dimen/dp45"
-            android:layout_height="@dimen/dp45"
+            android:layout_width="@dimen/dp50"
+            android:layout_height="@dimen/dp50"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +25,6 @@
             android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp16"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/imgNotificationPost"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toTopOf="@+id/imgAvatar"
             tools:text="ptuan307" />
@@ -38,16 +37,58 @@
             android:maxLines="5"
             android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp15"
-            app:layout_constraintEnd_toStartOf="@+id/imgNotificationPost"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/txtUserName"
             app:layout_constraintTop_toBottomOf="@+id/txtUserName"
             tools:text="Someone just visit your page" />
 
-        <ImageView
-            android:id="@+id/imgNotificationPost"
-            android:layout_width="@dimen/dp50"
-            android:layout_height="@dimen/dp50"
+        <TextView
+            android:id="@+id/text_time_ago"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp5"
+            android:ellipsize="end"
+            android:textColor="@color/color_app_text"
+            android:textSize="@dimen/sp15"
+            app:layout_constraintStart_toStartOf="@+id/txtUserName"
+            app:layout_constraintTop_toBottomOf="@+id/txtNotification"
+            tools:text="Someone just visit your page" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linear_notification_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/text_time_ago"
+            app:layout_constraintTop_toBottomOf="@+id/text_time_ago">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_confirm_notification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn"
+                android:text="Xác nhận"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp14" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_cancel_notification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp20"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn"
+                android:backgroundTint="@color/color_app_text"
+                android:text="Xóa"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp14" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

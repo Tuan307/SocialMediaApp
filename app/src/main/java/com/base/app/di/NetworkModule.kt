@@ -22,10 +22,17 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val TIME_OUT: Long = 10000
     private const val mChatToken = "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"
+
     @Provides
-    fun provideBytePayApi(retrofit: Retrofit): Api {
+    fun provideFCMApi(retrofit: Retrofit): Api {
         return retrofit.create(Api::class.java)
     }
+
+    @Provides
+    fun provideDatingApi(@Named("DatingSite") retrofit: Retrofit): DatingAPI {
+        return retrofit.create(DatingAPI::class.java)
+    }
+
     @Provides
     fun provideChatBotApi(@Named("ChatApiSite") retrofit: Retrofit): ChatBotAPI {
         return retrofit.create(ChatBotAPI::class.java)
@@ -59,10 +66,9 @@ object NetworkModule {
     }
 
 
-
     @Provides
     @Singleton
-    fun provideBytePayRetrofit(
+    fun provideFCMRetrofit(
         okHttpClient: OkHttpClient,
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit {
@@ -79,6 +85,30 @@ object NetworkModule {
 
         return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
             .baseUrl(BuildConfig.API_URL)
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("DatingSite")
+    fun provideDatingRetrofit(
+        okHttpClient: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory
+    ): Retrofit {
+
+        val httpClient = OkHttpClient.Builder()
+        httpClient.connectTimeout(10, TimeUnit.SECONDS);
+        httpClient.readTimeout(10, TimeUnit.SECONDS);
+
+        if (BuildConfig.DEBUG) {
+            val logging = HttpLoggingInterceptor()
+            logging.level = HttpLoggingInterceptor.Level.BODY
+            httpClient.addInterceptor(logging) // <-- this is the important line!
+        }
+
+        return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
+            .baseUrl(BuildConfig.DATING_API_URL)
             .client(okHttpClient)
             .build()
     }

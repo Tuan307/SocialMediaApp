@@ -21,6 +21,7 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
     private val viewModel by viewModels<CommentViewModel>()
     private var postId = EMPTY_STRING
     private var publisherId = EMPTY_STRING
+    private var imageUrl = EMPTY_STRING
     private var lists = ArrayList<Comment>()
     private lateinit var commentAdapter: CommentAdapter
     private var name = EMPTY_STRING
@@ -36,6 +37,7 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
         val intent = intent
         postId = intent.getStringExtra("postId").toString()
         publisherId = intent.getStringExtra("publisherId").toString()
+        imageUrl = intent.getStringExtra("imageUrl").toString()
         viewModel.getImage()
         viewModel.readComments(postId)
         commentAdapter =
@@ -58,7 +60,7 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
                 } else {
                     if (!isReplyComment) {
                         viewModel.addComments(postId, edtComment.text.toString())
-                        viewModel.addNotifications(postId, edtComment.text.toString(), publisherId)
+                        viewModel.addNotifications(postId, edtComment.text.toString(), publisherId,imageUrl)
                     } else {
                         isReplyComment = false
                         viewModel.addReplyComments(commentId, edtComment.text.toString())

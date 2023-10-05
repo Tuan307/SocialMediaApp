@@ -8,25 +8,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.base.app.data.models.NotificationItem
 import com.base.app.databinding.LayoutNotificationItemBinding
 import com.base.app.ui.main.fragment.notification.NotificationViewModel
+import com.bumptech.glide.Glide
 
-class NotificationAdapter(
+class NotificationAdapter1(
     val context: Context,
     val list: ArrayList<NotificationItem>,
     val viewModel: NotificationViewModel,
     val iCallBack: ICallBack
-) : RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<NotificationAdapter1.ViewHolder>() {
 
     inner class ViewHolder(private val binding: LayoutNotificationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NotificationItem) {
-            binding.apply {
+            with(binding) {
                 txtNotification.text = data.text
-                viewModel.getUserInformation(context, imgAvatar, txtUserName, data.userid)
+               // viewModel.getUserInformation(context, imgAvatar, txtUserName, data.userid)
                 if (data.ispost) {
-                    imgNotificationPost.visibility = View.VISIBLE
-                    viewModel.getPostItem(context, imgNotificationPost, data.postid)
-                } else {
-                    imgNotificationPost.visibility = View.INVISIBLE
+//                    imgNotificationPost.visibility = View.VISIBLE
+//                    Glide.with(context).load(data.imageUrl).into(imgNotificationPost)
+//                    //viewModel.getPostItem(context, imgNotificationPost, data.postid)
+//                } else {
+//                    imgNotificationPost.visibility = View.INVISIBLE
                 }
                 notificationItem.setOnClickListener {
                     iCallBack.onItemClick(data)
@@ -39,7 +41,7 @@ class NotificationAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): NotificationAdapter.ViewHolder {
+    ): NotificationAdapter1.ViewHolder {
         return ViewHolder(
             LayoutNotificationItemBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -49,7 +51,7 @@ class NotificationAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: NotificationAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NotificationAdapter1.ViewHolder, position: Int) {
         holder.bind(list[position])
     }
 

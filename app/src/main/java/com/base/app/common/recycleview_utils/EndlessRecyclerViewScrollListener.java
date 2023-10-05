@@ -10,15 +10,15 @@ import org.jetbrains.annotations.NotNull;
 public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
     // The minimum amount of items to have below your current scroll position
     // before loading more.
-    private int visibleThreshold = 5;
+    private int visibleThreshold = 10;
     // The current offset index of data you have loaded
-    private int currentPage = 0;
+    private int currentPage = 1;
     // The total number of items in the dataset after the last load
     private int previousTotalItemCount = 0;
     // True if we are still waiting for the last set of data to load.
     private boolean loading = true;
     // Sets the starting page index
-    private int startingPageIndex = 0;
+    private final int startingPageIndex = 1;
 
     RecyclerView.LayoutManager mLayoutManager;
 
@@ -54,7 +54,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     // but first we check if we are waiting for the previous load to finish.
     @Override
     public void onScrolled(@NotNull RecyclerView view, int dx, int dy) {
-        int lastVisibleItemPosition = 0;
+        int lastVisibleItemPosition = 1;
         int totalItemCount = mLayoutManager.getItemCount();
 
         if (mLayoutManager instanceof StaggeredGridLayoutManager) {

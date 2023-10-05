@@ -1,11 +1,39 @@
 package com.base.app.common
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
-object Utils{
+
+object Utils {
+
+    @SuppressLint("Range")
+    fun getFileName(context: Context, uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme.equals("content")) {
+            val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
+            cursor.use { cursor ->
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != -1) {
+                if (cut != null) {
+                    result = result?.substring(cut + 1)
+                }
+            }
+        }
+        return result.toString()
+    }
 
     fun validateEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
@@ -56,7 +84,7 @@ object Utils{
         ).toInt()
     }
 
-    fun hideSoftKeyboard(view: View,context: Context) {
+    fun hideSoftKeyboard(view: View, context: Context) {
         val imm: InputMethodManager? =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm?.hideSoftInputFromWindow(view.windowToken, 0)

@@ -2,22 +2,18 @@ package com.base.app.ui.main.fragment.home
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper.getMainLooper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.base.app.R
-import com.base.app.common.CommonUtils
 import com.base.app.data.models.PostItem
 import com.base.app.databinding.LayoutHomeAdapterBinding
-import com.bumptech.glide.Glide
 
 class PostAdapter(
     val context: Context,
-    val iPostCallBack: IPostCallBack,
+    val iPostCallBack: IPostCallBack1,
     val viewModel: HomeViewModel,
     val dataSet: ArrayList<PostItem>,
 ) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
@@ -29,7 +25,7 @@ class PostAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val data = dataSet[position]
-            Glide.with(context).load(data.postimage).into(binding.imgPost)
+            //Glide.with(context).load(data.postimage).into(binding.imgPost)
 
             binding.apply {
                 if (data.description.equals("")) {
@@ -39,14 +35,14 @@ class PostAdapter(
                     txtDescription.text = data.description
                 }
                 data.postid?.let { viewModel.isLikePost(it, imgHeart) }
-                data.postid?.let { viewModel.isSavedPost(it, imgSave) }
-                viewModel.getPublisherInformation(
-                    context,
-                    imgAvatar,
-                    txtUserName,
-                    txtPublisher,
-                    data.publicher
-                )
+                //data.postid?.let { viewModel.isSavedPost(it, imgSave) }
+//                viewModel.getPublisherInformation(
+//                    context,
+//                    imgAvatar,
+//                    txtUserName,
+//                    txtPublisher,
+//                    data.publicher
+//                )
                 data.postid?.let { viewModel.getPostLikes(txtLikeNumber, it) }
                 //data.postid?.let { viewModel.getPostDisLikes(txtUnLikeNumber, it) }
                 data.postid?.let { viewModel.countComments(txtViewAllComments, it) }
@@ -78,23 +74,23 @@ class PostAdapter(
                     }
                     popupMenu.show()
                 }
-                imgPost.setOnClickListener {
-                    if (CommonUtils.isDoubleClick()) {
-                        imgDoubleClick.visibility = View.VISIBLE
-                        Handler(getMainLooper()).postDelayed({
-                            imgDoubleClick.visibility = View.INVISIBLE
-                        }, 1000)
-                        data.postid?.let { it1 ->
-                            data.publicher?.let { it2 ->
-                                iPostCallBack.doubleClickLikePost(
-                                    it1,
-                                    imgHeart.tag.toString(),
-                                    it2
-                                )
-                            }
-                        }
-                    }
-                }
+//                imgPost.setOnClickListener {
+//                    if (CommonUtils.isDoubleClick()) {
+//                        imgDoubleClick.visibility = View.VISIBLE
+//                        Handler(getMainLooper()).postDelayed({
+//                            imgDoubleClick.visibility = View.INVISIBLE
+//                        }, 1000)
+//                        data.postid?.let { it1 ->
+//                            data.publicher?.let { it2 ->
+//                                iPostCallBack.doubleClickLikePost(
+//                                    it1,
+//                                    imgHeart.tag.toString(),
+//                                    it2
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
                 imgHeart.setOnClickListener {
                     data.postid?.let { it1 ->
                         data.publicher?.let { it2 ->
@@ -111,7 +107,7 @@ class PostAdapter(
                     }
                 }
                 imgShare.setOnClickListener {
-                    data.postid?.let { it1 -> iPostCallBack.sharePost(imgPost.drawable) }
+                    //data.postid?.let { it1 -> iPostCallBack.sharePost(imgPost.drawable) }
                 }
                 imgSave.setOnClickListener {
                     data.postid?.let { it1 -> iPostCallBack.savePost(it1, imgSave.tag.toString()) }
@@ -143,7 +139,7 @@ class PostAdapter(
         return dataSet.size
     }
 
-    interface IPostCallBack {
+    interface IPostCallBack1 {
         fun clickPost(postId: String, publisherId: String)
         fun likePost(postId: String, status: String, publisherId: String)
         fun commentPost(postId: String, publisherId: String)

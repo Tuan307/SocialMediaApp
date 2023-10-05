@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
-import com.base.app.data.models.PostItem
+import com.base.app.data.models.response.post.ImagesList
+import com.base.app.data.models.response.post.PostContent
 import com.base.app.databinding.FragmentMyProfileBinding
 import com.base.app.ui.add_post.PostActivity
 import com.base.app.ui.add_video_post.AddVideoActivity
@@ -21,14 +22,15 @@ import com.base.app.ui.options.OptionActivity
 import com.base.app.ui.profile_detail_post.PostDetailActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostAdapter.iCallBack {
 
     private val viewModel by viewModels<ProfileViewModel>()
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var profileAdapter: ProfilePostAdapter
-    private var list = ArrayList<PostItem>()
+    private var list = ArrayList<PostContent>()
     private var idKey: String = ""
 
     companion object {
@@ -108,7 +110,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     0 -> {
-                        viewModel.getProfilePost(idKey)
+                        viewModel.getProfilePost(idKey, 50, 1)
                     }
                     1 -> {
                         if (list.isNotEmpty()) {
@@ -157,6 +159,16 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                     }
                 }
             }
+            getUserRemoteResponse.observe(this@MyProfileFragment) {
+                if (it != null) {
+                    binding.apply {
+                        txtUserName.text = it.userName
+                        txtBio.text = it.bio
+                        txtFullName.text = it.fullName
+                        Glide.with(requireContext()).load(it.imageUrl).into(imgAvatar)
+                    }
+                }
+            }
             getFollowerNumber.observe(this@MyProfileFragment) {
                 binding.txtFollowerNumber.text = it.toString()
             }
@@ -181,7 +193,20 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                 if (list.isNotEmpty()) {
                     list.clear()
                 }
-                list.addAll(it)
+                list.addAll(it.map { data ->
+                    PostContent(
+                        postId = data.postid,
+                        description = data.postid,
+                        imagesList = arrayListOf(ImagesList(null, data.postimage)),
+                        checkInTimestamp = "123456789",
+                        checkInAddress = null,
+                        checkInLatitude = 20.0,
+                        checkInLongitude = 20.0,
+                        type = "image",
+                        videoUrl = null,
+                        postUserId = null
+                    )
+                })
                 profileAdapter.notifyDataSetChanged()
             }
             followResponse.observe(this@MyProfileFragment) {
@@ -192,25 +217,22 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                 }
             }
             getKey.observe(this@MyProfileFragment) {
-                if (it != null) {
-                    idKey = it
-                } else {
-                    idKey = viewModel.firebaseUser?.uid.toString()
-                }
+                idKey = it ?: viewModel.firebaseUser?.uid.toString()
                 viewModel.isFollowing(idKey)
                 viewModel.setId(idKey)
-                viewModel.getUserInformation(idKey)
+                //viewModel.getUserInformation(idKey)
+                viewModel.getRemoteUserInformation(idKey)
                 viewModel.getFollowing(idKey)
                 viewModel.getFollower(idKey)
-                viewModel.getProfilePost(idKey)
+                viewModel.getProfilePost(idKey, 50, 1)
             }
         }
     }
 
-    override fun onCLick(id: Int) {
+    override fun onCLick(position: Int) {
         val intent = Intent(requireContext(), PostDetailActivity::class.java)
         intent.putExtra("idKey", idKey)
-        intent.putExtra("imageId", id)
+        intent.putExtra("imagePosition", position)
         startActivity(intent)
     }
 

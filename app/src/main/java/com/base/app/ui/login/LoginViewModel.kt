@@ -13,7 +13,6 @@ class LoginViewModel : BaseViewModel() {
     val getLoginResponse = loginResponse as LiveData<Boolean>
     fun login(email: String, password: String) {
         showLoading(true)
-        Log.d("CheckLoading", isLoading.value.toString())
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {

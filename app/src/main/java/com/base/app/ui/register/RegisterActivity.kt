@@ -7,7 +7,9 @@ import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.databinding.ActivityRegisterBinding
 import com.base.app.ui.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterActivity : BaseActivity<ActivityRegisterBinding>() {
     private val viewModel by viewModels<RegisterViewModel>()
 
@@ -71,13 +73,21 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>() {
     }
 
     override fun observerLiveData() {
-        viewModel.apply {
-            getRegisterResponse.observe(this@RegisterActivity) {
-                if (it) {
+        with(viewModel) {
+            saveToDBResponse.observe(this@RegisterActivity) {
+                registerUser(it)
+            }
+            registerUserToDBResponse.observe(this@RegisterActivity) {
+                if (it.data != null) {
                     showToast(this@RegisterActivity, getString(R.string.str_success))
                     startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                     finish()
                 } else {
+                    showToast(this@RegisterActivity, it.status.message)
+                }
+            }
+            errorResponse.observe(this@RegisterActivity) {
+                if (!it) {
                     showToast(this@RegisterActivity, getString(R.string.str_error))
                 }
             }

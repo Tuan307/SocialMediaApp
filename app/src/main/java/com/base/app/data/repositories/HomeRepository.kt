@@ -15,5 +15,4 @@ class HomeRepository @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : BaseRemoteService() {
 
-
 }

@@ -6,15 +6,25 @@ import androidx.lifecycle.viewModelScope
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.common.ERROR
+import com.base.app.data.apis.DatingAPI
 import com.base.app.data.models.PostItem
 import com.base.app.data.models.User
+import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.repositories.profile.UserProfileRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel : BaseViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val api: DatingAPI,
+    private val repository: UserProfileRepository
+) : BaseViewModel() {
 
     private var key = MutableLiveData<String?>()
     val getKey = key as LiveData<String?>
@@ -61,6 +71,21 @@ class ProfileViewModel : BaseViewModel() {
         }
     }
 
+    private var userRemoteResponse = MutableLiveData<DatingUser?>()
+    val getUserRemoteResponse = userRemoteResponse as LiveData<DatingUser?>
+    fun getRemoteUserInformation(id: String) {
+        showLoading(true)
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            val result = api.getUserProfile(id)
+            if (result.status.code == 200.toLong() && result.data != null) {
+                userRemoteResponse.postValue(result.data)
+            } else {
+                responseMessage.postValue(result.status.message)
+            }
+            registerJobFinish()
+        }
+    }
+
     private var followerNumber = MutableLiveData<Long>()
     val getFollowerNumber = followerNumber as LiveData<Long>
     fun getFollower(id: String) {
@@ -82,7 +107,6 @@ class ProfileViewModel : BaseViewModel() {
     val getFollowingNumber = followingNumber as LiveData<Long>
     fun getFollowing(id: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
-
             databaseReference.child("Follow").child(id).child("following")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -96,30 +120,12 @@ class ProfileViewModel : BaseViewModel() {
         }
     }
 
-    private var profilePost = MutableLiveData<ArrayList<PostItem>>()
-    private var list = ArrayList<PostItem>()
-    val getProfilePost = profilePost as LiveData<ArrayList<PostItem>>
-    fun getProfilePost(id: String) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-
-            databaseReference.child("Posts").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    list.clear()
-                    for (data in snapshot.children) {
-                        val post = data.getValue(PostItem::class.java)
-                        if (post != null) {
-                            if (post.publicher == id) {
-                                list.add(post)
-                            }
-                        }
-                    }
-                    profilePost.postValue(list)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    responseMessage.postValue(ERROR)
-                }
-            })
+    private var profilePost = MutableLiveData<List<PostContent>>()
+    val getProfilePost = profilePost as LiveData<List<PostContent>>
+    fun getProfilePost(id: String, pageCount: Int, pageNumber: Int) {
+        parentJob = viewModelScope.launch {
+            val result = repository.getUserProfileImagePost(id, pageCount, pageNumber)
+            profilePost.value = result.data.orEmpty()
         }
     }
 
@@ -128,7 +134,6 @@ class ProfileViewModel : BaseViewModel() {
     val getKeyList = keyListResponse as LiveData<ArrayList<String>>
     fun getSavePostKey(id: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
-
             databaseReference.child("Saves").child(id)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {

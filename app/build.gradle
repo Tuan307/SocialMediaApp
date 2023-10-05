@@ -32,6 +32,7 @@ android {
             try {
                 minifyEnabled false
                 buildConfigField("String", "API_URL", apikeyProperties['API_URL_DEV'])
+                buildConfigField("String", "DATING_API_URL", apikeyProperties['DATING_API_URL_DEV'])
                 buildConfigField("String", "BASE_URL_CHAT_BOT", apikeyProperties['BASE_URL_CHAT_BOT_DEV'])
                 debuggable true
             } catch (e) {
@@ -208,4 +209,8 @@ dependencies {
     //video call
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.stringee.sdk.android:stringee-android-sdk:1.9.0'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    implementation 'com.google.android.libraries.places:places:3.2.0'
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
@@ -23,64 +24,70 @@ import com.base.app.base.fragment.BaseFragment
 import com.base.app.common.EMPTY_STRING
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.NotificationData
-import com.base.app.data.models.PostItem
 import com.base.app.data.models.PushNotification
+import com.base.app.data.models.response.post.ImagesList
+import com.base.app.data.models.response.post.PostContent
 import com.base.app.databinding.FragmentHome2Binding
 import com.base.app.ui.chat.ChatActivity
 import com.base.app.ui.comment.CommentActivity
-import com.base.app.ui.main.MainActivity
 import com.base.app.ui.main.MainViewModel
+import com.base.app.ui.main.fragment.home.adapter.NewsFeedAdapter
 import com.base.app.ui.main.fragment.home.bottom_sheet.AddPostBottomSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
+import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.*
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHome2Binding>(),
-    PostAdapter.IPostCallBack, SwipeRefreshLayout.OnRefreshListener {
+    NewsFeedAdapter.IPostCallBack, SwipeRefreshLayout.OnRefreshListener {
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
-    private var key: String? = null
-    private var lastKey: String? = null
-    private var listAll: ArrayList<PostItem> = ArrayList()
+    private var newsFeedList: ArrayList<PostContent> = ArrayList()
     private var txtName = EMPTY_STRING
     private var imageUri: Uri? = null
 
-
-    companion object {
-        fun newInstance(): HomeFragment {
-            return HomeFragment()
-        }
-    }
-
     private val viewModel by viewModels<HomeViewModel>()
-    private lateinit var homeAdapter: PostAdapter
+    private lateinit var feedAdapter: NewsFeedAdapter
     private val homeViewModel by activityViewModels<MainViewModel>()
-
+    private lateinit var prettyTime: PrettyTime
     override fun getContentLayout(): Int {
         return R.layout.fragment_home2
     }
 
     override fun initView() {
+        viewModel.getNewsFeedData(10, 1)
         registerObserverLoadingEvent(viewModel, this@HomeFragment)
         homeViewModel.getCurrentUserInformation()
         initRecyclerView()
-
         binding.homeRefresh.setOnRefreshListener(this@HomeFragment)
     }
 
     private fun initRecyclerView() {
-        binding.apply {
-            rcvHome.layoutManager =
-                LinearLayoutManager(binding.root.context, LinearLayoutManager.VERTICAL, false)
-            rcvHome.setHasFixedSize(true)
+        with(binding) {
+            prettyTime = PrettyTime(Locale.getDefault())
+            feedAdapter = NewsFeedAdapter(viewModel, this@HomeFragment)
+            rcvHome.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = feedAdapter
+            }
+
+            endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
+                binding.rcvHome.layoutManager as LinearLayoutManager
+            ) {
+                override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                    if (page > 1) {
+                        viewModel.getNewsFeedData(10, page)
+                    }
+                }
+            }
+            rcvHome.addOnScrollListener(endlessRecyclerViewScrollListener)
         }
     }
 
     override fun initListener() = with(binding) {
-        viewModel.getLastKey()
-        viewModel.getData()
         imgDM.setOnClickListener {
             startActivity(Intent(requireContext(), ChatActivity::class.java))
         }
@@ -91,41 +98,51 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     }
 
     override fun observerLiveData() {
-        viewModel.apply {
-            getListResponse.observe(this@HomeFragment) {
-                key = it[it.size - 1].postid
-                listAll.clear()
-                listAll.addAll(it.asReversed())
-                homeAdapter = PostAdapter(requireContext(), this@HomeFragment, viewModel, listAll)
-                binding.rcvHome.adapter = homeAdapter
-
-                endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
-                    binding.rcvHome.layoutManager as LinearLayoutManager
-                ) {
-                    override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                        if (key != lastKey)
-                            key?.let { it1 -> viewModel.getDataOnLoadMore(it1) }
-                    }
+        with(viewModel) {
+            newFeedResponse.observe(this@HomeFragment) {
+                if (it != null) {
+                    newsFeedList.clear()
+                    newsFeedList.addAll(it.content.map { data ->
+                        PostContent(
+                            postId = data.postId,
+                            description = data.description,
+                            imagesList = data.imagesList,
+                            checkInTimestamp = prettyTime.format(Date(data.checkInTimestamp.toLong())),
+                            checkInAddress = data.checkInAddress,
+                            checkInLatitude = data.checkInLatitude,
+                            checkInLongitude = data.checkInLongitude,
+                            type = data.type,
+                            videoUrl = data.videoUrl,
+                            postUserId = data.postUserId
+                        )
+                    })
+                    feedAdapter.submitList(newsFeedList.toList())
                 }
-                binding.rcvHome.addOnScrollListener(endlessRecyclerViewScrollListener)
-
             }
-            getListOnLoadMore.observe(this@HomeFragment) {
-                listAll.addAll(it.asReversed())
-                key = it[it.size - 1].postid
-                homeAdapter.notifyDataSetChanged()
-            }
-            getLastKey.observe(this@HomeFragment) {
-                lastKey = it
+            newFeedLoadMoreResponse.observe(this@HomeFragment) {
+                if (it != null) {
+                    newsFeedList.addAll(it.content.map { data ->
+                        PostContent(
+                            postId = data.postId,
+                            description = data.description,
+                            imagesList = data.imagesList,
+                            checkInTimestamp = prettyTime.format(Date(data.checkInTimestamp.toLong())),
+                            checkInAddress = data.checkInAddress,
+                            checkInLatitude = data.checkInLatitude,
+                            checkInLongitude = data.checkInLongitude,
+                            type = data.type,
+                            videoUrl = data.videoUrl,
+                            postUserId = data.postUserId
+                        )
+                    })
+                    feedAdapter.submitList(newsFeedList.toList())
+                }
             }
             deletePostResponse.observe(this@HomeFragment) {
-                if (it) {
-                    showToast(requireContext(), resources.getString(R.string.str_success))
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                    activity?.finish()
-                } else {
-                    showToast(requireContext(), resources.getString(R.string.str_error))
-                }
+                showToast(requireContext(), it)
+                //loadRefreshData()
+                viewModel.getNewsFeedData(10, 1)
+
             }
             tokenResponse.observe(this@HomeFragment) {
                 var message = txtName
@@ -163,6 +180,15 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         startActivity(intent)
     }
 
+    override fun clickToSeeDetail(listData: List<ImagesList>, position: Int) {
+        val intent = Intent(requireContext(), DetailHomePostActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt("postPosition", position)
+        bundle.putParcelableArrayList("postList", ArrayList(listData))
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
     override fun likePost(postId: String, status: String, publisherId: String) {
         viewModel.likePost(postId, status, publisherId)
         if (publisherId != viewModel.firebaseUser?.uid.toString()
@@ -173,20 +199,21 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     }
 
 
-    override fun commentPost(postId: String, publisherId: String) {
+    override fun commentPost(postId: String, publisherId: String, imageUrl: String) {
         val intent = Intent(context, CommentActivity::class.java)
         intent.putExtra("postId", postId)
         intent.putExtra("publisherId", publisherId)
+        intent.putExtra("imageUrl", imageUrl)
         startActivity(intent)
     }
 
-    override fun savePost(postId: String, status: String) {
-        viewModel.savePost(postId, status)
+    override fun savePost(postId: String) {
+        viewModel.savePost(postId)
     }
 
-    override fun sharePost(postId: Drawable) {
+    override fun sharePost(post: Drawable) {
         // convert to bitmap
-        val bitmap = postId.toBitmap()
+        val bitmap = post.toBitmap()
         // get uri
         imageUri = getImageToShare(bitmap);
         val intent = Intent(Intent.ACTION_SEND);
@@ -286,11 +313,21 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
     }
 
     override fun onRefresh() {
-        viewModel.getLastKey()
-        viewModel.getData()
+        loadRefreshData()
+    }
+
+    private fun loadRefreshData() {
+        viewModel.getNewsFeedData(10, 1)
+        endlessRecyclerViewScrollListener.resetState()
         viewModel.isLoading.postValue(false)
         Handler(Looper.getMainLooper()).postDelayed({
             binding.homeRefresh.isRefreshing = false
         }, 1500)
+    }
+
+    companion object {
+        fun newInstance(): HomeFragment {
+            return HomeFragment()
+        }
     }
 }

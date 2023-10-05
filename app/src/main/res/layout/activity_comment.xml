@@ -6,14 +6,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
+        android:background="@color/white"
         tools:context=".ui.comment.CommentActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/commentAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
@@ -51,12 +51,12 @@
             app:layout_constraintBottom_toTopOf="@+id/rltComment"
             app:layout_constraintTop_toBottomOf="@+id/commentAppBar" />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rltComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_bottom_nav"
-            android:padding="@dimen/dp10"
+            android:background="@color/white"
+            android:paddingVertical="@dimen/dp12"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rcvComment">
 
@@ -64,21 +64,26 @@
                 android:id="@+id/imgCommentAvatar"
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
-                android:layout_marginStart="@dimen/dp8" />
+                android:layout_marginStart="@dimen/dp8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/edtComment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/dp15"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/dp10"
                 android:layout_marginEnd="@dimen/dp10"
-                android:layout_toStartOf="@+id/txtPostComment"
-                android:layout_toEndOf="@+id/imgCommentAvatar"
-                android:background="@android:color/transparent"
+                android:background="@drawable/background_comment_bottom_item"
                 android:hint="@string/add_a_comment"
-                android:textColor="@color/color_app_text"
-                android:textColorHint="@color/color_app_text" />
+                android:paddingStart="@dimen/dp15"
+                android:textColor="@color/color_search_bar"
+                android:textColorHint="@color/color_search_bar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtPostComment"
+                app:layout_constraintStart_toEndOf="@id/imgCommentAvatar"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/txtPostComment"
@@ -90,7 +95,10 @@
                 android:text="@string/post"
                 android:textColor="@color/color_app_text"
                 android:textSize="@dimen/sp20"
-                android:textStyle="normal" />
-        </RelativeLayout>
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -170,11 +170,12 @@ class CommentViewModel @Inject constructor(
         }
     }
 
-    fun addNotifications(postId: String, comment: String, publisherId: String) {
+    fun addNotifications(postId: String, comment: String, publisherId: String, imageUrl: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             val hashMap = HashMap<String, Any>()
             hashMap["userid"] = firebaseUser?.uid.toString()
             hashMap["postid"] = postId
+            hashMap["imageUrl"] = imageUrl
             hashMap["text"] = "commented: $comment"
             hashMap["ispost"] = true
             databaseReference.child("Notifications").child(publisherId)

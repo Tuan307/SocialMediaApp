@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlack"
+        android:background="@color/white"
         android:padding="@dimen/dp8">
 
         <View
@@ -14,7 +14,7 @@
             android:layout_width="2dp"
             android:layout_height="0dp"
             android:layout_marginVertical="10dp"
-            android:background="@color/white"
+            android:background="@color/color_body_text"
             app:layout_constraintBottom_toBottomOf="@+id/list_reply_inside_comment"
             app:layout_constraintEnd_toEndOf="@id/imgCommentAvatar"
             app:layout_constraintStart_toStartOf="@+id/imgCommentAvatar"
@@ -24,7 +24,7 @@
             android:id="@+id/view_line_1"
             android:layout_width="20dp"
             android:layout_height="2dp"
-            android:background="@color/white"
+            android:background="@color/color_body_text"
             android:elevation="2dp"
             app:layout_constraintBottom_toBottomOf="@+id/view_line"
             app:layout_constraintStart_toEndOf="@+id/view_line" />
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:background="@drawable/bg_btn"
-            android:backgroundTint="@color/color_chat_text_hint"
+            android:backgroundTint="@color/color_bg_new"
             android:orientation="vertical"
             android:paddingHorizontal="10dp"
             android:paddingVertical="5dp"
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/text_reply_comment"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.2"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:drawablePadding="5dp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="@+id/linear_comment"
             app:layout_constraintTop_toBottomOf="@+id/text_reply_comment"

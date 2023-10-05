@@ -6,15 +6,51 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlack">
+        android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/imgPost"
+        <RelativeLayout
+            android:id="@+id/relative_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:layout_marginTop="@dimen/dp10"
-            android:adjustViewBounds="true"
-            app:layout_constraintTop_toBottomOf="@id/imgAvatar" />
+            app:layout_constraintTop_toBottomOf="@id/text_time_ago">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_replay_video"
+                android:layout_width="@dimen/dp50"
+                android:layout_height="@dimen/dp50"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:elevation="2dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_replay_24"
+                app:tint="@color/color_blue" />
+
+            <VideoView
+                android:id="@+id/video_post"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="gone"
+                app:use_controller="false" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_video_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/list_image_post"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/imgDoubleClick"
@@ -22,10 +58,10 @@
             android:layout_height="@dimen/dp90"
             android:src="@drawable/ic_heart_double_click"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imgPost"
+            app:layout_constraintBottom_toBottomOf="@+id/relative_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imgPost" />
+            app:layout_constraintTop_toTopOf="@+id/relative_container" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAvatar"
@@ -44,10 +80,50 @@
             android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp17"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imgAvatar"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toTopOf="@+id/imgAvatar"
             tools:text="Username" />
+
+        <TextView
+            android:id="@+id/text_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp20"
+            android:layout_marginTop="@dimen/dp5"
+            android:textColor="@color/color_app_text"
+            android:textSize="@dimen/sp15"
+            android:textStyle="normal"
+            app:layout_constraintStart_toEndOf="@+id/imgAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/txtUserName"
+            tools:text="Italy" />
+
+        <TextView
+            android:id="@+id/text_time_ago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp20"
+            android:layout_marginTop="@dimen/dp5"
+            android:textColor="@color/color_app_text"
+            android:textSize="@dimen/sp17"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/relative_container"
+            app:layout_constraintStart_toEndOf="@+id/imgAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/text_location"
+            tools:text="Username" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp15"
+            android:text="@string/text_follow"
+            android:textColor="@color/color_login_text"
+            android:textSize="@dimen/sp18"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/imgMore"
+            app:layout_constraintEnd_toStartOf="@+id/imgMore"
+            app:layout_constraintTop_toTopOf="@+id/imgMore" />
 
         <ImageView
             android:id="@+id/imgMore"
@@ -69,7 +145,7 @@
             android:layout_marginTop="@dimen/dp10"
             android:src="@drawable/ic_heart_border"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgPost" />
+            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
 
         <ImageView
             android:id="@+id/imgComment"
@@ -79,7 +155,7 @@
             android:layout_marginTop="@dimen/dp10"
             android:src="@drawable/comment"
             app:layout_constraintStart_toEndOf="@+id/imgHeart"
-            app:layout_constraintTop_toBottomOf="@+id/imgPost" />
+            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
 
         <ImageView
             android:id="@+id/imgSave"
@@ -89,7 +165,7 @@
             android:layout_marginEnd="@dimen/dp20"
             android:src="@drawable/ic_bookmark_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgPost" />
+            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
 
         <ImageView
             android:id="@+id/imgShare"
@@ -99,7 +175,7 @@
             android:layout_marginEnd="@dimen/dp15"
             android:src="@drawable/ic_share"
             app:layout_constraintEnd_toStartOf="@id/imgSave"
-            app:layout_constraintTop_toBottomOf="@+id/imgPost" />
+            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
 
         <TextView
             android:id="@+id/txtLikeNumber"
@@ -112,18 +188,6 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/imgHeart"
             tools:text="9999 likes" />
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/txtUnLikeNumber"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="@dimen/dp20"-->
-        <!--            android:layout_marginTop="@dimen/dp10"-->
-        <!--            android:textColor="@color/black"-->
-        <!--            android:textSize="@dimen/sp15"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/txtLikeNumber"-->
-        <!--            tools:text="9999 unLikes" />-->
 
         <TextView
             android:id="@+id/txtPublisher"
@@ -162,12 +226,11 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp1"
+            android:layout_height="@dimen/dp8"
             android:layout_marginTop="@dimen/dp5"
             android:layout_marginBottom="@dimen/dp10"
+            android:background="@color/color_background"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@color/color_app_text"
-            android:visibility="invisible"
             app:layout_constraintTop_toBottomOf="@+id/txtViewAllComments" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

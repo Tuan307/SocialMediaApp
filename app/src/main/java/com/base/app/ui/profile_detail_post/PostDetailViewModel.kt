@@ -17,6 +17,8 @@ import com.base.app.data.models.PostItem
 import com.base.app.data.models.PushNotification
 import com.base.app.data.models.User
 import com.base.app.data.models.mToken
+import com.base.app.data.models.response.post.ImageUserProfilePost
+import com.base.app.data.repositories.profile.UserProfileRepository
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,11 +31,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
-    private val api: Api
+    private val api: Api,
+    private val repository: UserProfileRepository
 ) : BaseViewModel() {
     private var dataListDetail = ArrayList<PostItem>()
     private var listResponseDetail = MutableLiveData<ArrayList<PostItem>>()
     val getListResponseDetail = listResponseDetail as LiveData<ArrayList<PostItem>>
+
+    private var _detailUserPostResponse: MutableLiveData<ImageUserProfilePost> = MutableLiveData()
+    val detailUserPostResponse: LiveData<ImageUserProfilePost>
+        get() = _detailUserPostResponse
+
+    fun getUserDetailPost(userId: String, pageCount: Int, pageNumber: Int) {
+        showLoading(true)
+        parentJob = viewModelScope.launch {
+            val result = repository.getUserProfileImagePost(userId, pageCount, pageNumber)
+            _detailUserPostResponse.value = result
+            registerJobFinish()
+        }
+    }
+
     fun getDataDetail(id: String) {
         showLoading(true)
         parentJob = viewModelScope.launch(Dispatchers.IO) {

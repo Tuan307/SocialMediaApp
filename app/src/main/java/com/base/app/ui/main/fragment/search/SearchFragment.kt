@@ -5,40 +5,47 @@ import android.text.TextWatcher
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
 import com.base.app.common.CommonUtils.hideSoftKeyboard
-import com.base.app.data.models.User
+import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
+import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.databinding.FragmentSearchBinding
 import com.base.app.ui.main.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>(),
     SearchAdapter.ICallBack {
     private val viewModel by viewModels<SearchViewModel>()
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var searchAdapter: SearchAdapter
-    private var lists = ArrayList<User>()
-
-    companion object {
-        fun newInstance(): SearchFragment {
-            return SearchFragment()
-        }
-    }
-
+    private val userList = ArrayList<DatingUser>()
+    private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     override fun getContentLayout(): Int {
         return R.layout.fragment_search
     }
 
     override fun initView() {
-        viewModel.getRecentSearchKey()
-        searchAdapter = SearchAdapter(lists, requireContext(), this)
-        binding.apply {
-            rcvSearch.layoutManager =
+        searchAdapter = SearchAdapter(this)
+        binding.rcvSearch.apply {
+            layoutManager =
                 LinearLayoutManager(requireContext())
-            rcvSearch.setHasFixedSize(true)
-            rcvSearch.adapter = searchAdapter
+            setHasFixedSize(true)
+            adapter = searchAdapter
         }
+        endlessRecyclerViewScrollListener = object :
+            EndlessRecyclerViewScrollListener(binding.rcvSearch.layoutManager as LinearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                if (page > 1) {
+                    viewModel.searchUser(binding.edtSearch.text.toString(), 10, page)
+                }
+            }
+        }
+        binding.rcvSearch.addOnScrollListener(endlessRecyclerViewScrollListener)
+        viewModel.getRecentSearchKey()
     }
 
     override fun initListener() {
@@ -61,23 +68,33 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(),
     }
 
     private fun searchUser(s: String) {
-        if (s != "") {
+        if (s == "" || s.isEmpty()) {
+            viewModel.getRecentSearchKey()
+        } else {
             searchAdapter.isRecent = false
-            viewModel.searchUser(s)
+            viewModel.searchUser(s, 10, 1)
         }
     }
 
-    override fun observerLiveData() {
-        viewModel.getUserResponse.observe(this@SearchFragment) {
-            lists.clear()
-            lists.addAll(it)
-            searchAdapter.notifyDataSetChanged()
+    override fun observerLiveData() = with(viewModel) {
+        searchUserResponse.observe(this@SearchFragment) {
+            userList.clear()
+            userList.addAll(it)
+            searchAdapter.submitList(userList.toList())
         }
-        viewModel.searchKeyResponse.observe(this@SearchFragment) {
+        searchUserLoadMoreResponse.observe(this@SearchFragment) {
+            userList.addAll(it)
+            searchAdapter.submitList(userList.toList())
+        }
+        searchRecentKeyResponse.observe(this@SearchFragment) {
             if (it.isNotEmpty()) {
                 searchAdapter.isRecent = true
                 viewModel.getRecentSearch(it)
             }
+        }
+        recentSearchListResponse.observe(this@SearchFragment) {
+            searchAdapter.submitList(emptyList())
+            searchAdapter.submitList(it.toList())
         }
     }
 
@@ -96,4 +113,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(),
         viewModel.removeRecent(id)
     }
 
+    companion object {
+        fun newInstance(): SearchFragment {
+            return SearchFragment()
+        }
+    }
 }

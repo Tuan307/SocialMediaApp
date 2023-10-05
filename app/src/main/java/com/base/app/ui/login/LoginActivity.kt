@@ -35,7 +35,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             }
             tvRegister.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
-                finish()
             }
             tvForgot.setOnClickListener {
                 viewModel.forgetPassword(edtInputAccount.getText().toString())

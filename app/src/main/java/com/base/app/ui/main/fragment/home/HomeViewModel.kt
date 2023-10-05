@@ -17,6 +17,10 @@ import com.base.app.data.models.PostItem
 import com.base.app.data.models.PushNotification
 import com.base.app.data.models.User
 import com.base.app.data.models.mToken
+import com.base.app.data.models.request.SavedPostRequest
+import com.base.app.data.models.response.post.ImagePostData
+import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.repositories.feed.NewsFeedRepository
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -30,8 +34,16 @@ import javax.inject.Inject
 @HiltViewModel
 
 class HomeViewModel @Inject constructor(
-    private val api: Api
+    private val api: Api,
+    private val newsFeedRepository: NewsFeedRepository
 ) : BaseViewModel() {
+
+    private var _newFeedResponse: MutableLiveData<ImagePostData?> = MutableLiveData()
+    val newFeedResponse: LiveData<ImagePostData?>
+        get() = _newFeedResponse
+    private var _newFeedLoadMoreResponse: MutableLiveData<ImagePostData?> = MutableLiveData()
+    val newFeedLoadMoreResponse: LiveData<ImagePostData?>
+        get() = _newFeedLoadMoreResponse
 
     fun countComments(text: TextView, postId: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
@@ -55,21 +67,6 @@ class HomeViewModel @Inject constructor(
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val count = snapshot.childrenCount
                         text.text = "$count likes"
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-                })
-        }
-    }
-
-    fun getPostDisLikes(text: TextView, postId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Dislikes").child(postId)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val count = snapshot.childrenCount
-                        text.text = "$count dislikes"
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -135,44 +132,34 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    var getListOnLoadMore = MutableLiveData<ArrayList<PostItem>>()
-    private var loadMoreList = ArrayList<PostItem>()
-    fun getDataOnLoadMore(key: String) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Posts").orderByKey().startAfter(key).limitToFirst(20)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        loadMoreList.clear()
-                        for (dataSnapshot in snapshot.children) {
-                            val post = dataSnapshot.getValue(PostItem::class.java)
-                            if (post?.publicher != null) {
-                                loadMoreList.add(post)
-                            }
-                        }
-                        getListOnLoadMore.postValue(loadMoreList)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {}
-                })
+    fun getNewsFeedData(pageCount: Int, pageNumber: Int) {
+        showLoading(true)
+        parentJob = viewModelScope.launch {
+            val result = newsFeedRepository.getNewsFeed(pageCount, pageNumber)
+            if (pageNumber == 1) {
+                _newFeedResponse.value = result.data
+            } else {
+                _newFeedLoadMoreResponse.value = result.data
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                registerJobFinish()
+            }, 1500)
         }
     }
 
-    var getLastKey = MutableLiveData<String>()
-    fun getLastKey() {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            val query = databaseReference.child("Posts").orderByKey().limitToLast(1)
-            query.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (dataSnapshot in snapshot.children) {
-                        getLastKey.postValue(dataSnapshot.key)
-                    }
-                }
+    private var _detailPostResponse: MutableLiveData<PostContent> = MutableLiveData()
+    val detailPostResponse: LiveData<PostContent>
+        get() = _detailPostResponse
 
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+    fun getDetailPost(postId: String) {
+        showLoading(true)
+        parentJob = viewModelScope.launch {
+            val result = newsFeedRepository.getDetailPost(postId)
+            if (result != null) {
+                _detailPostResponse.value = result[0]
+            }
+            registerJobFinish()
         }
-
     }
 
     fun likePost(postId: String, status: String, publisherId: String) {
@@ -203,19 +190,27 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun savePost(postId: String, status: String) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            val uid = firebaseUser?.uid
-            if (status == "save") {
-                if (uid != null) {
-                    databaseReference.child("Saves").child(uid).child(postId).setValue(true)
-                }
-            } else {
-                if (uid != null) {
-                    databaseReference.child("Saves").child(uid).child(postId).removeValue()
-                }
-            }
+    fun savePost(postId: String) {
+        viewModelScope.launch {
+            newsFeedRepository.addSavedPost(
+                SavedPostRequest(
+                    firebaseUser?.uid.toString(),
+                    postId
+                )
+            )
         }
+//        parentJob = viewModelScope.launch(Dispatchers.IO) {
+//            val uid = firebaseUser?.uid
+//            if (status == "save") {
+//                if (uid != null) {
+//                    databaseReference.child("Saves").child(uid).child(postId).setValue(true)
+//                }
+//            } else {
+//                if (uid != null) {
+//                    databaseReference.child("Saves").child(uid).child(postId).removeValue()
+//                }
+//            }
+//        }
     }
 
     fun isLikePost(postId: String, image: ImageView) {
@@ -243,38 +238,60 @@ class HomeViewModel @Inject constructor(
     }
 
     fun isSavedPost(postId: String, image: ImageView) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            val uid = firebaseUser?.uid
-            if (uid != null) {
-                databaseReference.child("Saves").child(uid)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.child(postId).exists()) {
-                                image.tag = "saved"
-                                image.setImageResource(R.drawable.ic_bookmark_boder_black)
-                            } else {
-                                image.setImageResource(R.drawable.ic_bookmark_border)
-                                image.tag = "save"
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                        }
-                    })
+        viewModelScope.launch {
+            val result = newsFeedRepository.checkIfSavedPostExist(
+                SavedPostRequest(
+                    firebaseUser?.uid.toString(),
+                    postId
+                )
+            )
+            if (result.data != null) {
+                image.tag = "saved"
+                image.setImageResource(R.drawable.ic_bookmark_boder_black)
+            } else {
+                image.setImageResource(R.drawable.ic_bookmark_border)
+                image.tag = "save"
             }
         }
+//        parentJob = viewModelScope.launch(Dispatchers.IO) {
+//            val uid = firebaseUser?.uid
+//            if (uid != null) {
+//                databaseReference.child("Saves").child(uid)
+//                    .addValueEventListener(object : ValueEventListener {
+//                        override fun onDataChange(snapshot: DataSnapshot) {
+//                            if (snapshot.child(postId).exists()) {
+//                                image.tag = "saved"
+//                                image.setImageResource(R.drawable.ic_bookmark_boder_black)
+//                            } else {
+//                                image.setImageResource(R.drawable.ic_bookmark_border)
+//                                image.tag = "save"
+//                            }
+//                        }
+//
+//                        override fun onCancelled(error: DatabaseError) {
+//                        }
+//                    })
+//            }
+//        }
     }
 
-    var deletePostResponse = MutableLiveData<Boolean>()
+    private var _deletePostResponse = MutableLiveData<String>()
+    val deletePostResponse: LiveData<String>
+        get() = _deletePostResponse
+
     fun deletePost(postId: String) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Posts").child(postId).removeValue().addOnCompleteListener {
-                if (it.isSuccessful) {
-                    deletePostResponse.postValue(true)
-                } else {
-                    deletePostResponse.postValue(false)
-                }
-            }
+        showLoading(true)
+        parentJob = viewModelScope.launch {
+//            databaseReference.child("Posts").child(postId).removeValue().addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    deletePostResponse.postValue(true)
+//                } else {
+//                    deletePostResponse.postValue(false)
+//                }
+//            }
+            val result = newsFeedRepository.deleteNewPost(postId)
+            _deletePostResponse.value = result.status.message
+            registerJobFinish()
         }
     }
 

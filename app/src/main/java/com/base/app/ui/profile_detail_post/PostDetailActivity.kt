@@ -5,6 +5,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.widget.EditText
@@ -15,10 +16,12 @@ import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.common.EMPTY_STRING
 import com.base.app.data.models.NotificationData
-import com.base.app.data.models.PostItem
 import com.base.app.data.models.PushNotification
+import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.models.response.post.ImagesList
 import com.base.app.databinding.FragmentPostDetailBinding
 import com.base.app.ui.comment.CommentActivity
+import com.base.app.ui.main.fragment.home.DetailHomePostActivity
 import com.base.app.ui.profile_detail_post.adapter.ProfilePostAdapterDetail
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -27,8 +30,8 @@ import java.io.File
 class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
     ProfilePostAdapterDetail.IPostCallBack {
     private val viewModel by viewModels<PostDetailViewModel>()
-    private var list: ArrayList<PostItem> = ArrayList()
-    private var imageId = 0
+    private var list: ArrayList<PostContent> = ArrayList()
+    private var imagePosition = 0
     private var txtName = ""
     private lateinit var postAdapter: ProfilePostAdapterDetail
     override fun getContentLayout(): Int {
@@ -39,19 +42,16 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
         registerObserverLoadingEvent(viewModel, this@PostDetailActivity)
         val intent = intent
         val idKey = intent.getStringExtra("idKey")
-        imageId = intent.getIntExtra("imageId", 0)
+        imagePosition = intent.getIntExtra("imagePosition", 0)
         binding.rcvPhoto.layoutManager = LinearLayoutManager(this@PostDetailActivity)
-        binding.rcvPhoto.setHasFixedSize(true)
         postAdapter = ProfilePostAdapterDetail(
             this@PostDetailActivity,
-            list,
             this@PostDetailActivity,
             viewModel
         )
         binding.rcvPhoto.adapter = postAdapter
         viewModel.getCurrentUserInformation()
-        viewModel.getDataDetail(idKey.toString())
-
+        viewModel.getUserDetailPost(idKey.toString(), 50, 1)
     }
 
     override fun initListener() {
@@ -61,14 +61,14 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
     }
 
     override fun observerLiveData() {
-        viewModel.apply {
-            getListResponseDetail.observe(this@PostDetailActivity) {
+        with(viewModel) {
+            detailUserPostResponse.observe(this@PostDetailActivity) {
                 list.clear()
-                list.addAll(it)
-                postAdapter.notifyDataSetChanged()
-
-                binding.rcvPhoto.scrollToPosition(imageId)
+                it.data?.let { it1 -> list.addAll(it1) }
+                postAdapter.submitList(list.toList())
+                binding.rcvPhoto.scrollToPosition(imagePosition)
             }
+
             userResponse.observe(this@PostDetailActivity) {
                 txtName = it.username.toString()
             }
@@ -101,6 +101,15 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
         ) {
             viewModel.getReceiverToken(publisherId)
         }
+    }
+
+    override fun clickToSeeDetail(listData: List<ImagesList>, position: Int) {
+        val intent = Intent(this@PostDetailActivity, DetailHomePostActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt("postPosition", position)
+        bundle.putParcelableArrayList("postList", ArrayList(listData))
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
 

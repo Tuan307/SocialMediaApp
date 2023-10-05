@@ -3,18 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBlack"
+        android:background="@color/white"
         tools:context=".ui.register.RegisterActivity">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imgBack"
-            app:cardBackgroundColor="@color/colorBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/dp15"
             android:layout_marginHorizontal="@dimen/dp32"
             android:layout_marginVertical="@dimen/dp32"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
             android:text="@string/str_register"
-            android:textColor="@color/color_app_text"
+            android:textColor="@color/black"
             android:textSize="@dimen/sp24"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/imgBack"

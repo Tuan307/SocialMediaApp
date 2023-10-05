@@ -7,33 +7,76 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBlack"
+        android:background="@color/white"
         tools:context=".ui.add_post.PostActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/appBarPost"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/post_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10"
-            app:contentInsetLeft="0dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imgBack"
-                android:layout_width="@dimen/dp45"
-                android:layout_height="@dimen/dp45"
-                android:src="@drawable/ic_back" />
-        </androidx.appcompat.widget.Toolbar>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/appBarPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                app:contentInsetLeft="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/imgUploadImage"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp200"
-            android:layout_marginTop="@dimen/dp15"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_image_example"
-            app:layout_constraintTop_toBottomOf="@+id/appBarPost" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgBack"
+                        android:layout_width="@dimen/dp45"
+                        android:layout_height="@dimen/dp45"
+                        android:src="@drawable/ic_back"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_share_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp16"
+                        android:text="@string/text_share"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp22"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_upload_avatar"
+            android:layout_width="@dimen/dp50"
+            android:layout_height="@dimen/dp50"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp20"
+            android:src="@drawable/photoofme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_app_bar" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:drawableEnd="@drawable/ic_location_mark"
+            android:textColor="@color/color_search_text"
+            android:textSize="@dimen/sp15"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/img_upload_avatar"
+            app:layout_constraintTop_toTopOf="@id/img_upload_avatar"
+            tools:text="Ha Noi, Viet Nam" />
 
         <EditText
             android:id="@+id/edtDescription"
@@ -41,30 +84,123 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp20"
             android:layout_marginTop="@dimen/dp20"
-            android:ellipsize="end"
-            android:hint="@string/description"
             android:backgroundTint="@color/colorWhite"
-            android:maxLines="5"
-            android:textColorHint="@color/color_app_text"
+            android:ellipsize="end"
+            android:hint="@string/text_description"
             android:textColor="@color/color_app_text"
+            android:textColorHint="@color/color_app_text"
             android:textSize="@dimen/sp18"
-            app:layout_constraintTop_toBottomOf="@+id/imgUploadImage" />
+            app:layout_constraintTop_toBottomOf="@+id/img_upload_avatar" />
 
-        <Button
-            android:id="@+id/btnUpload"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_of_images"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp32"
-            android:layout_marginBottom="@dimen/dp32"
-            android:background="@drawable/bg_btn"
-            android:backgroundTint="@color/color_bottom_nav"
-            android:text="@string/upload"
-            android:textAllCaps="false"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp18"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/linear_post"
+            app:layout_constraintTop_toBottomOf="@+id/edtDescription"
+            app:layout_constraintVertical_bias="0.98" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_show_image"
+            android:layout_width="@dimen/dp160"
+            android:layout_height="@dimen/dp160"
+            android:layout_marginStart="@dimen/dp16"
+            android:visibility="gone"
+            app:cardCornerRadius="@dimen/dp15"
+            app:layout_constraintBottom_toTopOf="@+id/linear_post"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtDescription"
+            app:layout_constraintVertical_bias="0.98">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_show_video"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linear_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_bg"
+            android:orientation="horizontal"
+            android:paddingVertical="@dimen/dp15"
+            android:weightSum="3"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_post_image"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/dp32"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/ic_upload_image" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dp15"
+                    android:text="Ảnh"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp18" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_post_video"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/dp32"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/ic_upload_video" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dp15"
+                    android:text="Video"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp18" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_check_in"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/dp32"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_gravity="center_horizontal"
+                    app:srcCompat="@drawable/ic_upload_location" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/text_check_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dp15"
+                    android:text="Check-in"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp18" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

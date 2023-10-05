@@ -15,11 +15,12 @@
             android:id="@+id/toolBarHome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorBlack"
+            android:background="@color/white"
             android:padding="@dimen/dp10">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:paddingVertical="@dimen/dp8"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -62,15 +63,15 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/homeRefresh"
+            android:layout_marginTop="@dimen/dp5"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvHome"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/layout_home_adapter" />
+                android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
     </LinearLayout>
 </layout>
