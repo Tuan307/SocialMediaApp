@@ -284,6 +284,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         intent.putExtra("idKey", idKey)
         intent.putExtra("imagePosition", position)
         startActivity(intent)
+
     }
 
 }
