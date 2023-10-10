@@ -27,8 +27,6 @@
     <color name="redDark">#952323</color>
     <color name="greyLight">#ADA9A9</color>
 
-
-
     <color name="colorPrimary">#3797EF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#03CB83</color>
@@ -50,6 +48,7 @@
     <color name="color_background">#E5E5E5</color>
     <color name="color_welcome">#322C68</color>
     <color name="color_blue">#1593F6</color>
+    <color name="color_blue_faded">#EB79BFF6</color>
     <color name="color_icon_focus">#03AD67</color>
     <color name="color_icon_unfocus">#A6B0CF</color>
     <color name="color_gray">#D5E1ED</color>
