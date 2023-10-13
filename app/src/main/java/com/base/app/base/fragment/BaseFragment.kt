@@ -23,6 +23,7 @@ import com.esafirm.imagepicker.features.ImagePickerMode
 import com.esafirm.imagepicker.features.ImagePickerSavePath
 import com.esafirm.imagepicker.features.toFiles
 import com.esafirm.imagepicker.model.Image
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 
 abstract class BaseFragment<BINDING : ViewDataBinding> :
     Fragment() {

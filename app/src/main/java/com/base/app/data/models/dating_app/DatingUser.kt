@@ -17,4 +17,5 @@ data class DatingUser(
     val email: String,
     val latitude: Double,
     val longitude: Double,
+    var hasChosen: Boolean?
 )

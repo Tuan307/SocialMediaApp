@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_detail_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.group.detail_group.GroupDetailActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_detail_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_back"
+                        android:layout_width="@dimen/dp32"
+                        android:layout_height="@dimen/dp32"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ef_ic_arrow_back"
+                        app:tint="@color/colorBlack" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_search"
+                        android:layout_width="@dimen/dp30"
+                        android:layout_height="@dimen/dp30"
+                        android:layout_marginEnd="@dimen/dp16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/image_menu"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_search"
+                        app:tint="@color/colorBlack" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_menu"
+                        android:layout_width="@dimen/dp32"
+                        android:layout_height="@dimen/dp32"
+                        android:layout_marginEnd="@dimen/dp12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_menu"
+                        app:tint="@color/colorBlack" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_of_group_post"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar_detail_group" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

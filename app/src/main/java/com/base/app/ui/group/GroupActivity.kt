@@ -1,5 +1,6 @@
 package com.base.app.ui.group
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +10,12 @@ import com.base.app.R
 import com.base.app.base.fragment.PagerFragmentAdapter
 import com.base.app.data.models.group.ScreenTitle
 import com.base.app.databinding.ActivityGroupBinding
+import com.base.app.ui.group.add_group.AddGroupActivity
 import com.base.app.ui.group.for_you.GroupForYouFragment
 import com.base.app.ui.group.your_group.GroupYourGroupFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GroupActivity : AppCompatActivity(), GroupScreenListAdapter.OnGroupScreenTitleClick {
     private lateinit var binding: ActivityGroupBinding
     private var screenList = arrayListOf<ScreenTitle>()
@@ -29,6 +33,9 @@ class GroupActivity : AppCompatActivity(), GroupScreenListAdapter.OnGroupScreenT
         with(binding) {
             imageBack.setOnClickListener {
                 finish()
+            }
+            imageAddGroup.setOnClickListener {
+                startActivity(Intent(this@GroupActivity, AddGroupActivity::class.java))
             }
             listOfScreens.apply {
                 layoutManager =
@@ -51,8 +58,10 @@ class GroupActivity : AppCompatActivity(), GroupScreenListAdapter.OnGroupScreenT
     }
 
     override fun onClick(title: String) {
+        var position = 0
         val list = screenList.mapIndexed { index, data ->
             if (title == data.title) {
+                position = index
                 ScreenTitle(
                     title = data.title,
                     isCheck = !data.isCheck
@@ -67,6 +76,7 @@ class GroupActivity : AppCompatActivity(), GroupScreenListAdapter.OnGroupScreenT
         screenList.clear()
         screenList.addAll(list)
         screenAdapter.submitList(list.toList())
+        binding.listOfScreens.smoothScrollToPosition(position)
         when (title) {
             getString(R.string.text_group_for_you) -> {
                 binding.groupFragmentContainer.currentItem = 0

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_group_navigation"
+    app:startDestination="@id/createGroupInformationFragment">
+    <fragment
+        android:id="@+id/createGroupInformationFragment"
+        android:name="com.base.app.ui.group.add_group.fragment.CreateGroupInformationFragment"
+        android:label="CreateGroupInformationFragment"
+        tools:layout="@layout/fragment_create_group_information">
+        <action
+            android:id="@+id/action_createGroupInformationFragment_to_inviteMemberFragment"
+            app:destination="@id/inviteMemberFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inviteMemberFragment"
+        android:name="com.base.app.ui.group.add_group.fragment.InviteMemberFragment"
+        android:label="InviteMemberFragment"
+        tools:layout="@layout/fragment_invite_member">
+        <argument
+            android:name="group_id"
+            app:argType="string" />
+        <argument
+            android:name="group_type"
+            app:argType="string" />
+    </fragment>
+</navigation>

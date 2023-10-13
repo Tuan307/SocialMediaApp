@@ -8,11 +8,24 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp10"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp22"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/relative_container"
+            tools:text="Moi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voi" />
+
         <RelativeLayout
             android:id="@+id/relative_container"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_marginTop="@dimen/dp10"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/text_time_ago">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -145,7 +158,7 @@
             android:layout_marginTop="@dimen/dp10"
             android:src="@drawable/ic_heart_border"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
+            app:layout_constraintTop_toBottomOf="@+id/text_question" />
 
         <ImageView
             android:id="@+id/imgComment"
@@ -155,7 +168,7 @@
             android:layout_marginTop="@dimen/dp10"
             android:src="@drawable/comment"
             app:layout_constraintStart_toEndOf="@+id/imgHeart"
-            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
+            app:layout_constraintTop_toBottomOf="@+id/text_question" />
 
         <ImageView
             android:id="@+id/imgSave"
@@ -165,7 +178,7 @@
             android:layout_marginEnd="@dimen/dp20"
             android:src="@drawable/ic_bookmark_border"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
+            app:layout_constraintTop_toBottomOf="@+id/text_question" />
 
         <ImageView
             android:id="@+id/imgShare"
@@ -175,7 +188,7 @@
             android:layout_marginEnd="@dimen/dp15"
             android:src="@drawable/ic_share"
             app:layout_constraintEnd_toStartOf="@id/imgSave"
-            app:layout_constraintTop_toBottomOf="@+id/relative_container" />
+            app:layout_constraintTop_toBottomOf="@+id/text_question" />
 
         <TextView
             android:id="@+id/txtLikeNumber"

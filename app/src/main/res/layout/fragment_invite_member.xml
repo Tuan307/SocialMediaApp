@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        tools:context=".ui.group.add_group.fragment.InviteMemberFragment">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_invite_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentInsetStart="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_back"
+                        android:layout_width="@dimen/dp32"
+                        android:layout_height="@dimen/dp32"
+                        android:layout_marginStart="@dimen/dp12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ef_ic_arrow_back"
+                        app:tint="@color/colorBlack" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp12"
+                        android:text="@string/text_invite_member"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp20"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_back"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_done"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp12"
+                        android:text="@string/str_done_no_cap"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp20"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_have_created_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="@string/text_have_created_group"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_invite_member" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_invite_member_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="Mời mọi người vào nhóm để quy tụ những người có cùng đam mê"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp18"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_have_created_group" />
+
+        <LinearLayout
+            android:id="@+id/linear_invite_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="@drawable/custom_search"
+            android:backgroundTint="@color/color_gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp12"
+            app:layout_constraintTop_toBottomOf="@+id/text_invite_member_group">
+
+            <ImageView
+                android:id="@+id/imgSearch"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="@dimen/dp24"
+                android:backgroundTint="@color/color_search_text"
+                android:src="@drawable/ic_search"
+                app:tint="@color/color_message_content" />
+
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp10"
+                android:background="@android:color/transparent"
+                android:hint="@string/search"
+                android:minHeight="28dp"
+                android:textColor="@color/color_app_text"
+                android:textColorHint="@color/color_search_text" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_invite_member"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_invite_member" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

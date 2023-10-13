@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_group_banner"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp200"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp12"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp25"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_group_banner"
+            tools:text="Group A" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_group_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp6"
+            android:drawableStart="@drawable/ic_earth_lock"
+            android:drawablePadding="@dimen/dp6"
+            android:textColor="@color/color_chat_text_hint"
+            android:textSize="@dimen/sp16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_group_name"
+            tools:text="Nhóm công khai" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_member_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:drawablePadding="@dimen/dp6"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp16"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/text_group_privacy"
+            app:layout_constraintStart_toEndOf="@+id/text_group_privacy"
+            app:layout_constraintTop_toTopOf="@+id/text_group_privacy"
+            tools:text="36.211 thành viên" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linear_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp12"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintTop_toBottomOf="@+id/text_group_privacy">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_join_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn"
+                android:drawableStart="@drawable/ic_groups"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Tham gia"
+                android:textAllCaps="false"
+                android:textSize="@dimen/sp15"
+                android:textStyle="normal" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_invite_group"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp12"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn"
+                android:backgroundTint="@color/color_bg_new"
+                android:drawableStart="@drawable/ic_group_add"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingLeft="20dp"
+                android:text="Mời bạn"
+                android:textAllCaps="false"
+                android:textSize="@dimen/sp15"
+                android:textStyle="normal" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="@dimen/dp45"
+            android:layout_height="@dimen/dp45"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp20"
+            android:src="@drawable/photoofme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_button" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/input_thinking"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:background="@drawable/bg_edittext_find_transaction"
+            android:focusable="false"
+            android:hint="@string/text_write_something"
+            android:paddingHorizontal="@dimen/dp12"
+            android:paddingVertical="@dimen/dp12"
+            android:textColor="@color/black"
+            android:textColorHint="@color/hint_text_color"
+            android:textSize="@dimen/sp15"
+            app:layout_constraintBottom_toBottomOf="@+id/image_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_avatar"
+            app:layout_constraintTop_toTopOf="@id/image_avatar" />
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp2"
+            android:layout_marginTop="@dimen/dp12"
+            android:background="@color/color_chat_text_hint"
+            app:layout_constraintEnd_toEndOf="@id/input_thinking"
+            app:layout_constraintStart_toStartOf="@+id/image_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/image_avatar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

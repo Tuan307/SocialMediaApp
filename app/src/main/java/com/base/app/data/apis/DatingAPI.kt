@@ -3,6 +3,12 @@ package com.base.app.data.apis
 import com.base.app.data.models.dating_app.BaseApiResponse
 import com.base.app.data.models.dating_app.SearchUserResponse
 import com.base.app.data.models.dating_app.UserProfileResponseResult
+import com.base.app.data.models.group.request.CreateGroupInvitationRequest
+import com.base.app.data.models.group.request.CreateGroupRequest
+import com.base.app.data.models.group.response.CreateGroupResponse
+import com.base.app.data.models.group.response.CreateInvitationResponse
+import com.base.app.data.models.group.response.GetGroupResponse
+import com.base.app.data.models.group.response.GetYourOwnGroupResponse
 import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.RegisterRequest
@@ -37,7 +43,7 @@ interface DatingAPI {
 
     @GET("users/search")
     suspend fun searchUsers(
-        @Query("name") name: String, @Query("pageCount") pageCount: Int,
+        @Query("keyword") name: String, @Query("pageCount") pageCount: Int,
         @Query("pageNumber") pageNumber: Int
     ): Response<SearchUserResponse>
 
@@ -88,4 +94,22 @@ interface DatingAPI {
         @Query("pageCount") pageCount: Int,
         @Query("pageNumber") pageNumber: Int
     ): Response<GetNotificationResponse>
+
+    @POST("group/create")
+    suspend fun createGroup(@Body request: CreateGroupRequest): Response<CreateGroupResponse>
+
+    @POST("group/invite")
+    suspend fun addGroupInvitation(@Body request: CreateGroupInvitationRequest): Response<CreateInvitationResponse>
+
+    @GET("group/user")
+    suspend fun getGroupByUserId(
+        @Query("userId") userId: String, @Query("pageCount") pageCount: Int,
+        @Query("pageNumber") pageNumber: Int
+    ): Response<GetGroupResponse>
+
+    @GET("group/owner")
+    suspend fun getGroupByOwnerId(
+        @Query("userId") userId: String, @Query("pageCount") pageCount: Int,
+        @Query("pageNumber") pageNumber: Int
+    ): Response<GetYourOwnGroupResponse>
 }

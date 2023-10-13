@@ -5,18 +5,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_marginHorizontal="@dimen/dp6"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp10">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_screen_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/item_group_screen_title_bg"
-            android:paddingHorizontal="@dimen/dp6"
+            android:paddingHorizontal="@dimen/dp10"
             android:paddingVertical="@dimen/dp3"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/sp16"
+            android:textSize="@dimen/sp18"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

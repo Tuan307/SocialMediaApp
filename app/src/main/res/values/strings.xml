@@ -4,6 +4,7 @@
     <string name="str_setup">CÀI ĐẶT</string>
     <string name="str_retry">Thử lại</string>
     <string name="str_done">XONG</string>
+    <string name="str_done_no_cap">Xong</string>
 
     <string name="app_name">Social App</string>
     <string name="api_default_error">Có lỗi xảy ra</string>
@@ -414,6 +415,17 @@
     <string name="text_group">Nhóm</string>
     <string name="text_group_for_you">Dành cho bạn</string>
     <string name="text_group_your">Nhóm của bạn</string>
+    <string name="text_create_group">Tạo nhóm</string>
+    <string name="text_name_title">Tên</string>
+    <string name="text_group_description">Mô tả</string>
+    <string name="text_group_privacy">Quyền riêng tư</string>
+    <string name="text_group_image">Ảnh bìa</string>
+    <string name="text_upload_image_banner">Tải ảnh bìa lên</string>
+    <string name="text_invite_member">Mời thành viên</string>
+    <string name="text_have_created_group">Đã tạo nhóm của bạn</string>
+    <string name="text_invite">Mời</string>
+    <string name="text_has_invited">Đã mời</string>
+    <string name="text_write_something">Bạn viết gì đi</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>

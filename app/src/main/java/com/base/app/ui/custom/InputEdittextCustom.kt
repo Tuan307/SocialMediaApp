@@ -39,18 +39,22 @@ class InputEdittextCustom @JvmOverloads constructor(
         init(context, attrs)
     }
 
-    fun setInfoEdt(resource: Int) {
+    fun setInfoEdt(resource: Int?) {
         val lp = LayoutParams(
             LayoutParams.MATCH_PARENT,
             LayoutParams.WRAP_CONTENT
         )
-        if (resource > 0) {
-            mBinding.imgStart.setImageResource(resource)
-            lp.setMargins(CommonUtils.pxFromDp(context, 20f), 0, 0, 0)
-            mBinding.layoutName.layoutParams = lp
+        if (resource != null) {
+            if (resource > 0) {
+                mBinding.imgStart.setImageResource(resource)
+                lp.setMargins(CommonUtils.pxFromDp(context, 20f), 0, 0, 0)
+                mBinding.layoutName.layoutParams = lp
+            } else {
+                lp.setMargins(0, 0, 0, 0)
+                mBinding.layoutName.layoutParams = lp
+            }
         } else {
-            lp.setMargins(0, 0, 0, 0)
-            mBinding.layoutName.layoutParams = lp
+            mBinding.imgStart.visibility = View.GONE
         }
     }
 
@@ -71,7 +75,6 @@ class InputEdittextCustom @JvmOverloads constructor(
                         if (s.toString() == context.getString(R.string.str_default_price)) {
                             mBinding.edtName.setText(EMPTY_STRING)
                         } else {
-                            // Date: 19/09/2022
                             // Problem : Avoid user input wrong number and make exception
                             try {
                                 textChangeCallBack.getTaxCallBack(
