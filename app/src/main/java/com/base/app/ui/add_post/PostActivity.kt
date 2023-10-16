@@ -35,6 +35,8 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
     private var videoUri: Uri? = null
     private var videoPath: String? = null
     private val PICK_VIDEO = 10
+    private var from = ""
+    private var groupId = 0.toLong()
     private lateinit var showImageAdapter: ShowImageAdapter
     private val imagePickerLauncher = registerImagePicker {
         imagesPicker.clear()
@@ -45,6 +47,11 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
     override fun getContentLayout(): Int = R.layout.activity_post
 
     override fun initView() {
+        val intent = intent
+        from = intent.getStringExtra("from").toString()
+        if (from == "group") {
+            groupId = intent.getLongExtra("groupId", 0)
+        }
         showImageAdapter = ShowImageAdapter(showImageList, this@PostActivity)
         with(binding) {
             listOfImages.apply {
@@ -82,9 +89,21 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
             }
             textSharePost.setOnClickListener {
                 if (viewModel.postType == "image") {
-                    viewModel.uploadImage(imageUri, imagePath, edtDescription.text.toString())
+                    viewModel.uploadImage(
+                        imageUri,
+                        imagePath,
+                        edtDescription.text.toString(),
+                        from,
+                        groupId
+                    )
                 } else {
-                    viewModel.uploadVideo(videoUri, videoPath, edtDescription.text.toString())
+                    viewModel.uploadVideo(
+                        videoUri,
+                        videoPath,
+                        edtDescription.text.toString(),
+                        from,
+                        groupId
+                    )
                 }
             }
         }
@@ -114,8 +133,23 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
                 if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
                     viewModel.postNewsFeedRequest = it
                 } else {
-                uploadImagePostToDB(it)
+                    uploadImagePostToDB(it)
                 }
+            }
+
+            uploadGroupVideoResponse.observe(this@PostActivity) {
+//                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
+//                    viewModel.groupPostNewsFeedRequest = it
+//                } else {
+                uploadGroupPostToDB(it)
+                //}
+            }
+            uploadGroupImagesList.observe(this@PostActivity) {
+//                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
+//                    viewModel.groupPostNewsFeedRequest = it
+//                } else {
+                uploadGroupPostToDB(it)
+                //}
             }
         }
     }
@@ -185,22 +219,26 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
                     viewModel.checkInAddress = place.address?.toString() ?: "VietNam"
                     viewModel.checkInLatitude = place.latLng?.latitude ?: 21.028511
                     viewModel.checkInLongitude = place.latLng?.longitude ?: 105.804817
-                    if (viewModel.postNewsFeedRequest != null) {
-                        val data = viewModel.postNewsFeedRequest?.let {
-                            PostNewsFeedRequest(
-                                it.description,
-                                it.id,
-                                it.imagesList,
-                                it.userId,
-                                it.checkInTimestamp,
-                                place.name?.toString() ?: "Hanoi",
-                                place.latLng?.latitude ?: 21.028511,
-                                place.latLng?.longitude ?: 105.804817,
-                                it.type,
-                                it.videoUrl
-                            )
+                    if (from == "home") {
+                        if (viewModel.postNewsFeedRequest != null) {
+                            val data = viewModel.postNewsFeedRequest?.let {
+                                PostNewsFeedRequest(
+                                    it.description,
+                                    it.id,
+                                    it.imagesList,
+                                    it.userId,
+                                    it.checkInTimestamp,
+                                    place.name?.toString() ?: "Hanoi",
+                                    place.latLng?.latitude ?: 21.028511,
+                                    place.latLng?.longitude ?: 105.804817,
+                                    it.type,
+                                    it.videoUrl
+                                )
+                            }
+                            data?.let { viewModel.uploadImagePostToDB(it) }
                         }
-                        data?.let { viewModel.uploadImagePostToDB(it) }
+                    } else {
+
                     }
                 }
             } else if (result.resultCode == Activity.RESULT_CANCELED) {

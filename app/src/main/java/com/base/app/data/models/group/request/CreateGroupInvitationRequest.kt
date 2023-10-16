@@ -9,4 +9,5 @@ data class CreateGroupInvitationRequest(
     val createdAt: String,
     val userId: String,
     val type: String,
+    val fromInvitedUserId: String,
 )

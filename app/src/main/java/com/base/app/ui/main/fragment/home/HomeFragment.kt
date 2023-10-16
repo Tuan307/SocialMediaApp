@@ -183,6 +183,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun clickPost(postId: String, publisherId: String) {
         val intent = Intent(context, CommentActivity::class.java)
+        intent.putExtra("from", "home")
         intent.putExtra("postId", postId)
         intent.putExtra("publisherId", publisherId)
         startActivity(intent)
@@ -209,6 +210,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun commentPost(postId: String, publisherId: String, imageUrl: String) {
         val intent = Intent(context, CommentActivity::class.java)
+        intent.putExtra("from", "home")
         intent.putExtra("postId", postId)
         intent.putExtra("publisherId", publisherId)
         intent.putExtra("imageUrl", imageUrl)

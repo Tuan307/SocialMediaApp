@@ -69,6 +69,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvHome"
+                tools:listitem="@layout/layout_home_adapter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

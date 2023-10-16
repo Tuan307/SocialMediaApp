@@ -11,7 +11,6 @@ import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
 import com.base.app.databinding.ActivityCommentBinding
 import com.base.app.ui.comment.adapter.CommentAdapter
-import com.base.app.ui.comment.adapter.ReplyCommentAdapter
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,6 +26,7 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
     private var name = EMPTY_STRING
     private var uToken = EMPTY_STRING
     private var commentId = ""
+    private var from = ""
     private var isReplyComment = false
     override fun getContentLayout(): Int {
         return R.layout.activity_comment
@@ -35,13 +35,14 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
     override fun initView() {
         registerObserverLoadingEvent(viewModel, this@CommentActivity)
         val intent = intent
+        from = intent.getStringExtra("from").toString()
         postId = intent.getStringExtra("postId").toString()
         publisherId = intent.getStringExtra("publisherId").toString()
         imageUrl = intent.getStringExtra("imageUrl").toString()
         viewModel.getImage()
-        viewModel.readComments(postId)
+        viewModel.readComments(postId, from)
         commentAdapter =
-            CommentAdapter(lists, this@CommentActivity, viewModel, this@CommentActivity)
+            CommentAdapter(lists, this@CommentActivity, viewModel, this@CommentActivity, from)
         binding.apply {
             rcvComment.layoutManager = LinearLayoutManager(this@CommentActivity)
             rcvComment.setHasFixedSize(true)
@@ -59,11 +60,16 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
                     showToast(this@CommentActivity, "Please input your comment!")
                 } else {
                     if (!isReplyComment) {
-                        viewModel.addComments(postId, edtComment.text.toString())
-                        viewModel.addNotifications(postId, edtComment.text.toString(), publisherId,imageUrl)
+                        viewModel.addComments(postId, edtComment.text.toString(), from)
+                        viewModel.addNotifications(
+                            postId,
+                            edtComment.text.toString(),
+                            publisherId,
+                            imageUrl
+                        )
                     } else {
                         isReplyComment = false
-                        viewModel.addReplyComments(commentId, edtComment.text.toString())
+                        viewModel.addReplyComments(commentId, edtComment.text.toString(), from)
                     }
                     val notification = PushNotification(
                         NotificationData(

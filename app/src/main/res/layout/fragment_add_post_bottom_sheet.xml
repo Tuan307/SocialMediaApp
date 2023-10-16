@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp16"
-            android:text="@string/action"
+            android:text="Chọn hành động"
             android:textColor="@color/black"
             android:textSize="@dimen/sp20"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp16"
-            android:text="@string/post_image"
+            android:text="Đăng bài viết"
             android:textColor="@color/black"
             android:textSize="@dimen/sp20" />
 
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp16"
-            android:text="@string/post_video"
+            android:text="Đăng reel"
             android:textColor="@color/black"
             android:textSize="@dimen/sp20" />
     </LinearLayout>

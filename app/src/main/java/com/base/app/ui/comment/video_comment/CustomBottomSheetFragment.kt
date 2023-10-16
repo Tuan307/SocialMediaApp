@@ -2,7 +2,11 @@ package com.base.app.ui.comment.video_comment
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -18,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CustomBottomSheetFragment : BottomSheetDialogFragment(),CommentAdapter.OnReplyComment {
+class CustomBottomSheetFragment : BottomSheetDialogFragment(), CommentAdapter.OnReplyComment {
     companion object {
         const val TAG = "ActionBottomDialog"
         fun newInstance(): CustomBottomSheetFragment {
@@ -26,6 +30,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment(),CommentAdapter.OnR
             return CustomBottomSheetFragment()
         }
     }
+
     private var list: ArrayList<Comment> = ArrayList()
     private lateinit var binding: BottomSheetCommentBinding
     private lateinit var commentAdapter: CommentAdapter
@@ -55,7 +60,13 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment(),CommentAdapter.OnR
         binding.apply {
             rcvVideoComeent.layoutManager = LinearLayoutManager(requireContext())
             rcvVideoComeent.setHasFixedSize(true)
-            commentAdapter = CommentAdapter(list, requireContext(), viewModel,this@CustomBottomSheetFragment)
+            commentAdapter = CommentAdapter(
+                list,
+                requireContext(),
+                viewModel,
+                this@CustomBottomSheetFragment,
+                "home"
+            )
             rcvVideoComeent.adapter = commentAdapter
         }
         val bundle = this.arguments

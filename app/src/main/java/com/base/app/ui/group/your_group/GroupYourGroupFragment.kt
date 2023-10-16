@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,7 +82,7 @@ class GroupYourGroupFragment : Fragment(), GroupYourGroupAdapter.OnShowAllGroup,
     }
 
     override fun onShowDetailGroup(groupId: Long) {
-        val intent = Intent(requireContext(), GroupDetailActivity::class.java)
+        val intent = Intent(requireActivity(), GroupDetailActivity::class.java)
         intent.putExtra("groupId", groupId)
         startActivity(intent)
     }

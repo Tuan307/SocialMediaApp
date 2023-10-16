@@ -1,55 +1,43 @@
-package com.base.app.ui.group.add_group.fragment
+package com.base.app.ui.group.invite_member
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.base.app.R
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
-import com.base.app.databinding.FragmentInviteMemberBinding
+import com.base.app.databinding.ActivityInviteMemberBinding
 import com.base.app.ui.group.add_group.InviteMemberViewModel
 import com.base.app.ui.group.add_group.adapter.InviteMemberAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
-    private lateinit var binding: FragmentInviteMemberBinding
+class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
+    private lateinit var binding: ActivityInviteMemberBinding
     private val viewModel by viewModels<InviteMemberViewModel>()
     private lateinit var inviteMemberAdapter: InviteMemberAdapter
-    private val args: InviteMemberFragmentArgs by navArgs()
-    private var groupId = ""
+    private var groupId = 0.toLong()
     private var inviteList: ArrayList<DatingUser> = arrayListOf()
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentInviteMemberBinding.inflate(inflater, container, false)
-        inviteMemberAdapter = InviteMemberAdapter(this@InviteMemberFragment)
-        groupId = args.groupId
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_invite_member)
+        setContentView(binding.root)
+        inviteMemberAdapter = InviteMemberAdapter(this@InviteMemberActivity)
         viewModel.getFollowing()
+        val intent = intent
+        groupId = intent.getStringExtra("groupId").toString().toLong()
         with(binding) {
             imageBack.setOnClickListener {
-                findNavController().navigateUp()
-            }
-            textDone.setOnClickListener {
-                requireActivity().finish()
+                finish()
             }
             listInviteMember.apply {
-                layoutManager = LinearLayoutManager(requireContext())
+                layoutManager = LinearLayoutManager(this@InviteMemberActivity)
                 adapter = inviteMemberAdapter
             }
             edtSearch.addTextChangedListener(object : TextWatcher {
@@ -64,15 +52,14 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
                 }
             })
         }
-
         observeData()
     }
 
     private fun observeData() = with(viewModel) {
-        followingResponse.observe(viewLifecycleOwner) {
+        followingResponse.observe(this@InviteMemberActivity) {
             getUserView(it)
         }
-        userResponse.observe(viewLifecycleOwner) {
+        userResponse.observe(this@InviteMemberActivity) {
             inviteList.clear()
             inviteList.addAll(it.map { data ->
                 DatingUser(
@@ -101,27 +88,35 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
                 )
             })
         }
-        searchUserResponse.observe(viewLifecycleOwner) {
+        searchUserResponse.observe(this@InviteMemberActivity) {
             inviteMemberAdapter.submitList(it.toList())
         }
-        inviteUserResponse.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it.status.message, Toast.LENGTH_SHORT).show()
+        inviteUserResponse.observe(this@InviteMemberActivity) {
+            Toast.makeText(this@InviteMemberActivity, it.status.message, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onInviteClick(position: Int) {
+        Toast.makeText(this@InviteMemberActivity, position.toString(), Toast.LENGTH_SHORT).show()
         val user = inviteList[position]
-        viewModel.inviteMember(
-            CreateGroupInvitationRequest(
-                groupId.toLong(),
-                Calendar.getInstance().time.time.toString(),
-                user.userId,
-                "invite",
-                viewModel.firebaseUser?.uid.toString(),
-            )
-        )
         val check = inviteList[position].hasChosen
-        inviteList[position].hasChosen = !check!!
-        inviteMemberAdapter.submitList(inviteList.toList())
+        if (check != null) {
+            if (!check) {
+                viewModel.inviteMember(
+                    CreateGroupInvitationRequest(
+                        groupId,
+                        Calendar.getInstance().time.time.toString(),
+                        user.userId,
+                        "invite",
+                        viewModel.firebaseUser?.uid.toString(),
+                    )
+                )
+                inviteList[position].hasChosen = true
+                inviteMemberAdapter.submitList(inviteList.toList())
+                inviteMemberAdapter.submitList(inviteList.toList())
+                inviteMemberAdapter.notifyDataSetChanged()
+            }
+        }
+
     }
 }

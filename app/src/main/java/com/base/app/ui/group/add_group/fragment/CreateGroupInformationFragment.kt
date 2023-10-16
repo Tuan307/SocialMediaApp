@@ -91,7 +91,7 @@ class CreateGroupInformationFragment : Fragment() {
                 val action =
                     CreateGroupInformationFragmentDirections.actionCreateGroupInformationFragmentToInviteMemberFragment(
                         it.data.id.toString(),
-                        itemsValue[binding.spinnerGroupPrivacy.selectedItemPosition]
+                        "invite"
                     )
                 findNavController().navigate(action)
             } else {

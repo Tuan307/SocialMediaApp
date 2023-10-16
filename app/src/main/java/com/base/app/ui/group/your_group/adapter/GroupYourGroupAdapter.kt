@@ -1,5 +1,6 @@
 package com.base.app.ui.group.your_group.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -37,7 +38,7 @@ class GroupYourGroupAdapter(private val listener: OnShowAllGroup) :
             textGroupName.text = data.groupName
             textGroupJoinedDate.text = data.groupJoinedDate
             Glide.with(root.context).load(data.groupImage).into(imageGroupAvatar)
-            root.setOnClickListener {
+            imageGroupAvatar.setOnClickListener {
                 listener.onShowDetailGroup(data.id)
             }
         }

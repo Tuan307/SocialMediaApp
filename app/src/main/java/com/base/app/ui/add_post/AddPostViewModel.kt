@@ -7,8 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.data.models.group.request.CreateGroupPostRequest
+import com.base.app.data.models.group.response.AddPostByGroupResponse
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.repositories.feed.NewsFeedRepository
+import com.base.app.data.repositories.group.GroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,19 +20,45 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddPostViewModel @Inject constructor(
-    private val newsFeedRepository: NewsFeedRepository
+    private val newsFeedRepository: NewsFeedRepository,
+    private val groupRepository: GroupRepository
 ) : BaseViewModel() {
 
     var uploadImageResponse = MutableLiveData<Boolean>()
+
     private var _uploadImageList: MutableLiveData<PostNewsFeedRequest> = MutableLiveData()
     val uploadImageList: LiveData<PostNewsFeedRequest>
         get() = _uploadImageList
+
+    private var _uploadGroupImagesList: MutableLiveData<CreateGroupPostRequest> = MutableLiveData()
+    val uploadGroupImagesList: LiveData<CreateGroupPostRequest>
+        get() = _uploadGroupImagesList
+
+    private var _uploadGroupVideoResponse: MutableLiveData<CreateGroupPostRequest> =
+        MutableLiveData()
+    val uploadGroupVideoResponse: LiveData<CreateGroupPostRequest>
+        get() = _uploadGroupVideoResponse
+
     var checkInAddress = ""
     var checkInLatitude = 0.0
     var checkInLongitude = 0.0
     var postNewsFeedRequest: PostNewsFeedRequest? = null
+    var groupPostNewsFeedRequest: CreateGroupPostRequest? = null
     var postType = ""
-    fun uploadImage(uri: List<Uri>, path: List<String>, description: String) {
+
+    private var _addGroupPostResponse: MutableLiveData<AddPostByGroupResponse> =
+        MutableLiveData()
+    val addGroupPostResponse: LiveData<AddPostByGroupResponse>
+        get() = _addGroupPostResponse
+
+
+    fun uploadImage(
+        uri: List<Uri>,
+        path: List<String>,
+        description: String,
+        from: String,
+        groupId: Long
+    ) {
         showLoading(true)
         if (uri.isNotEmpty() && path.isNotEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
@@ -53,20 +82,39 @@ class AddPostViewModel @Inject constructor(
                             val downloadUri = task.result.toString()
                             updateList.add(downloadUri)
                             if (i == uri.size - 1) {
-                                _uploadImageList.postValue(
-                                    PostNewsFeedRequest(
-                                        description,
-                                        postId,
-                                        updateList,
-                                        firebaseUser?.uid.toString(),
-                                        Calendar.getInstance().time.time.toString(),
-                                        checkInAddress,
-                                        checkInLatitude,
-                                        checkInLongitude,
-                                        "image",
-                                        null
+                                if (from == "home") {
+                                    _uploadImageList.postValue(
+                                        PostNewsFeedRequest(
+                                            description,
+                                            postId,
+                                            updateList,
+                                            firebaseUser?.uid.toString(),
+                                            Calendar.getInstance().time.time.toString(),
+                                            checkInAddress,
+                                            checkInLatitude,
+                                            checkInLongitude,
+                                            "image",
+                                            null
+                                        )
                                     )
-                                )
+                                } else {
+                                    _uploadGroupImagesList.postValue(
+                                        CreateGroupPostRequest(
+                                            description,
+                                            postId,
+                                            updateList,
+                                            firebaseUser?.uid.toString(),
+                                            Calendar.getInstance().time.time.toString(),
+                                            checkInAddress,
+                                            checkInLatitude,
+                                            checkInLongitude,
+                                            "image",
+                                            null,
+                                            null,
+                                            groupId
+                                        )
+                                    )
+                                }
                             }
 //                            val hashMap = HashMap<String, Any>()
 //                            hashMap["postid"] = postId
@@ -101,11 +149,27 @@ class AddPostViewModel @Inject constructor(
         }
     }
 
+    fun uploadGroupPostToDB(request: CreateGroupPostRequest) {
+        showLoading(true)
+        parentJob = viewModelScope.launch {
+            val result = groupRepository.addGroupPost(request)
+            if (result.data == null) {
+                uploadImageResponse.postValue(false)
+                registerJobFinish()
+            } else {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    uploadImageResponse.postValue(true)
+                    registerJobFinish()
+                }, 1000)
+            }
+        }
+    }
+
     private var _uploadVideoResponse = MutableLiveData<PostNewsFeedRequest>()
     val uploadVideoResponse: LiveData<PostNewsFeedRequest>
         get() = _uploadVideoResponse
 
-    fun uploadVideo(uri: Uri?, path: String?, description: String?) {
+    fun uploadVideo(uri: Uri?, path: String?, description: String?, from: String, groupId: Long) {
         showLoading(true)
         if (uri != null && path != null) {
             parentJob = viewModelScope.launch(Dispatchers.IO) {
@@ -125,20 +189,39 @@ class AddPostViewModel @Inject constructor(
                     if (task.isSuccessful) {
                         val downloadUri = task.result.toString()
                         val postId = databaseReference.push().key.toString()
-                        _uploadVideoResponse.postValue(
-                            PostNewsFeedRequest(
-                                description,
-                                postId,
-                                arrayListOf(),
-                                firebaseUser?.uid.toString(),
-                                Calendar.getInstance().time.time.toString(),
-                                checkInAddress,
-                                checkInLatitude,
-                                checkInLongitude,
-                                "video",
-                                downloadUri
+                        if (from == "home") {
+                            _uploadVideoResponse.postValue(
+                                PostNewsFeedRequest(
+                                    description,
+                                    postId,
+                                    arrayListOf(),
+                                    firebaseUser?.uid.toString(),
+                                    Calendar.getInstance().time.time.toString(),
+                                    checkInAddress,
+                                    checkInLatitude,
+                                    checkInLongitude,
+                                    "video",
+                                    downloadUri
+                                )
                             )
-                        )
+                        } else {
+                            _uploadGroupVideoResponse.postValue(
+                                CreateGroupPostRequest(
+                                    description,
+                                    postId,
+                                    arrayListOf(),
+                                    firebaseUser?.uid.toString(),
+                                    Calendar.getInstance().time.time.toString(),
+                                    checkInAddress,
+                                    checkInLatitude,
+                                    checkInLongitude,
+                                    "video",
+                                    downloadUri,
+                                    null,
+                                    groupId
+                                )
+                            )
+                        }
                     } else {
                         uploadImageResponse.postValue(false)
                     }

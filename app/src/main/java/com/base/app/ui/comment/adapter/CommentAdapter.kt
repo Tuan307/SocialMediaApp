@@ -21,7 +21,8 @@ class CommentAdapter(
     val list: ArrayList<Comment>,
     val context: Context,
     val viewModel: CommentViewModel,
-    private val listener: OnReplyComment
+    private val listener: OnReplyComment,
+    val from: String
 ) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
     private lateinit var replyCommentAdapter: ReplyCommentAdapter
@@ -38,7 +39,7 @@ class CommentAdapter(
                 viewModel.getReplyCommentsNumber(
                     data.commentid.toString(),
                     textShowReply,
-                    viewLine,viewLine1
+                    viewLine, viewLine1,from
                 )
                 textShowReply.setOnClickListener {
                     replyCommentAdapter = ReplyCommentAdapter(viewModel)

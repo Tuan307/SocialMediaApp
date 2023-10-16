@@ -197,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/dp15"
-                    android:text="Check-in"
+                    android:text="Địa điểm"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp18" />
             </androidx.appcompat.widget.LinearLayoutCompat>

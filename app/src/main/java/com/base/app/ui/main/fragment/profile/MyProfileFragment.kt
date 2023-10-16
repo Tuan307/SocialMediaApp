@@ -94,7 +94,9 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                         startActivity(Intent(requireContext(), AddVideoActivity::class.java))
                     }
                     R.id.postImage -> {
-                        startActivity(Intent(requireContext(), PostActivity::class.java))
+                        val intent = Intent(requireContext(), PostActivity::class.java)
+                        intent.putExtra("from", "home")
+                        startActivity(intent)
                     }
                 }
                 true

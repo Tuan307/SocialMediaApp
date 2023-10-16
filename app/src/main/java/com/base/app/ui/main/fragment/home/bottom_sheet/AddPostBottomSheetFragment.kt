@@ -38,7 +38,9 @@ class AddPostBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             textPostImage.setOnClickListener {
-                startActivity(Intent(requireContext(), PostActivity::class.java))
+                val intent = Intent(requireContext(), PostActivity::class.java)
+                intent.putExtra("from", "home")
+                startActivity(intent)
                 dismiss()
             }
             textPostVideo.setOnClickListener {

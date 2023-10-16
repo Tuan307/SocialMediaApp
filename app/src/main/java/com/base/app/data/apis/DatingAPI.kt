@@ -4,9 +4,13 @@ import com.base.app.data.models.dating_app.BaseApiResponse
 import com.base.app.data.models.dating_app.SearchUserResponse
 import com.base.app.data.models.dating_app.UserProfileResponseResult
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
+import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
+import com.base.app.data.models.group.response.AddPostByGroupResponse
 import com.base.app.data.models.group.response.CreateGroupResponse
 import com.base.app.data.models.group.response.CreateInvitationResponse
+import com.base.app.data.models.group.response.GetAllPostByGroup
+import com.base.app.data.models.group.response.GetGroupByGroupIdAndMemberIdResponse
 import com.base.app.data.models.group.response.GetGroupResponse
 import com.base.app.data.models.group.response.GetYourOwnGroupResponse
 import com.base.app.data.models.request.AddNotificationRequest
@@ -112,4 +116,29 @@ interface DatingAPI {
         @Query("userId") userId: String, @Query("pageCount") pageCount: Int,
         @Query("pageNumber") pageNumber: Int
     ): Response<GetYourOwnGroupResponse>
+
+    @GET("group/check/join")
+    suspend fun checkIfJoinedGroup(
+        @Query("userId") userId: String, @Query("groupId") groupId: Long
+    ): Response<GetGroupByGroupIdAndMemberIdResponse>
+
+    @GET("group")
+    suspend fun getGroupById(
+        @Query("groupId") groupId: Long
+    ): Response<CreateGroupResponse>
+
+    @GET("group/member")
+    suspend fun getAllGroupMemberByGroupId(
+        @Query("groupId") groupId: Long
+    ): Response<GetGroupResponse>
+
+    @GET("group/post")
+    suspend fun getAllGroupPost(
+        @Query("groupId") groupId: Long, @Query("pageCount") pageCount: Int,
+        @Query("pageNumber") pageNumber: Int
+    ): Response<GetAllPostByGroup>
+
+    @POST("group/add/post")
+    suspend fun addGroupPost(@Body request: CreateGroupPostRequest): Response<AddPostByGroupResponse>
+
 }

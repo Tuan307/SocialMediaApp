@@ -11,6 +11,7 @@ data class DetailGroupInformationViewData(
     val imageUrl: String,
     val userImageUrl: String,
     val groupName: String,
+    val groupOwnerId: String,
     val groupPrivacy: String,
     val groupMemberNumber: String,
     val hasJoined: Boolean

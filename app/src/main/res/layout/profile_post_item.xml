@@ -8,9 +8,10 @@
         android:background="@color/white">
 
         <ImageView
+            android:src="@drawable/damsen"
             android:id="@+id/imgImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_margin="1dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY" />

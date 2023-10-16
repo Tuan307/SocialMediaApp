@@ -78,45 +78,76 @@ class CommentViewModel @Inject constructor(
 
     var getCommentResponse = MutableLiveData<ArrayList<Comment>>()
     private var comments = ArrayList<Comment>()
-    fun readComments(postId: String) {
+    fun readComments(postId: String, from: String) {
         showLoading(true)
         parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Comments").child(postId)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        comments.clear()
-                        for (data in snapshot.children) {
-                            val comment = data.getValue(Comment::class.java)
-                            if (comment != null) {
-                                comments.add(comment)
+            if (from == "home") {
+                databaseReference.child("Comments").child(postId)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            comments.clear()
+                            for (data in snapshot.children) {
+                                val comment = data.getValue(Comment::class.java)
+                                if (comment != null) {
+                                    comments.add(comment)
+                                }
                             }
+                            getCommentResponse.postValue(comments)
+                            registerJobFinish()
                         }
-                        getCommentResponse.postValue(comments)
-                        registerJobFinish()
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-                })
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+            } else {
+                databaseReference.child("Group_Comments").child(postId)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            comments.clear()
+                            for (data in snapshot.children) {
+                                val comment = data.getValue(Comment::class.java)
+                                if (comment != null) {
+                                    comments.add(comment)
+                                }
+                            }
+                            getCommentResponse.postValue(comments)
+                            registerJobFinish()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+            }
         }
     }
 
     var addCommentResponse = MutableLiveData<Boolean>()
-    fun addComments(postId: String, comment: String) {
+    fun addComments(postId: String, comment: String, from: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             val key = databaseReference.push().key.toString()
             val hashMap = HashMap<String, Any>()
             hashMap["comment"] = comment
             hashMap["publisher"] = firebaseUser!!.uid
             hashMap["commentid"] = key
-            databaseReference.child("Comments").child(postId)
-                .child(key).setValue(hashMap).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        addCommentResponse.postValue(true)
-                    } else {
-                        addCommentResponse.postValue(false)
+            if (from == "home") {
+                databaseReference.child("Comments").child(postId)
+                    .child(key).setValue(hashMap).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            addCommentResponse.postValue(true)
+                        } else {
+                            addCommentResponse.postValue(false)
+                        }
                     }
-                }
+            } else {
+                databaseReference.child("Group_Comments").child(postId)
+                    .child(key).setValue(hashMap).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            addCommentResponse.postValue(true)
+                        } else {
+                            addCommentResponse.postValue(false)
+                        }
+                    }
+            }
         }
     }
 
@@ -124,21 +155,32 @@ class CommentViewModel @Inject constructor(
     val addReplyCommentResponse: LiveData<Boolean>
         get() = _addReplyCommentResponse
 
-    fun addReplyComments(commentId: String, replyComment: String) {
+    fun addReplyComments(commentId: String, replyComment: String, from: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             val key = databaseReference.push().key.toString()
             val hashMap = HashMap<String, Any>()
             hashMap["comment"] = replyComment
             hashMap["publisher"] = firebaseUser!!.uid
             hashMap["commentid"] = key
-            databaseReference.child("ReplyComment").child(commentId)
-                .child(key).setValue(hashMap).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        _addReplyCommentResponse.postValue(true)
-                    } else {
-                        _addReplyCommentResponse.postValue(false)
+            if (from == "home") {
+                databaseReference.child("ReplyComment").child(commentId)
+                    .child(key).setValue(hashMap).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            _addReplyCommentResponse.postValue(true)
+                        } else {
+                            _addReplyCommentResponse.postValue(false)
+                        }
                     }
-                }
+            } else {
+                databaseReference.child("Group_ReplyComment").child(commentId)
+                    .child(key).setValue(hashMap).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            _addReplyCommentResponse.postValue(true)
+                        } else {
+                            _addReplyCommentResponse.postValue(false)
+                        }
+                    }
+            }
         }
     }
 
@@ -146,27 +188,49 @@ class CommentViewModel @Inject constructor(
         commentId: String,
         text: AppCompatTextView,
         view: View,
-        viewLine1: View
+        viewLine1: View,
+        from: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("ReplyComment").child(commentId)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.childrenCount != 0.toLong()) {
-                            text.isVisible = true
-                            text.text = "Xem ${snapshot.childrenCount} phản hồi khác"
-                            view.isVisible = true
-                            viewLine1.isVisible = true
-                        } else {
-                            text.isVisible = false
-                            view.isVisible = false
-                            viewLine1.isVisible = false
+            if(from == "home"){
+                databaseReference.child("ReplyComment").child(commentId)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.childrenCount != 0.toLong()) {
+                                text.isVisible = true
+                                text.text = "Xem ${snapshot.childrenCount} phản hồi khác"
+                                view.isVisible = true
+                                viewLine1.isVisible = true
+                            } else {
+                                text.isVisible = false
+                                view.isVisible = false
+                                viewLine1.isVisible = false
+                            }
                         }
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-                })
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+            }else{
+                databaseReference.child("Group_ReplyComment").child(commentId)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.childrenCount != 0.toLong()) {
+                                text.isVisible = true
+                                text.text = "Xem ${snapshot.childrenCount} phản hồi khác"
+                                view.isVisible = true
+                                viewLine1.isVisible = true
+                            } else {
+                                text.isVisible = false
+                                view.isVisible = false
+                                viewLine1.isVisible = false
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+            }
         }
     }
 

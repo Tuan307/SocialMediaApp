@@ -73,6 +73,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAvatar"
             android:layout_width="@dimen/dp80"
+            android:src="@drawable/damsen"
             android:layout_height="@dimen/dp80"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
@@ -261,6 +262,7 @@
             android:id="@+id/rcvProfile"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            tools:itemCount="1"
             android:layout_marginTop="@dimen/dp8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
