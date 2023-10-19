@@ -12,7 +12,7 @@ data class CreateInvitationResponse(
     @SerializedName("status")
     val status: Status,
     @SerializedName("data")
-    val data: InvitationData,
+    val data: InvitationData?,
     @SerializedName("pageCount")
     val pageCount: Long,
     @SerializedName("page")

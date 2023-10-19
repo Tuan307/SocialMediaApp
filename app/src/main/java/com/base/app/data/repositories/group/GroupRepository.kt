@@ -6,6 +6,7 @@ import com.base.app.data.apis.DatingAPI
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
+import com.base.app.data.models.group.request.JoinGroupRequest
 import com.base.app.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -34,6 +35,18 @@ class GroupRepository @Inject constructor(
     suspend fun createGroupInvitation(request: CreateGroupInvitationRequest) =
         withContext(dispatcher) {
             when (val result = callApi { api.addGroupInvitation(request) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun createGroupJoinRequest(request: CreateGroupInvitationRequest) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.addGroupJoinRequest(request) }) {
                 is NetworkResult.Success -> {
                     result.data
                 }
@@ -143,6 +156,18 @@ class GroupRepository @Inject constructor(
     suspend fun addGroupPost(request: CreateGroupPostRequest) =
         withContext(dispatcher) {
             when (val result = callApi { api.addGroupPost(request) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun addMemberToGroup(request: JoinGroupRequest) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.addMemberToGroup(request) }) {
                 is NetworkResult.Success -> {
                     result.data
                 }

@@ -40,6 +40,7 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
     private val viewModel by viewModels<GroupDetailViewModel>()
     private val list: ArrayList<DetailGroupViewData> = arrayListOf()
     private var groupId = 0.toLong()
+    private var groupName = ""
     private var isJoined = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,7 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
         val intent = intent
         detailAdapter = DetailGroupAdapter(this@GroupDetailActivity, viewModel)
         groupId = intent.getLongExtra("groupId", 0)
+        groupName = intent.getStringExtra("groupName").toString()
         viewModel.checkIfJoinedGroup(groupId)
         with(binding) {
             swipeDetailGroup.setOnRefreshListener(this@GroupDetailActivity)
@@ -179,6 +181,7 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
     override fun inviteFriend(groupId: String) {
         val intent = Intent(this@GroupDetailActivity, InviteMemberActivity::class.java)
         intent.putExtra("groupId", groupId)
+        intent.putExtra("groupName", groupName)
         startActivity(intent)
     }
 

@@ -6,6 +6,7 @@ import com.base.app.data.models.dating_app.UserProfileResponseResult
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
+import com.base.app.data.models.group.request.JoinGroupRequest
 import com.base.app.data.models.group.response.AddPostByGroupResponse
 import com.base.app.data.models.group.response.CreateGroupResponse
 import com.base.app.data.models.group.response.CreateInvitationResponse
@@ -107,6 +108,9 @@ interface DatingAPI {
     @POST("group/invite")
     suspend fun addGroupInvitation(@Body request: CreateGroupInvitationRequest): Response<CreateInvitationResponse>
 
+    @POST("group/request")
+    suspend fun addGroupJoinRequest(@Body request: CreateGroupInvitationRequest): Response<CreateInvitationResponse>
+
     @GET("group/user")
     suspend fun getGroupByUserId(
         @Query("userId") userId: String, @Query("pageCount") pageCount: Int,
@@ -155,6 +159,9 @@ interface DatingAPI {
 
     @POST("group/add/post")
     suspend fun addGroupPost(@Body request: CreateGroupPostRequest): Response<AddPostByGroupResponse>
+
+    @POST("group/add/member")
+    suspend fun addMemberToGroup(@Body request: JoinGroupRequest): Response<GetGroupByGroupIdAndMemberIdResponse>
 
     @DELETE("group/delete/group")
     suspend fun deleteGroup(@Query("groupId") groupId: Long): Response<BaseApiResponse>

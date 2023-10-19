@@ -81,9 +81,10 @@ class GroupYourGroupFragment : Fragment(), GroupYourGroupAdapter.OnShowAllGroup,
         startActivity(intent)
     }
 
-    override fun onShowDetailGroup(groupId: Long) {
+    override fun onShowDetailGroup(groupId: Long,groupName:String) {
         val intent = Intent(requireActivity(), GroupDetailActivity::class.java)
         intent.putExtra("groupId", groupId)
+        intent.putExtra("groupName", groupName)
         startActivity(intent)
     }
 

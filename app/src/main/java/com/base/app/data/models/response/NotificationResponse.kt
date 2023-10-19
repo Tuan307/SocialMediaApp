@@ -2,6 +2,7 @@ package com.base.app.data.models.response
 
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.dating_app.Status
+import com.base.app.data.models.group.response.GroupData
 import com.base.app.data.models.response.post.Pageable
 import com.base.app.data.models.response.post.Sort
 import com.google.gson.annotations.SerializedName
@@ -37,13 +38,16 @@ data class NotificationContent(
     val isPost: Boolean?,
     val isInvitation: Boolean?,
     val text: String?,
+    val isRequest: Boolean?,
     @SerializedName("notificationPostId")
     val notificationPostId: String?,
     val notificationTimeStamp: String?,
     @SerializedName("notificationOwnerId")
     val notificationOwnerId: String?,
     @SerializedName("notificationUserId")
-    val notificationUserId: DatingUser?
+    val notificationUserId: DatingUser?,
+    @SerializedName("notificationGroupId")
+    val notificationGroupId: GroupData?
 )
 
 data class NotificationData(

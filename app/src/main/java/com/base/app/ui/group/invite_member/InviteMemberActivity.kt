@@ -23,6 +23,7 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
     private val viewModel by viewModels<InviteMemberViewModel>()
     private lateinit var inviteMemberAdapter: InviteMemberAdapter
     private var groupId = 0.toLong()
+    private var groupName = ""
     private var inviteList: ArrayList<DatingUser> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,7 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
         viewModel.getFollowing()
         val intent = intent
         groupId = intent.getStringExtra("groupId").toString().toLong()
+        groupName = intent.getStringExtra("groupName").toString()
         with(binding) {
             imageBack.setOnClickListener {
                 finish()
@@ -106,6 +108,7 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
                     CreateGroupInvitationRequest(
                         groupId,
                         Calendar.getInstance().time.time.toString(),
+                        "Mời bạn tham gia nhóm $groupName",
                         user.userId,
                         "invite",
                         viewModel.firebaseUser?.uid.toString(),

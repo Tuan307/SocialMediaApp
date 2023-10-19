@@ -39,7 +39,7 @@ class GroupYourGroupAdapter(private val listener: OnShowAllGroup) :
             textGroupJoinedDate.text = data.groupJoinedDate
             Glide.with(root.context).load(data.groupImage).into(imageGroupAvatar)
             imageGroupAvatar.setOnClickListener {
-                listener.onShowDetailGroup(data.id)
+                listener.onShowDetailGroup(data.id,data.groupName)
             }
         }
     }
@@ -77,6 +77,6 @@ class GroupYourGroupAdapter(private val listener: OnShowAllGroup) :
 
     interface OnShowAllGroup {
         fun onShowAllList(type: String)
-        fun onShowDetailGroup(groupId: Long)
+        fun onShowDetailGroup(groupId: Long,groupName:String)
     }
 }

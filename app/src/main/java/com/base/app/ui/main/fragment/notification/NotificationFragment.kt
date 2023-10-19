@@ -75,6 +75,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
                                 )
                             ),
                             notificationUserId = itemData.notificationUserId,
+                            isRequest = itemData.isRequest,
+                            notificationGroupId = itemData.notificationGroupId
                         )
                     })
                     notificationAdapter.submitList(notificationList.toList())
@@ -97,6 +99,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
                                 )
                             ),
                             notificationUserId = itemData.notificationUserId,
+                            isRequest = itemData.isRequest,
+                            notificationGroupId = itemData.notificationGroupId
                         )
                     })
                     notificationAdapter.submitList(notificationList.toList())

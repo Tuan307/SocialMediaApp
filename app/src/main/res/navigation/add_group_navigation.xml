@@ -24,5 +24,8 @@
         <argument
             android:name="group_type"
             app:argType="string" />
+        <argument
+            android:name="group_name"
+            app:argType="string" />
     </fragment>
 </navigation>

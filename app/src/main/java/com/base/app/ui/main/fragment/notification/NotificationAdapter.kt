@@ -1,5 +1,6 @@
 package com.base.app.ui.main.fragment.notification
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +19,17 @@ class NotificationAdapter :
     ListAdapter<NotificationContent, NotificationAdapter.ViewHolder>(NotificationDiffUtil) {
     inner class ViewHolder(private val binding: LayoutNotificationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(data: NotificationContent) = with(binding) {
             Glide.with(root.context).load(data.notificationUserId?.imageUrl).into(imgAvatar)
             txtUserName.text = data.notificationUserId?.userName
-            txtNotification.text = data.text.toString()
+            if (data.isInvitation == true || data.isRequest == true) {
+                txtNotification.text = "${data.text} ${data.notificationGroupId?.groupName}"
+            } else if (data.isPost == true) {
+                txtNotification.text = data.text.toString()
+            }
             textTimeAgo.text = data.notificationTimeStamp
-            if (data.isInvitation == true) {
+            if (data.isInvitation == true || data.isRequest == true) {
                 linearNotificationButton.visibility = View.VISIBLE
             } else {
                 linearNotificationButton.visibility = View.GONE

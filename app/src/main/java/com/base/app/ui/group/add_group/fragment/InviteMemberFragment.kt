@@ -27,6 +27,7 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
     private lateinit var inviteMemberAdapter: InviteMemberAdapter
     private val args: InviteMemberFragmentArgs by navArgs()
     private var groupId = ""
+    private var groupName = ""
     private var inviteList: ArrayList<DatingUser> = arrayListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +36,7 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
         binding = FragmentInviteMemberBinding.inflate(inflater, container, false)
         inviteMemberAdapter = InviteMemberAdapter(this@InviteMemberFragment)
         groupId = args.groupId
+        groupName = args.groupName
         return binding.root
     }
 
@@ -115,6 +117,7 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
             CreateGroupInvitationRequest(
                 groupId.toLong(),
                 Calendar.getInstance().time.time.toString(),
+                "Mời bạn tham gia nhóm $groupName",
                 user.userId,
                 "invite",
                 viewModel.firebaseUser?.uid.toString(),

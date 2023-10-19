@@ -91,7 +91,8 @@ class CreateGroupInformationFragment : Fragment() {
                 val action =
                     CreateGroupInformationFragmentDirections.actionCreateGroupInformationFragmentToInviteMemberFragment(
                         it.data.id.toString(),
-                        "invite"
+                        "invite",
+                        it.data.groupName.toString()
                     )
                 findNavController().navigate(action)
             } else {
