@@ -46,6 +46,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvComment"
             android:layout_width="match_parent"
+            tools:listitem="@layout/comment_item"
+            tools:itemCount="3"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp10"
             app:layout_constraintBottom_toTopOf="@+id/rltComment"
@@ -63,6 +65,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgCommentAvatar"
                 android:layout_width="@dimen/dp40"
+                android:src="@drawable/damsen"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginStart="@dimen/dp8"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +95,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/dp5"
-                android:text="@string/post"
+                android:text="@string/post_comment"
                 android:textColor="@color/color_app_text"
                 android:textSize="@dimen/sp20"
                 android:textStyle="normal"

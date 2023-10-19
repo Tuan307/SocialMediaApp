@@ -32,7 +32,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgCommentAvatar"
             android:layout_width="@dimen/dp40"
-            android:src="@drawable/photoofme"
+            android:src="@drawable/damsen"
             android:layout_height="@dimen/dp40"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -70,7 +70,7 @@
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="@+id/txtCommentUserName"
                 app:layout_constraintTop_toBottomOf="@+id/txtCommentUserName"
-                tools:text="comment here" />
+                tools:text="Bình luận test" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,4 +1,4 @@
-package com.base.app.ui.group.detail_group.adapter
+package com.base.app.ui.group.for_you.adapter
 
 import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
@@ -7,16 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.base.app.R
 import com.base.app.data.models.response.post.ImagesList
-import com.base.app.databinding.LayoutDetailGroupInformationBinding
-import com.base.app.databinding.LayoutHomeAdapterBinding
+import com.base.app.databinding.LayoutForYouGroupBodyBinding
+import com.base.app.databinding.LayoutForYouGroupHeaderBinding
 import com.base.app.ui.group.detail_group.GroupDetailViewModel
-import com.base.app.ui.group.detail_group.viewdata.DetailGroupInformationViewData
-import com.base.app.ui.group.detail_group.viewdata.DetailGroupPostViewData
-import com.base.app.ui.group.detail_group.viewdata.DetailGroupViewData
+import com.base.app.ui.group.for_you.viewdata.GroupForYouPostViewData
+import com.base.app.ui.group.for_you.viewdata.GroupForYouViewData
+import com.base.app.ui.group.for_you.viewdata.GroupYourViewData
 import com.base.app.ui.main.fragment.home.PostInPostAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -26,81 +27,47 @@ import kotlinx.coroutines.launch
 
 /**
  * @author tuanpham
- * @since 10/13/2023
+ * @since 10/18/2023
  */
-class DetailGroupAdapter(
-    private val listener: IGroupPostCallBack,
-    private val viewModel: GroupDetailViewModel
+class GroupForYouGroupAdapter(
+    private val viewModel: GroupDetailViewModel,
+    private val listener: GroupForYouInteract
 ) :
-    ListAdapter<DetailGroupViewData, RecyclerView.ViewHolder>(DetailGroupViewData.DetailGroupDiffUtil) {
+    ListAdapter<GroupForYouViewData, RecyclerView.ViewHolder>(GroupForYouViewData.GroupForYouDiffUtil) {
 
-    class InformationViewHolder(val binding: LayoutDetailGroupInformationBinding) :
+    private class HeaderViewHolder(private val binding: LayoutForYouGroupHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(
-            data: DetailGroupInformationViewData,
-            listener: IGroupPostCallBack,
-            viewModel: GroupDetailViewModel
-        ) =
-            with(binding) {
-                Glide.with(root.context).load(data.imageUrl).into(imageGroupBanner)
-                Glide.with(root.context).load(data.userImageUrl).into(imageAvatar)
-                textGroupName.text = data.groupName
-                if (viewModel.firebaseUser?.uid.toString() == data.groupOwnerId) {
-                    buttonJoinGroup.visibility = View.GONE
-                    buttonManageGroup.visibility = View.VISIBLE
-                } else {
-                    buttonJoinGroup.visibility = View.VISIBLE
-                    buttonManageGroup.visibility = View.GONE
-                }
-                buttonInviteGroup.setOnClickListener {
-                    listener.inviteFriend(data.id)
-                }
-                buttonManageGroup.setOnClickListener {
-                    listener.manageGroup(data.id)
-                }
-                buttonJoinGroup.setOnClickListener {
-                    if (data.hasJoined) {
-                        listener.leaveGroup(data.id)
-                    } else {
-                        listener.requestJoinGroup(data.id)
-                    }
-                }
-                textGroupPrivacy.text = if (data.groupPrivacy == "private") {
-                    "Riêng tư"
-                } else {
-                    "Công khai"
-                }
-                textMemberNumber.text = data.groupMemberNumber
-                buttonJoinGroup.text = if (data.hasJoined) {
-                    "Đã tham gia"
-                } else {
-                    "Tham gia"
-                }
-                inputThinking.setOnClickListener {
-                    listener.onPostAction()
-                }
+        private lateinit var headerAdapter: GroupForYouHeaderAdapter
+        fun bind(data: GroupYourViewData) = with(binding) {
+            headerAdapter = GroupForYouHeaderAdapter(data.groups)
+            listOfGroup.apply {
+                layoutManager =
+                    LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = headerAdapter
             }
+        }
     }
 
-    class GroupPostViewHolder(val binding: LayoutHomeAdapterBinding) :
+    private class BodyViewHolder(private val binding: LayoutForYouGroupBodyBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        var mediaPlayer: MediaPlayer? = null
         fun bind(
-            data: DetailGroupPostViewData,
-            listener: IGroupPostCallBack,
-            viewModel: GroupDetailViewModel
+            data: GroupForYouPostViewData,
+            viewModel: GroupDetailViewModel,
+            listener: GroupForYouInteract,
         ) = with(binding) {
-            if (data.checkInAddress.isEmpty()) {
+            var mediaPlayer: MediaPlayer? = null
+            if (data.address.isEmpty()) {
                 textLocation.visibility = View.GONE
             }
+            Glide.with(root.context).load(data.postGroup.groupImageUrl).into(imageGroup)
             if (data.type == "image") {
                 val postInPostAdapter =
                     PostInPostAdapter(
                         root.context,
-                        data.imagesList,
+                        data.itemList,
                         object : PostInPostAdapter.OnImageCLick {
                             override fun onImageClick(position: Int) {
-                                listener.clickToSeeDetail(data.imagesList.orEmpty(), position)
+                                listener.clickToSeeDetail(data.itemList, position)
                             }
                         })
                 videoPost.visibility = View.GONE
@@ -133,7 +100,7 @@ class DetailGroupAdapter(
                     mediaPlayer?.start()
                 }
             }
-            textLocation.text = data.checkInAddress
+            textLocation.text = data.address
             textTimeAgo.text = data.createdAt
             if (data.description == "") {
                 txtDescription.visibility = View.GONE
@@ -143,9 +110,9 @@ class DetailGroupAdapter(
             }
             data.id.let { viewModel.isLikeGroupPost(it, imgHeart) }
             data.id.let { viewModel.isSavedPost(it, imgSave) }
-            txtUserName.text = data.user.userName
-            txtPublisher.text = data.user.fullName
-            Glide.with(root.context).load(data.user.imageUrl).into(imgAvatar)
+            txtUserName.text = data.postUser.userName
+            txtPublisher.text = data.postUser.fullName
+            Glide.with(root.context).load(data.postUser.imageUrl).into(imgAvatar)
             data.id.let { viewModel.getGroupPostLikes(txtLikeNumber, it) }
             data.id.let { viewModel.countGroupPostComments(txtViewAllComments, it) }
             imgMore.setOnClickListener {
@@ -160,8 +127,8 @@ class DetailGroupAdapter(
                             data.id.let { it1 -> listener.editImage(it1, it) }
                         }
                         R.id.download -> {
-                            if (data.imagesList != null) {
-                                data.imagesList[0].imageUrl.let { it1 ->
+                            if (data.itemList != null) {
+                                data.itemList[0].imageUrl.let { it1 ->
                                     listener.downloadImage(
                                         "ảnh được tải từ social app",
                                         it1.toString()
@@ -172,7 +139,7 @@ class DetailGroupAdapter(
                     }
                     true
                 }
-                if (data.user.userId != viewModel.firebaseUser?.uid.toString()) {
+                if (data.postUser.userId != viewModel.firebaseUser?.uid.toString()) {
                     popupMenu.menu.findItem(R.id.edit).isVisible = false
                     popupMenu.menu.findItem(R.id.delete).isVisible = false
                 }
@@ -180,7 +147,7 @@ class DetailGroupAdapter(
             }
             imgHeart.setOnClickListener {
                 data.id.let { it1 ->
-                    data.user.userId.let { it2 ->
+                    data.postUser.userId.let { it2 ->
                         listener.likePost(
                             it1, imgHeart.tag.toString(),
                             it2
@@ -189,13 +156,11 @@ class DetailGroupAdapter(
                 }
             }
             imgComment.setOnClickListener {
-                if (data.id != null && data.user.userId != null) {
-                    listener.commentPost(
-                        data.id,
-                        data.user.userId,
-                        data.imagesList?.get(0)?.imageUrl.toString()
-                    )
-                }
+                listener.commentPost(
+                    data.id,
+                    data.postUser.userId,
+                    data.itemList[0].imageUrl.toString()
+                )
             }
             imgSave.setOnClickListener {
                 data.id.let { it1 ->
@@ -211,7 +176,7 @@ class DetailGroupAdapter(
             }
             txtViewAllComments.setOnClickListener {
                 data.id.let { it1 ->
-                    data.user.userId.let { it2 ->
+                    data.postUser.userId.let { it2 ->
                         listener.clickPost(
                             it1,
                             it2
@@ -224,21 +189,21 @@ class DetailGroupAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            R.layout.layout_home_adapter -> {
-                GroupPostViewHolder(
-                    LayoutHomeAdapterBinding.inflate(
-                        LayoutInflater.from(
-                            parent.context
-                        ), parent, false
+            R.layout.layout_for_you_group_header -> {
+                HeaderViewHolder(
+                    LayoutForYouGroupHeaderBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
                     )
                 )
             }
-            R.layout.layout_detail_group_information -> {
-                InformationViewHolder(
-                    LayoutDetailGroupInformationBinding.inflate(
-                        LayoutInflater.from(
-                            parent.context
-                        ), parent, false
+            R.layout.layout_for_you_group_body -> {
+                BodyViewHolder(
+                    LayoutForYouGroupBodyBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
                     )
                 )
             }
@@ -248,15 +213,11 @@ class DetailGroupAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is InformationViewHolder -> {
-                holder.bind(
-                    getItem(position) as DetailGroupInformationViewData,
-                    listener,
-                    viewModel
-                )
+            is HeaderViewHolder -> {
+                holder.bind(getItem(position) as GroupYourViewData)
             }
-            is GroupPostViewHolder -> {
-                holder.bind(getItem(position) as DetailGroupPostViewData, listener, viewModel)
+            is BodyViewHolder -> {
+                holder.bind(getItem(position) as GroupForYouPostViewData, viewModel,listener)
             }
         }
     }
@@ -265,8 +226,7 @@ class DetailGroupAdapter(
         return getItem(position).layoutRes
     }
 
-    interface IGroupPostCallBack {
-        fun onPostAction()
+    interface GroupForYouInteract {
         fun clickPost(postId: String, publisherId: String)
         fun clickToSeeDetail(listData: List<ImagesList>, position: Int)
         fun likePost(postId: String, status: String, publisherId: String)
@@ -277,10 +237,5 @@ class DetailGroupAdapter(
         fun downloadImage(fileName: String, postId: String)
         fun editImage(postId: String, view: View)
         fun deleteImage(postId: String)
-        fun inviteFriend(groupId: String)
-        fun manageGroup(groupId: String)
-        fun requestJoinGroup(groupId: String)
-        fun leaveGroup(groupId: String)
     }
-
 }

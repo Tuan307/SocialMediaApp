@@ -35,6 +35,15 @@ data class GetGroupData(
     val type: String
 )
 
+data class SearchPostInGroupResponse(
+    @SerializedName("status")
+    val status: Status?,
+    @SerializedName("data")
+    val data: List<GroupPostModel>?,
+    val pageCount: Long?,
+    val page: Long?
+)
+
 data class GroupPostData(
     val content: List<GroupPostModel>,
     val pageable: Pageable,

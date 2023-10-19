@@ -15,6 +15,7 @@ import com.base.app.data.repositories.group.GroupRepository
 import com.base.app.ui.group.detail_group.viewdata.DetailGroupInformationViewData
 import com.base.app.ui.group.detail_group.viewdata.DetailGroupPostViewData
 import com.base.app.ui.group.detail_group.viewdata.DetailGroupViewData
+import com.base.app.ui.group.detail_group.viewdata.SearchGroupViewData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -228,6 +229,35 @@ class GroupDetailViewModel @Inject constructor(
                     override fun onCancelled(error: DatabaseError) {
                     }
                 })
+        }
+    }
+
+    private var _searchPostInGroupResponse: MutableLiveData<List<SearchGroupViewData>> =
+        MutableLiveData()
+    val searchPostInGroupResponse: LiveData<List<SearchGroupViewData>>
+        get() = _searchPostInGroupResponse
+
+    fun searchPostInGroup(groupId: Long, keyword: String) {
+        viewModelScope.launch {
+            val result = repository.searchPostInGroup(groupId, keyword)
+            _searchPostInGroupResponse.value = result.data?.map { data ->
+                SearchGroupViewData(
+                    groupPostId = data.groupPostId,
+                    description = data.description,
+                    groupPostContentItemList = data.groupPostContentItemList.map {
+                        ImagesList(it.id, it.imageUrl)
+                    },
+                    groupPostUser = data.groupPostUserId,
+                    groupModel = data.groupPostModelId,
+                    createdAt = data.createdAt,
+                    checkInAddress = data.checkInAddress,
+                    checkInLatitude = data.checkInLatitude,
+                    checkInLongitude = data.checkInLongitude,
+                    type = data.type,
+                    videoUrl = data.videoUrl,
+                    question = data.question
+                )
+            }
         }
     }
 

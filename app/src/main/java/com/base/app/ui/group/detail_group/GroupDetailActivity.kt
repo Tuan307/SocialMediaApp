@@ -23,6 +23,7 @@ import com.base.app.data.models.response.post.ImagesList
 import com.base.app.databinding.ActivityGroupDetailBinding
 import com.base.app.ui.add_post.PostActivity
 import com.base.app.ui.comment.CommentActivity
+import com.base.app.ui.group.bottom_sheet_fragment.MangeGroupBottomSheetFragment
 import com.base.app.ui.group.detail_group.adapter.DetailGroupAdapter
 import com.base.app.ui.group.detail_group.viewdata.DetailGroupViewData
 import com.base.app.ui.group.invite_member.InviteMemberActivity
@@ -53,7 +54,14 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
             imageBack.setOnClickListener {
                 finish()
             }
-
+            imageSearch.setOnClickListener {
+                startActivity(
+                    Intent(
+                        this@GroupDetailActivity,
+                        SearchGroupPostActivity::class.java
+                    ).putExtra("groupId", groupId)
+                )
+            }
             listOfGroupPost.apply {
                 layoutManager = LinearLayoutManager(this@GroupDetailActivity)
                 adapter = detailAdapter
@@ -172,6 +180,21 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
         val intent = Intent(this@GroupDetailActivity, InviteMemberActivity::class.java)
         intent.putExtra("groupId", groupId)
         startActivity(intent)
+    }
+
+    override fun manageGroup(groupId: String) {
+        val fragment = MangeGroupBottomSheetFragment.newInstance()
+        val bundle = Bundle()
+        bundle.putString("from", "manage_group")
+        bundle.putLong("groupId", groupId.toLong())
+        fragment.arguments = bundle
+        fragment.show(supportFragmentManager, "ActionBottomDialog")
+    }
+
+    override fun requestJoinGroup(groupId: String) {
+    }
+
+    override fun leaveGroup(groupId: String) {
     }
 
     private fun downloadImageByUri(fileName: String, postImage: String) {

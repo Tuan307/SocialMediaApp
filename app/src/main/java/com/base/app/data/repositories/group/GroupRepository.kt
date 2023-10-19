@@ -103,6 +103,31 @@ class GroupRepository @Inject constructor(
             }
         }
 
+    suspend fun getAllGroupNewsFeed(pageCount: Int, pageNumber: Int) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.getAllGroupNewsFeed(pageCount, pageNumber) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun getAllGroups(userId: String, pageCount: Int, pageNumber: Int) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.getAllGroups(userId, pageCount, pageNumber) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+
     suspend fun getAllGroupMemberByGroupId(groupId: Long) =
         withContext(dispatcher) {
             when (val result = callApi { api.getAllGroupMemberByGroupId(groupId) }) {
@@ -126,4 +151,29 @@ class GroupRepository @Inject constructor(
                 }
             }
         }
+
+    suspend fun deleteGroup(groupId: Long) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.deleteGroup(groupId) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun searchPostInGroup(groupId: Long, keyword: String) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.searchPostInGroup(groupId, keyword) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
 }

@@ -86,7 +86,7 @@
             android:id="@+id/group_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginTop="@dimen/dp10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/app_bar_group" />
     </androidx.constraintlayout.widget.ConstraintLayout>

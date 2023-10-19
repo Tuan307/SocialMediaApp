@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_sheet_fragment"
+        android:paddingVertical="@dimen/dp32"
+        tools:context=".ui.group.bottom_sheet_fragment.MangeGroupBottomSheetFragment">
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="@dimen/dp50"
+            android:layout_height="5dp"
+            android:background="@drawable/bg_btn"
+            android:backgroundTint="@color/color_chat_text_hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            app:cardBackgroundColor="@color/colorGrayText"
+            app:cardCornerRadius="@dimen/dp180"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_line">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp5"
+                android:src="@drawable/ic_logout"
+                app:tint="@color/colorBlack" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:text="Rời nhóm"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintBottom_toBottomOf="@id/card_log_out"
+            app:layout_constraintStart_toEndOf="@+id/card_log_out"
+            app:layout_constraintTop_toTopOf="@+id/card_log_out" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_edit_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            app:cardBackgroundColor="@color/colorGrayText"
+            app:cardCornerRadius="@dimen/dp180"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_log_out">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp5"
+                android:src="@drawable/ic_logout"
+                app:tint="@color/colorBlack" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_edit_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:text="Chỉnh sửa thông tin nhóm"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintBottom_toBottomOf="@id/card_edit_group"
+            app:layout_constraintStart_toEndOf="@+id/card_edit_group"
+            app:layout_constraintTop_toTopOf="@+id/card_edit_group" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_delete_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            app:cardBackgroundColor="@color/colorGrayText"
+            app:cardCornerRadius="@dimen/dp180"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_edit_group">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp5"
+                android:src="@drawable/ic_logout"
+                app:tint="@color/colorBlack" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_delete_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:text="Xóa nhóm"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintBottom_toBottomOf="@id/card_delete_group"
+            app:layout_constraintStart_toEndOf="@+id/card_delete_group"
+            app:layout_constraintTop_toTopOf="@+id/card_delete_group" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

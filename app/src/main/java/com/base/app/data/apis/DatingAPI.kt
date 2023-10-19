@@ -9,10 +9,12 @@ import com.base.app.data.models.group.request.CreateGroupRequest
 import com.base.app.data.models.group.response.AddPostByGroupResponse
 import com.base.app.data.models.group.response.CreateGroupResponse
 import com.base.app.data.models.group.response.CreateInvitationResponse
+import com.base.app.data.models.group.response.GetAllGroupResponse
 import com.base.app.data.models.group.response.GetAllPostByGroup
 import com.base.app.data.models.group.response.GetGroupByGroupIdAndMemberIdResponse
 import com.base.app.data.models.group.response.GetGroupResponse
 import com.base.app.data.models.group.response.GetYourOwnGroupResponse
+import com.base.app.data.models.group.response.SearchPostInGroupResponse
 import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.RegisterRequest
@@ -138,7 +140,28 @@ interface DatingAPI {
         @Query("pageNumber") pageNumber: Int
     ): Response<GetAllPostByGroup>
 
+    @GET("group/newsfeed")
+    suspend fun getAllGroupNewsFeed(
+        @Query("pageCount") pageCount: Int,
+        @Query("pageNumber") pageNumber: Int
+    ): Response<GetAllPostByGroup>
+
+    @GET("group/all")
+    suspend fun getAllGroups(
+        @Query("userId") userId: String,
+        @Query("pageCount") pageCount: Int,
+        @Query("pageNumber") pageNumber: Int
+    ): Response<GetAllGroupResponse>
+
     @POST("group/add/post")
     suspend fun addGroupPost(@Body request: CreateGroupPostRequest): Response<AddPostByGroupResponse>
 
+    @DELETE("group/delete/group")
+    suspend fun deleteGroup(@Query("groupId") groupId: Long): Response<BaseApiResponse>
+
+    @GET("group/search/post")
+    suspend fun searchPostInGroup(
+        @Query("groupId") groupId: Long,
+        @Query("keyword") keyword: String
+    ): Response<SearchPostInGroupResponse>
 }

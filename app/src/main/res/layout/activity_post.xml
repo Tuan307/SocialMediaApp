@@ -61,7 +61,7 @@
             android:layout_height="@dimen/dp50"
             android:layout_marginStart="@dimen/dp16"
             android:layout_marginTop="@dimen/dp20"
-            android:src="@drawable/photoofme"
+            android:src="@drawable/damsen"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_app_bar" />
 
@@ -95,6 +95,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_of_images"
             android:layout_width="match_parent"
+            tools:listitem="@layout/item_show_post_image"
+            tools:itemCount="1"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/linear_post"
             app:layout_constraintTop_toBottomOf="@+id/edtDescription"

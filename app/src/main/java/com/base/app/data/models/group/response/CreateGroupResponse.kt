@@ -17,6 +17,15 @@ data class CreateGroupResponse(
     val page: Long?
 )
 
+data class GetAllGroupResponse(
+    @SerializedName("status")
+    val status: Status?,
+    @SerializedName("data")
+    val data: List<GroupData>?,
+    val pageCount: Long?,
+    val page: Long?
+)
+
 data class GroupData(
     val id: Long?,
     val groupName: String?,

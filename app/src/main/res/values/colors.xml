@@ -47,7 +47,7 @@
     <color name="color_background">#E5E5E5</color>
     <color name="color_welcome">#322C68</color>
     <color name="color_blue">#1593F6</color>
-    <color name="color_blue_faded">#EB79BFF6</color>
+    <color name="color_blue_faded">#EB8AC9FA</color>
     <color name="color_icon_focus">#03AD67</color>
     <color name="color_icon_unfocus">#A6B0CF</color>
     <color name="color_gray">#D5E1ED</color>
@@ -64,4 +64,5 @@
     <color name="color_search_bar">#262626</color>
     <color name="color_search_text">#8E8E93</color>
     <color name="color_login_text">#3797EF</color>
+    <color name="color_join_text">#0786FB</color>
 </resources>

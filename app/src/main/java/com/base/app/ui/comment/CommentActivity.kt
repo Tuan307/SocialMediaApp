@@ -79,7 +79,6 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
                         ),
                         uToken
                     )
-                    viewModel.sendNotification(notification)
                 }
             }
         }
