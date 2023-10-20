@@ -16,6 +16,7 @@ import com.base.app.common.Utils
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.databinding.ActivityPostBinding
 import com.base.app.ui.add_post.map_apdater.ShowImageAdapter
+import com.base.app.ui.group.GroupActivity
 import com.base.app.ui.main.MainActivity
 import com.esafirm.imagepicker.features.registerImagePicker
 import com.esafirm.imagepicker.model.Image
@@ -114,27 +115,35 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
             uploadImageResponse.observe(this@PostActivity) {
                 if (it) {
                     showToast(this@PostActivity, resources.getString(R.string.str_success))
-                    startActivity(Intent(this@PostActivity, MainActivity::class.java))
+                    if (from == "group") {
+                        startActivity(Intent(this@PostActivity, GroupActivity::class.java))
+                    } else {
+                        startActivity(Intent(this@PostActivity, MainActivity::class.java))
+                    }
                     finishAffinity()
                 } else {
                     showToast(this@PostActivity, resources.getString(R.string.error))
-                    startActivity(Intent(this@PostActivity, MainActivity::class.java))
+                    if (from == "group") {
+                        startActivity(Intent(this@PostActivity, GroupActivity::class.java))
+                    } else {
+                        startActivity(Intent(this@PostActivity, MainActivity::class.java))
+                    }
                     finishAffinity()
                 }
             }
             uploadVideoResponse.observe(this@PostActivity) {
-                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
-                    viewModel.postNewsFeedRequest = it
-                } else {
+//                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
+//                    viewModel.postNewsFeedRequest = it
+//                } else {
                     uploadImagePostToDB(it)
-                }
+                //}
             }
             uploadImageList.observe(this@PostActivity) {
-                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
-                    viewModel.postNewsFeedRequest = it
-                } else {
+//                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
+//                    viewModel.postNewsFeedRequest = it
+//                } else {
                     uploadImagePostToDB(it)
-                }
+     //           }
             }
 
             uploadGroupVideoResponse.observe(this@PostActivity) {

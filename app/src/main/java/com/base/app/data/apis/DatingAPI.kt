@@ -32,6 +32,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -94,6 +95,9 @@ interface DatingAPI {
 
     @POST("notification/add")
     suspend fun addNotification(@Body request: AddNotificationRequest): Response<NotificationResponse>
+
+    @DELETE("notification/remove")
+    suspend fun removeNotification(@Query("id") id: Long): Response<BaseApiResponse>
 
     @GET("notification")
     suspend fun getAllNotification(
@@ -165,6 +169,9 @@ interface DatingAPI {
 
     @DELETE("group/delete/group")
     suspend fun deleteGroup(@Query("groupId") groupId: Long): Response<BaseApiResponse>
+
+    @HTTP(method = "DELETE",path="group/delete/invitation", hasBody = true)
+    suspend fun cancelInvitation(@Body request: JoinGroupRequest): Response<BaseApiResponse>
 
     @GET("group/search/post")
     suspend fun searchPostInGroup(

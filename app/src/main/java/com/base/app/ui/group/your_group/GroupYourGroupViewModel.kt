@@ -52,7 +52,7 @@ class GroupYourGroupViewModel @Inject constructor(
                 result.data?.let {
                     list.addAll(it.map { data ->
                         GroupBodyViewData(
-                            id = data.id,
+                            id = data.groupModelId.id ?: 0,
                             groupImage = data.groupModelId.groupImageUrl.toString(),
                             groupName = data.groupModelId.groupName.toString(),
                             groupJoinedDate = data.groupModelId.groupCreatedAt.toString()

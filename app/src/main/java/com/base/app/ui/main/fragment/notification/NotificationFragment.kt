@@ -2,6 +2,7 @@ package com.base.app.ui.main.fragment.notification
 
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,14 +18,14 @@ import java.util.*
 
 @AndroidEntryPoint
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener, NotificationAdapter.OnNotificationClick {
 
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     private val viewModel by viewModels<NotificationViewModel>()
     private lateinit var notificationAdapter: NotificationAdapter
     private var notificationList = ArrayList<NotificationContent>()
     private lateinit var prettyTime: PrettyTime
-
+    private var removeAtPosition = -1
     override fun getContentLayout(): Int {
         return R.layout.fragment_notification
     }
@@ -34,7 +35,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
         prettyTime = PrettyTime(Locale.getDefault())
         with(binding) {
             swipeRefreshNotification.setOnRefreshListener(this@NotificationFragment)
-            notificationAdapter = NotificationAdapter()
+            notificationAdapter = NotificationAdapter(this@NotificationFragment)
             listNotification.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = notificationAdapter
@@ -106,6 +107,15 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
                     notificationAdapter.submitList(notificationList.toList())
                 }
             }
+            removeNotificationResponse.observe(this@NotificationFragment) {
+                notificationList.removeAt(removeAtPosition)
+                val list = arrayListOf<NotificationContent>()
+                list.addAll(notificationList)
+                notificationAdapter.submitList(list.toList())
+            }
+            removeNotificationErrorResponse.observe(this@NotificationFragment) {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -126,5 +136,22 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
         Handler(Looper.getMainLooper()).postDelayed({
             binding.swipeRefreshNotification.isRefreshing = false
         }, 1500)
+    }
+
+    override fun onConfirm(data: NotificationContent, position: Int) {
+        removeAtPosition = position
+        data.notificationGroupId?.id?.let { data.id?.let { it1 -> viewModel.joinGroup(it, it1) } }
+    }
+
+    override fun onReject(data: NotificationContent, position: Int) {
+        removeAtPosition = position
+        data.notificationGroupId?.id?.let {
+            data.id?.let { it1 ->
+                viewModel.cancelJoinInvitation(
+                    it,
+                    it1
+                )
+            }
+        }
     }
 }

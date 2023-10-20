@@ -82,22 +82,7 @@ class AddPostViewModel @Inject constructor(
                             val downloadUri = task.result.toString()
                             updateList.add(downloadUri)
                             if (i == uri.size - 1) {
-                                if (from == "home") {
-                                    _uploadImageList.postValue(
-                                        PostNewsFeedRequest(
-                                            description,
-                                            postId,
-                                            updateList,
-                                            firebaseUser?.uid.toString(),
-                                            Calendar.getInstance().time.time.toString(),
-                                            checkInAddress,
-                                            checkInLatitude,
-                                            checkInLongitude,
-                                            "image",
-                                            null
-                                        )
-                                    )
-                                } else {
+                                if (from == "group") {
                                     _uploadGroupImagesList.postValue(
                                         CreateGroupPostRequest(
                                             description,
@@ -114,14 +99,23 @@ class AddPostViewModel @Inject constructor(
                                             groupId
                                         )
                                     )
+                                } else {
+                                    _uploadImageList.postValue(
+                                        PostNewsFeedRequest(
+                                            description,
+                                            postId,
+                                            updateList,
+                                            firebaseUser?.uid.toString(),
+                                            Calendar.getInstance().time.time.toString(),
+                                            checkInAddress,
+                                            checkInLatitude,
+                                            checkInLongitude,
+                                            "image",
+                                            null
+                                        )
+                                    )
                                 }
                             }
-//                            val hashMap = HashMap<String, Any>()
-//                            hashMap["postid"] = postId
-//                            hashMap["postimage"] = downloadUri
-//                            hashMap["description"] = description
-//                            hashMap["publicher"] = firebaseUser?.uid.toString()
-//                            databaseReference.child("Posts").child(postId).setValue(hashMap)
                         } else {
                             uploadImageResponse.postValue(false)
                         }

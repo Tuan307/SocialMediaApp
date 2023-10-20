@@ -31,6 +31,19 @@ class NotificationRepository @Inject constructor(
             }
         }
 
+    suspend fun removeNotification(id: Long) =
+        withContext(dispatcher) {
+            when (val result =
+                callApi { api.removeNotification(id) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
     suspend fun addNotification(request: AddNotificationRequest) =
         withContext(dispatcher) {
             when (val result =

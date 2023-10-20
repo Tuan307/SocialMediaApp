@@ -189,6 +189,18 @@ class GroupRepository @Inject constructor(
             }
         }
 
+    suspend fun cancelInvitation(request: JoinGroupRequest) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.cancelInvitation(request) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
     suspend fun searchPostInGroup(groupId: Long, keyword: String) =
         withContext(dispatcher) {
             when (val result = callApi { api.searchPostInGroup(groupId, keyword) }) {

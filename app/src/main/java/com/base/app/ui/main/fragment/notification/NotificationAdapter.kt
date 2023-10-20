@@ -15,26 +15,33 @@ import com.bumptech.glide.Glide
  * @author tuanpham
  * @since 10/4/2023
  */
-class NotificationAdapter :
+class NotificationAdapter(private val listener: OnNotificationClick) :
     ListAdapter<NotificationContent, NotificationAdapter.ViewHolder>(NotificationDiffUtil) {
     inner class ViewHolder(private val binding: LayoutNotificationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(data: NotificationContent) = with(binding) {
-            Glide.with(root.context).load(data.notificationUserId?.imageUrl).into(imgAvatar)
-            txtUserName.text = data.notificationUserId?.userName
-            if (data.isInvitation == true || data.isRequest == true) {
-                txtNotification.text = "${data.text} ${data.notificationGroupId?.groupName}"
-            } else if (data.isPost == true) {
-                txtNotification.text = data.text.toString()
+        fun bind(data: NotificationContent, position: Int, listener: OnNotificationClick) =
+            with(binding) {
+                Glide.with(root.context).load(data.notificationUserId?.imageUrl).into(imgAvatar)
+                txtUserName.text = data.notificationUserId?.userName
+                if (data.isInvitation == true || data.isRequest == true) {
+                    txtNotification.text = "${data.text} ${data.notificationGroupId?.groupName}"
+                } else if (data.isPost == true) {
+                    txtNotification.text = data.text.toString()
+                }
+                textTimeAgo.text = data.notificationTimeStamp
+                if (data.isInvitation == true || data.isRequest == true) {
+                    linearNotificationButton.visibility = View.VISIBLE
+                } else {
+                    linearNotificationButton.visibility = View.GONE
+                }
+                buttonCancelNotification.setOnClickListener {
+                    listener.onReject(data, position)
+                }
+                buttonConfirmNotification.setOnClickListener {
+                    listener.onConfirm(data, position)
+                }
             }
-            textTimeAgo.text = data.notificationTimeStamp
-            if (data.isInvitation == true || data.isRequest == true) {
-                linearNotificationButton.visibility = View.VISIBLE
-            } else {
-                linearNotificationButton.visibility = View.GONE
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,7 +55,7 @@ class NotificationAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position, listener)
     }
 
     private object NotificationDiffUtil : ItemCallback<NotificationContent>() {
@@ -65,6 +72,10 @@ class NotificationAdapter :
         ): Boolean {
             return oldItem == newItem
         }
+    }
 
+    interface OnNotificationClick {
+        fun onConfirm(data: NotificationContent, position: Int)
+        fun onReject(data: NotificationContent, position: Int)
     }
 }
