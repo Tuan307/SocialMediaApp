@@ -4,18 +4,24 @@ import android.net.Uri
 import androidx.activity.viewModels
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
+import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.databinding.ActivityEditProfileBinding
 import com.bumptech.glide.Glide
 import com.esafirm.imagepicker.features.registerImagePicker
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
     private val viewModel by viewModels<EditProfileViewModel>()
     private var imageUri: Uri? = null
     private var imagePath: String? = null
+    private var currentUser: DatingUser? = null
     private val imagePickerLauncher = registerImagePicker {
         imagesPicker.clear()
         imagesPicker.addAll(it)
-        handleImagePicker(imagesPicker[0].uri)
+        if (imagesPicker.isNotEmpty()) {
+            handleImagePicker(imagesPicker[0].uri)
+        }
     }
 
 
@@ -42,39 +48,51 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
                 imagePickerLauncher.launch(createConfig(true, 1))
             }
             imgDoneEdit.setOnClickListener {
-                viewModel.updateProfile(
-                    fullName = edtEditName.getText().toString(),
-                    userName = edtEditUserName.getText().toString(),
-                    bio = edtEditBio.getText().toString(),
-                    imageUri = imageUri,
-                    imagePath = imagePath
-                )
+                currentUser?.userId?.let { it1 ->
+                    viewModel.updateProfileRequest(
+                        userId = it1,
+                        fullName = edtEditName.getText().toString(),
+                        userName = edtEditUserName.getText().toString(),
+                        bio = edtEditBio.getText().toString(),
+                        imageUri = imageUri,
+                        imagePath = imagePath
+                    )
+                }
             }
         }
     }
 
-    override fun observerLiveData() {
-        viewModel.getUserInformation.observe(this@EditProfileActivity) {
+    override fun observerLiveData() = with(viewModel) {
+        getUserInformation.observe(this@EditProfileActivity) {
+            currentUser = it
             if (it != null) {
-                binding.apply {
-                    it.username?.let { it1 -> edtEditUserName.setText(it1) }
+                with(binding) {
+                    edtEditUserName.setText(it.userName)
                     it.bio?.let { it1 -> edtEditBio.setText(it1) }
-                    it.fullname?.let { it1 -> edtEditName.setText(it1) }
-                    it.imageurl?.let { it1 ->
-                        Glide.with(this@EditProfileActivity).load(it1).into(imgAvatar)
-                    }
+                    edtEditName.setText(it.fullName)
+                    Glide.with(this@EditProfileActivity).load(it.imageUrl).into(imgAvatar)
                 }
             }
         }
-        viewModel.getUpdateProfileResponse.observe(this@EditProfileActivity) {
-            if (it) {
+        updateProfileRemoteRequest.observe(this@EditProfileActivity) {
+            updateProfile(it)
+        }
+        updateProfileRemote.observe(this@EditProfileActivity) {
+            if (it.data != null) {
+                val data = it.data
+                updateProfileFireBase(
+                    data.fullName,
+                    data.userName,
+                    data.bio.toString(),
+                    data.imageUrl
+                )
                 showToast(this@EditProfileActivity, resources.getString(R.string.str_success))
                 finish()
             } else {
-                showToast(this@EditProfileActivity, resources.getString(R.string.error))
+                showToast(this@EditProfileActivity, it.status.message)
             }
         }
-        viewModel.uploadImageResponse.observe(this@EditProfileActivity) {
+        uploadImageResponse.observe(this@EditProfileActivity) {
             if (!it) {
                 showToast(
                     this@EditProfileActivity,
@@ -89,5 +107,4 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
         imageUri = uri
         imagePath = uri?.let { getFileExtension(it) }
     }
-
 }

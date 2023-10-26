@@ -1,5 +1,6 @@
 package com.base.app.ui.group.explore_group
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +17,7 @@ import com.base.app.R
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.databinding.FragmentExploreGroupBinding
+import com.base.app.ui.group.detail_group.GroupDetailActivity
 import com.base.app.ui.group.explore_group.adapter.ExploreGroupAdapter
 import com.base.app.ui.group.explore_group.viewdata.GroupDataViewData
 import dagger.hilt.android.AndroidEntryPoint
@@ -88,12 +90,18 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
                 listOfGroups[index].hasJoined = true
                 exploreGroupAdapter.submitList(listOfGroups.toList())
                 exploreGroupAdapter.notifyDataSetChanged()
+
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.str_success),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.str_success),
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+        removeRequestGroupsResponse.observe(viewLifecycleOwner) {
+            if (it.data == true) {
+                onReload()
+            }
         }
         requestJoinGroupsResponse.observe(viewLifecycleOwner) {
             if (it.data == null) {
@@ -113,14 +121,14 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
                 listOfGroups[index].hasJoined = true
                 exploreGroupAdapter.submitList(listOfGroups.toList())
                 exploreGroupAdapter.notifyDataSetChanged()
-            }
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.str_success),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
 
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.str_success),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -133,6 +141,10 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onRefresh() {
+        onReload()
+    }
+
+    private fun onReload() {
         viewModel.getAllGroups(20, 1)
         listOfGroups.clear()
         endlessRecyclerViewScrollListener.resetState()
@@ -148,13 +160,24 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
                     data.id,
                     Calendar.getInstance().time.time.toString(),
                     "Đã gửi yêu cầu tham gia nhóm",
-                    viewModel.firebaseUser?.uid.toString(),
+                    data.groupOwner?.userId.toString(),
                     "request",
-                    ""
+                    viewModel.firebaseUser?.uid.toString(),
                 )
             )
         } else {
             viewModel.joinGroup(data.id)
         }
+    }
+
+    override fun onRemoveRequest(data: GroupDataViewData) {
+        viewModel.removeGroupRequest(data.id.toLong())
+    }
+
+    override fun onClickDetail(data: GroupDataViewData) {
+        val intent = Intent(requireActivity(), GroupDetailActivity::class.java)
+        intent.putExtra("groupId", data.id)
+        intent.putExtra("groupName", data.groupName)
+        startActivity(intent)
     }
 }

@@ -34,7 +34,7 @@ class GroupForYouViewModel @Inject constructor(private val repository: GroupRepo
 
     fun getYourGroup() {
         viewModelScope.launch {
-            val result = repository.getYourOwnGroup(firebaseUser?.uid.toString(), 5, 1)
+            val result = repository.getYourOwnGroup(firebaseUser?.uid.toString(), 6, 1)
             _groupYourGroupResponse.value = result
         }
     }

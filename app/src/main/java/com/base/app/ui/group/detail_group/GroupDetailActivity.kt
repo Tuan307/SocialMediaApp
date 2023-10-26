@@ -19,17 +19,20 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
+import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.response.post.ImagesList
 import com.base.app.databinding.ActivityGroupDetailBinding
 import com.base.app.ui.add_post.PostActivity
 import com.base.app.ui.comment.CommentActivity
 import com.base.app.ui.group.bottom_sheet_fragment.MangeGroupBottomSheetFragment
 import com.base.app.ui.group.detail_group.adapter.DetailGroupAdapter
+import com.base.app.ui.group.detail_group.viewdata.DetailGroupInformationViewData
 import com.base.app.ui.group.detail_group.viewdata.DetailGroupViewData
 import com.base.app.ui.group.invite_member.InviteMemberActivity
 import com.base.app.ui.main.fragment.home.DetailHomePostActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.util.*
 
 @AndroidEntryPoint
 class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
@@ -41,7 +44,6 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
     private val list: ArrayList<DetailGroupViewData> = arrayListOf()
     private var groupId = 0.toLong()
     private var groupName = ""
-    private var isJoined = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_group_detail)
@@ -50,7 +52,7 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
         detailAdapter = DetailGroupAdapter(this@GroupDetailActivity, viewModel)
         groupId = intent.getLongExtra("groupId", 0)
         groupName = intent.getStringExtra("groupName").toString()
-        viewModel.checkIfJoinedGroup(groupId)
+        viewModel.checkIfRequestToJoinGroup(groupId)
         with(binding) {
             swipeDetailGroup.setOnRefreshListener(this@GroupDetailActivity)
             imageBack.setOnClickListener {
@@ -84,8 +86,7 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
 
     private fun observeData() = with(viewModel) {
         checkIfJoinedGroupResponse.observe(this@GroupDetailActivity) {
-            isJoined = it.data != null
-            viewModel.getGroupInformation(groupId, isJoined)
+            viewModel.getGroupInformation(groupId, isJoined, isRequested)
         }
         listInformationResponse.observe(this@GroupDetailActivity) {
             viewModel.getAllGroupMemberInformation(groupId, it)
@@ -103,13 +104,72 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
             }
         }
         listGroupPostResponse.observe(this@GroupDetailActivity) {
-            list.addAll(it)
-            detailAdapter.submitList(list.toList())
+            if (it.isNotEmpty()) {
+                list.addAll(it)
+                detailAdapter.submitList(list.toList())
+            }
+        }
+        removeUserFromGroupResponse.observe(this@GroupDetailActivity) {
+            isJoined = false
+            isRequested = false
+            viewModel.getGroupInformation(groupId, isJoined, isRequested)
+        }
+        removeRequestGroupsResponse.observe(this@GroupDetailActivity) {
+            if (it.data != true) {
+                Toast.makeText(
+                    this@GroupDetailActivity,
+                    "Error: ${it.status.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                onReload()
+                Toast.makeText(
+                    this@GroupDetailActivity,
+                    getString(R.string.str_success),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        joinGroupsResponse.observe(this@GroupDetailActivity) {
+            if (it.data == null) {
+                Toast.makeText(
+                    this@GroupDetailActivity,
+                    "Error: ${it.status?.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                onReload()
+                Toast.makeText(
+                    this@GroupDetailActivity,
+                    getString(R.string.str_success),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        requestJoinGroupsResponse.observe(this@GroupDetailActivity) {
+            if (it.data == null) {
+                Toast.makeText(
+                    this@GroupDetailActivity,
+                    "Error: ${it.status?.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                onReload()
+                Toast.makeText(
+                    this@GroupDetailActivity,
+                    getString(R.string.str_success),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
     override fun onRefresh() {
-        viewModel.getGroupInformation(groupId, isJoined)
+        onReload()
+    }
+
+    private fun onReload() {
+        viewModel.checkIfRequestToJoinGroup(groupId)
         endlessRecyclerViewScrollListener.resetState()
         Handler(Looper.getMainLooper()).postDelayed({
             binding.swipeDetailGroup.isRefreshing = false
@@ -194,10 +254,29 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
         fragment.show(supportFragmentManager, "ActionBottomDialog")
     }
 
-    override fun requestJoinGroup(groupId: String) {
+    override fun requestJoinGroup(data: DetailGroupInformationViewData) {
+        if (data.groupPrivacy == "private") {
+            viewModel.requestJoinGroup(
+                CreateGroupInvitationRequest(
+                    data.id.toLong(),
+                    Calendar.getInstance().time.time.toString(),
+                    "Đã gửi yêu cầu tham gia nhóm",
+                    data.groupOwnerId,
+                    "request",
+                    viewModel.firebaseUser?.uid.toString(),
+                )
+            )
+        } else {
+            viewModel.joinGroup(data.id.toLong())
+        }
+    }
+
+    override fun removeRequestJoinGroup(data: DetailGroupInformationViewData) {
+        viewModel.removeGroupRequest(data.id.toLong())
     }
 
     override fun leaveGroup(groupId: String) {
+        viewModel.removeUserFromGroup(groupId.toLong())
     }
 
     private fun downloadImageByUri(fileName: String, postImage: String) {

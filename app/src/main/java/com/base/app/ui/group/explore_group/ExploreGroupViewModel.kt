@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.data.models.dating_app.BaseApiResponse
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.JoinGroupRequest
 import com.base.app.data.models.group.response.CreateInvitationResponse
@@ -38,6 +39,11 @@ class ExploreGroupViewModel @Inject constructor(
     val requestJoinGroupsResponse: LiveData<CreateInvitationResponse>
         get() = _requestJoinGroupsResponse
 
+    private var _removeRequestGroupsResponse: MutableLiveData<BaseApiResponse> =
+        MutableLiveData()
+    val removeRequestGroupsResponse: LiveData<BaseApiResponse>
+        get() = _removeRequestGroupsResponse
+
     fun getAllGroups(pageCount: Int, page: Int) {
         viewModelScope.launch {
             val result = repository.getAllGroups(firebaseUser?.uid.toString(), pageCount, page)
@@ -55,6 +61,13 @@ class ExploreGroupViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun removeGroupRequest(groupId: Long){
+        viewModelScope.launch {
+            val result = repository.removeGroupRequest(firebaseUser?.uid.toString(), groupId)
+            _removeRequestGroupsResponse.value = result
         }
     }
 

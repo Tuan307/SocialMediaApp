@@ -36,3 +36,23 @@ data class GroupData(
     val groupOwner: DatingUser?,
     val groupPrivacy: String?
 )
+
+data class GetGroupRequestResponse(
+    val status: Status?,
+    val data: List<RequestModel>?,
+    val pageCount: Long?,
+    val page: Long?
+)
+
+data class RequestModel(
+    val id: Long?,
+    val createdAt: String?,
+    val type: String?,
+    val message: String?,
+    @SerializedName("requestUserId")
+    val requestUserId: DatingUser?,
+    @SerializedName("fromInvitedUserId")
+    val fromInvitedUserId: DatingUser?,
+    @SerializedName("groupId")
+    val groupId: GroupData?
+)

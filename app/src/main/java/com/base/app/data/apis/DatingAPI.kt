@@ -3,16 +3,19 @@ package com.base.app.data.apis
 import com.base.app.data.models.dating_app.BaseApiResponse
 import com.base.app.data.models.dating_app.SearchUserResponse
 import com.base.app.data.models.dating_app.UserProfileResponseResult
+import com.base.app.data.models.dating_app.UserUpdateProfileResponse
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
 import com.base.app.data.models.group.request.JoinGroupRequest
 import com.base.app.data.models.group.response.AddPostByGroupResponse
+import com.base.app.data.models.group.response.CheckIfRequestToJoinGroupResponse
 import com.base.app.data.models.group.response.CreateGroupResponse
 import com.base.app.data.models.group.response.CreateInvitationResponse
 import com.base.app.data.models.group.response.GetAllGroupResponse
 import com.base.app.data.models.group.response.GetAllPostByGroup
 import com.base.app.data.models.group.response.GetGroupByGroupIdAndMemberIdResponse
+import com.base.app.data.models.group.response.GetGroupRequestResponse
 import com.base.app.data.models.group.response.GetGroupResponse
 import com.base.app.data.models.group.response.GetYourOwnGroupResponse
 import com.base.app.data.models.group.response.SearchPostInGroupResponse
@@ -20,6 +23,7 @@ import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.RegisterRequest
 import com.base.app.data.models.request.SavedPostRequest
+import com.base.app.data.models.request.UpdateProfileRequest
 import com.base.app.data.models.response.GetNotificationResponse
 import com.base.app.data.models.response.NotificationResponse
 import com.base.app.data.models.response.post.AddPostImageResponse
@@ -34,6 +38,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -45,6 +50,9 @@ interface DatingAPI {
 
     @GET("users/{id}")
     suspend fun getUserProfile(@Path("id") id: String): Response<UserProfileResponseResult>
+
+    @PUT("users/update/profile")
+    suspend fun updateUserProfile(@Body request: UpdateProfileRequest): Response<UserUpdateProfileResponse>
 
     @POST("users/register")
     suspend fun registerUser(@Body user: RegisterRequest): Response<UserProfileResponseResult>
@@ -132,6 +140,11 @@ interface DatingAPI {
         @Query("userId") userId: String, @Query("groupId") groupId: Long
     ): Response<GetGroupByGroupIdAndMemberIdResponse>
 
+    @GET("group/check/request")
+    suspend fun checkIfRequestToJoinGroup(
+        @Query("userId") userId: String, @Query("groupId") groupId: Long
+    ): Response<CheckIfRequestToJoinGroupResponse>
+
     @GET("group")
     suspend fun getGroupById(
         @Query("groupId") groupId: Long
@@ -170,7 +183,7 @@ interface DatingAPI {
     @DELETE("group/delete/group")
     suspend fun deleteGroup(@Query("groupId") groupId: Long): Response<BaseApiResponse>
 
-    @HTTP(method = "DELETE",path="group/delete/invitation", hasBody = true)
+    @HTTP(method = "DELETE", path = "group/delete/invitation", hasBody = true)
     suspend fun cancelInvitation(@Body request: JoinGroupRequest): Response<BaseApiResponse>
 
     @GET("group/search/post")
@@ -178,4 +191,21 @@ interface DatingAPI {
         @Query("groupId") groupId: Long,
         @Query("keyword") keyword: String
     ): Response<SearchPostInGroupResponse>
+
+    @GET("group/get/request")
+    suspend fun getAllGroupRequest(
+        @Query("groupId") groupId: Long
+    ): Response<GetGroupRequestResponse>
+
+    @DELETE("group/remove/user")
+    suspend fun removeUserFromGroup(
+        @Query("userId") userId: String,
+        @Query("groupId") groupId: Long
+    ): Response<BaseApiResponse>
+
+    @DELETE("group/remove/request")
+    suspend fun removeGroupRequest(
+        @Query("userId") userId: String,
+        @Query("groupId") groupId: Long
+    ): Response<BaseApiResponse>
 }

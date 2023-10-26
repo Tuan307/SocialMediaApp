@@ -26,6 +26,15 @@ data class GetGroupByGroupIdAndMemberIdResponse(
     val page: Long?
 )
 
+data class CheckIfRequestToJoinGroupResponse(
+    @SerializedName("status")
+    val status: Status?,
+    @SerializedName("data")
+    val data: Int,
+    val pageCount: Long?,
+    val page: Long?
+)
+
 data class GetGroupData(
     val id: Long,
     @SerializedName("groupModelId")

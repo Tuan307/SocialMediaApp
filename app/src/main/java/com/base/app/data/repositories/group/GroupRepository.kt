@@ -80,9 +80,45 @@ class GroupRepository @Inject constructor(
             }
         }
 
+    suspend fun checkIfRequestToJoinGroup(userId: String, groupId: Long) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.checkIfRequestToJoinGroup(userId, groupId) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
     suspend fun checkIfJoinedGroup(userId: String, groupId: Long) =
         withContext(dispatcher) {
             when (val result = callApi { api.checkIfJoinedGroup(userId, groupId) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun removeUserFromGroup(userId: String, groupId: Long) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.removeUserFromGroup(userId, groupId) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun removeGroupRequest(userId: String, groupId: Long) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.removeGroupRequest(userId, groupId) }) {
                 is NetworkResult.Success -> {
                     result.data
                 }
@@ -107,6 +143,18 @@ class GroupRepository @Inject constructor(
     suspend fun getAllGroupPost(groupId: Long, pageCount: Int, pageNumber: Int) =
         withContext(dispatcher) {
             when (val result = callApi { api.getAllGroupPost(groupId, pageCount, pageNumber) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun getAllGroupRequest(groupId: Long) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.getAllGroupRequest(groupId) }) {
                 is NetworkResult.Success -> {
                     result.data
                 }

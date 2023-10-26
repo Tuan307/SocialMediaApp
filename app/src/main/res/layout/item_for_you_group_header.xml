@@ -22,6 +22,18 @@
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_see_more"
+                    android:layout_width="@dimen/dp50"
+                    android:layout_height="@dimen/dp50"
+                    android:elevation="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_add_products"
+                    app:tint="@color/color_text" />
+
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/image_group"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

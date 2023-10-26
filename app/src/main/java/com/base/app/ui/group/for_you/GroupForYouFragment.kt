@@ -23,11 +23,13 @@ import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.response.post.ImagesList
 import com.base.app.databinding.FragmentGroupForYouBinding
 import com.base.app.ui.comment.CommentActivity
+import com.base.app.ui.group.detail_group.GroupDetailActivity
 import com.base.app.ui.group.detail_group.GroupDetailViewModel
 import com.base.app.ui.group.for_you.adapter.GroupForYouGroupAdapter
 import com.base.app.ui.group.for_you.viewdata.GroupForYouViewData
 import com.base.app.ui.group.for_you.viewdata.GroupItemYourGroupViewData
 import com.base.app.ui.group.for_you.viewdata.GroupYourViewData
+import com.base.app.ui.group.your_group.GroupAllYourGroupActivity
 import com.base.app.ui.main.fragment.home.DetailHomePostActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -76,14 +78,26 @@ class GroupForYouFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     private fun observeData() = with(viewModel) {
         groupYourGroupResponse.observe(viewLifecycleOwner) {
             list.clear()
+            val size = it.data?.size
             val header = it.data?.let { it1 ->
                 GroupYourViewData(
                     id = "header",
-                    groups = it1.map { data ->
-                        GroupItemYourGroupViewData(
-                            groupImage = data.groupImageUrl.toString(),
-                            groupName = data.groupName.toString()
-                        )
+                    groups = it1.mapIndexed { index, data ->
+                        if (index != size?.minus(1)) {
+                            GroupItemYourGroupViewData(
+                                groupId = data.id ?: -1,
+                                groupImage = data.groupImageUrl.toString(),
+                                groupName = data.groupName.toString(),
+                                isLast = false
+                            )
+                        } else {
+                            GroupItemYourGroupViewData(
+                                groupId = data.id ?: -1,
+                                groupImage = data.groupImageUrl.toString(),
+                                groupName = data.groupName.toString(),
+                                isLast = true
+                            )
+                        }
                     }
                 )
             }
@@ -171,6 +185,19 @@ class GroupForYouFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
 
     override fun deleteImage(postId: String) {
         detailViewModel.deleteGroupPost(postId)
+    }
+
+    override fun onHeaderClick(isLast: Boolean, data: GroupItemYourGroupViewData) {
+        if (isLast) {
+            val intent = Intent(requireActivity(), GroupAllYourGroupActivity::class.java)
+            intent.putExtra("type", 0)
+            startActivity(intent)
+        } else {
+            val intent = Intent(requireActivity(), GroupDetailActivity::class.java)
+            intent.putExtra("groupId", data.groupId)
+            intent.putExtra("groupName", data.groupName)
+            startActivity(intent)
+        }
     }
 
     private fun downloadImageByUri(fileName: String, postImage: String) {

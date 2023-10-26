@@ -379,6 +379,7 @@
     <string name="name">Name</string>
     <string name="bio">Bio</string>
     <string name="comment">Comment</string>
+    <string name="comment_vn">Bình luận</string>
     <string name="add_a_comment">Thêm bình luận mới...</string>
     <string name="post">Post</string>
     <string name="post_comment">Đăng</string>
@@ -412,7 +413,7 @@
     <string name="text_reply_comment">Phản hồi</string>
     <string name="text_follow">+ Follow</string>
     <string name="text_share">Chia sẻ</string>
-    <string name="api_key">AIzaSyA-tzWw5XRsV6VAHQ28ZA7usi1R5KcOv8o</string>
+    <string name="api_key">AIzaSyBgi-0EE178KtvzdR2srfa3-p8Vd7aPKFI</string>
     <string name="text_group">Nhóm</string>
     <string name="text_group_for_you">Dành cho bạn</string>
     <string name="text_group_your">Nhóm của bạn</string>
@@ -430,6 +431,7 @@
     <string name="text_write_something">Bạn viết gì đi</string>
     <string name="text_empty_view">Không tìm thấy bài đăng nào</string>
     <string name="text_join">Tham gia</string>
+    <string name="text_verify">Xét duyệt</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>

@@ -3,6 +3,7 @@ package com.base.app.data.repositories.profile
 import com.base.app.base.network.BaseRemoteService
 import com.base.app.base.network.NetworkResult
 import com.base.app.data.apis.DatingAPI
+import com.base.app.data.models.request.UpdateProfileRequest
 import com.base.app.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -42,6 +43,19 @@ class UserProfileRepository @Inject constructor(
                 }
             }
         }
+
+    suspend fun updateUserProfile(request: UpdateProfileRequest) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.updateUserProfile(request) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
     suspend fun getAllSavedPost(userId: String, pageCount: Int, pageNumber: Int) =
         withContext(dispatcher) {
             when (val result = callApi { api.getAllSavedPost(userId, pageCount, pageNumber) }) {

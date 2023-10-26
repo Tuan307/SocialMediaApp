@@ -16,6 +16,8 @@ data class GroupYourViewData(
 }
 
 data class GroupItemYourGroupViewData(
+    val groupId: Long,
     val groupName: String,
-    val groupImage: String
+    val groupImage: String,
+    var isLast: Boolean = false
 )

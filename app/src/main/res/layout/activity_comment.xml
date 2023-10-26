@@ -35,7 +35,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:text="@string/comment"
+                        android:text="@string/comment_vn"
                         android:textColor="@color/color_app_text"
                         android:textSize="@dimen/sp26"
                         android:textStyle="bold" />

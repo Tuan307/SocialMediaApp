@@ -17,6 +17,7 @@ import com.base.app.databinding.LayoutForYouGroupHeaderBinding
 import com.base.app.ui.group.detail_group.GroupDetailViewModel
 import com.base.app.ui.group.for_you.viewdata.GroupForYouPostViewData
 import com.base.app.ui.group.for_you.viewdata.GroupForYouViewData
+import com.base.app.ui.group.for_you.viewdata.GroupItemYourGroupViewData
 import com.base.app.ui.group.for_you.viewdata.GroupYourViewData
 import com.base.app.ui.main.fragment.home.PostInPostAdapter
 import com.bumptech.glide.Glide
@@ -38,8 +39,13 @@ class GroupForYouGroupAdapter(
     private class HeaderViewHolder(private val binding: LayoutForYouGroupHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private lateinit var headerAdapter: GroupForYouHeaderAdapter
-        fun bind(data: GroupYourViewData) = with(binding) {
-            headerAdapter = GroupForYouHeaderAdapter(data.groups)
+        fun bind(data: GroupYourViewData, listener: GroupForYouInteract) = with(binding) {
+            headerAdapter = GroupForYouHeaderAdapter(data.groups,
+                object : GroupForYouHeaderAdapter.OnForYouGroupHeader {
+                    override fun onGroupClick(data: GroupItemYourGroupViewData) {
+                        listener.onHeaderClick(data.isLast, data)
+                    }
+                })
             listOfGroup.apply {
                 layoutManager =
                     LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
@@ -59,6 +65,7 @@ class GroupForYouGroupAdapter(
             if (data.address.isEmpty()) {
                 textLocation.visibility = View.GONE
             }
+            textGroupName.text = data.postGroup.groupName
             Glide.with(root.context).load(data.postGroup.groupImageUrl).into(imageGroup)
             if (data.type == "image") {
                 val postInPostAdapter =
@@ -214,10 +221,10 @@ class GroupForYouGroupAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is HeaderViewHolder -> {
-                holder.bind(getItem(position) as GroupYourViewData)
+                holder.bind(getItem(position) as GroupYourViewData, listener)
             }
             is BodyViewHolder -> {
-                holder.bind(getItem(position) as GroupForYouPostViewData, viewModel,listener)
+                holder.bind(getItem(position) as GroupForYouPostViewData, viewModel, listener)
             }
         }
     }
@@ -237,5 +244,6 @@ class GroupForYouGroupAdapter(
         fun downloadImage(fileName: String, postId: String)
         fun editImage(postId: String, view: View)
         fun deleteImage(postId: String)
+        fun onHeaderClick(isLast: Boolean, data: GroupItemYourGroupViewData)
     }
 }

@@ -59,10 +59,12 @@ class DetailGroupAdapter(
                     listener.manageGroup(data.id)
                 }
                 buttonJoinGroup.setOnClickListener {
-                    if (data.hasJoined) {
+                    if (data.hasJoined || buttonJoinGroup.text == "Đã tham gia") {
                         listener.leaveGroup(data.id)
+                    } else if (data.hasRequested || buttonJoinGroup.text == "Đã gửi yêu cầu") {
+                        listener.removeRequestJoinGroup(data)
                     } else {
-                        listener.requestJoinGroup(data.id)
+                        listener.requestJoinGroup(data)
                     }
                 }
                 textGroupPrivacy.text = if (data.groupPrivacy == "private") {
@@ -73,6 +75,11 @@ class DetailGroupAdapter(
                 textMemberNumber.text = data.groupMemberNumber
                 buttonJoinGroup.text = if (data.hasJoined) {
                     "Đã tham gia"
+                } else {
+                    "Tham gia"
+                }
+                buttonJoinGroup.text = if (data.hasRequested) {
+                    "Đã gửi yêu cầu"
                 } else {
                     "Tham gia"
                 }
@@ -279,7 +286,8 @@ class DetailGroupAdapter(
         fun deleteImage(postId: String)
         fun inviteFriend(groupId: String)
         fun manageGroup(groupId: String)
-        fun requestJoinGroup(groupId: String)
+        fun requestJoinGroup(data: DetailGroupInformationViewData)
+        fun removeRequestJoinGroup(data: DetailGroupInformationViewData)
         fun leaveGroup(groupId: String)
     }
 

@@ -14,7 +14,8 @@ data class DetailGroupInformationViewData(
     val groupOwnerId: String,
     val groupPrivacy: String,
     val groupMemberNumber: String,
-    val hasJoined: Boolean
+    var hasJoined: Boolean,
+    var hasRequested: Boolean
 
 ) : DetailGroupViewData {
     override val layoutRes: Int

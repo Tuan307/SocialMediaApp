@@ -8,6 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.R
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.data.models.dating_app.BaseApiResponse
+import com.base.app.data.models.group.request.CreateGroupInvitationRequest
+import com.base.app.data.models.group.request.JoinGroupRequest
+import com.base.app.data.models.group.response.CreateInvitationResponse
 import com.base.app.data.models.group.response.GetGroupByGroupIdAndMemberIdResponse
 import com.base.app.data.models.mToken
 import com.base.app.data.models.response.post.ImagesList
@@ -34,6 +38,8 @@ import javax.inject.Inject
 class GroupDetailViewModel @Inject constructor(
     private val repository: GroupRepository
 ) : BaseViewModel() {
+    var isJoined = false
+    var isRequested = false
     private var prettyTime = PrettyTime(Locale.getDefault())
     var groupPrivacy = ""
     private var _listInformationResponse: MutableLiveData<DetailGroupInformationViewData> =
@@ -51,19 +57,88 @@ class GroupDetailViewModel @Inject constructor(
     val listGroupPostResponse: LiveData<List<DetailGroupViewData>>
         get() = _listGroupPostResponse
 
-    private var _checkIfJoinedGroupResponse: MutableLiveData<GetGroupByGroupIdAndMemberIdResponse> =
+    private var _checkIfJoinedGroupResponse: MutableLiveData<Boolean> =
         MutableLiveData()
-    val checkIfJoinedGroupResponse: LiveData<GetGroupByGroupIdAndMemberIdResponse>
+    val checkIfJoinedGroupResponse: LiveData<Boolean>
         get() = _checkIfJoinedGroupResponse
 
-    fun checkIfJoinedGroup(groupId: Long) {
+    private var _removeUserFromGroupResponse: MutableLiveData<BaseApiResponse> =
+        MutableLiveData()
+    val removeUserFromGroupResponse: LiveData<BaseApiResponse>
+        get() = _removeUserFromGroupResponse
+
+    private var _joinGroupsResponse: MutableLiveData<GetGroupByGroupIdAndMemberIdResponse> =
+        MutableLiveData()
+    val joinGroupsResponse: LiveData<GetGroupByGroupIdAndMemberIdResponse>
+        get() = _joinGroupsResponse
+
+    private var _requestJoinGroupsResponse: MutableLiveData<CreateInvitationResponse> =
+        MutableLiveData()
+    val requestJoinGroupsResponse: LiveData<CreateInvitationResponse>
+        get() = _requestJoinGroupsResponse
+
+    private var _removeRequestGroupsResponse: MutableLiveData<BaseApiResponse> =
+        MutableLiveData()
+    val removeRequestGroupsResponse: LiveData<BaseApiResponse>
+        get() = _removeRequestGroupsResponse
+
+    fun joinGroup(groupId: Long) {
         viewModelScope.launch {
-            val result = repository.checkIfJoinedGroup(firebaseUser?.uid.toString(), groupId)
-            _checkIfJoinedGroupResponse.value = result
+            val result =
+                repository.addMemberToGroup(JoinGroupRequest(firebaseUser?.uid.toString(), groupId))
+            _joinGroupsResponse.value = result
         }
     }
 
-    fun getGroupInformation(groupId: Long, isJoined: Boolean) {
+    fun requestJoinGroup(request: CreateGroupInvitationRequest) {
+        viewModelScope.launch {
+            val result = repository.createGroupJoinRequest(request)
+            _requestJoinGroupsResponse.value = result
+        }
+    }
+
+    fun removeGroupRequest(groupId: Long){
+        viewModelScope.launch {
+            val result = repository.removeGroupRequest(firebaseUser?.uid.toString(), groupId)
+            _removeRequestGroupsResponse.value = result
+        }
+    }
+    fun checkIfJoinedGroup(groupId: Long) {
+        viewModelScope.launch {
+            val result = repository.checkIfJoinedGroup(firebaseUser?.uid.toString(), groupId)
+            // _checkIfJoinedGroupResponse.value = result
+        }
+    }
+
+    fun checkIfRequestToJoinGroup(groupId: Long) {
+        viewModelScope.launch {
+            val result = repository.checkIfRequestToJoinGroup(firebaseUser?.uid.toString(), groupId)
+            when (result.data) {
+                2 -> {
+                    isJoined = true
+                    isRequested = false
+                }
+                0 -> {
+                    isJoined = false
+                    isRequested = false
+                }
+                1 -> {
+                    isRequested = true
+                    isJoined = false
+                }
+            }
+            _checkIfJoinedGroupResponse.value = true
+        }
+    }
+
+    fun removeUserFromGroup(groupId: Long) {
+        viewModelScope.launch {
+            val result = repository.removeUserFromGroup(firebaseUser?.uid.toString(), groupId)
+            _removeUserFromGroupResponse.value = result
+        }
+    }
+
+    fun getGroupInformation(groupId: Long, isJoined: Boolean, hasRequested: Boolean) {
         viewModelScope.launch {
             val result = repository.getGroupById(groupId)
             val groupData = result.data
@@ -75,7 +150,8 @@ class GroupDetailViewModel @Inject constructor(
                 groupPrivacy = groupData?.groupPrivacy.toString(),
                 groupMemberNumber = "",
                 hasJoined = isJoined,
-                groupOwnerId = groupData?.groupOwner?.userId.toString()
+                groupOwnerId = groupData?.groupOwner?.userId.toString(),
+                hasRequested = hasRequested
             )
             groupPrivacy = groupData?.groupPrivacy.toString()
             _listInformationResponse.value = detailInformation
@@ -93,7 +169,8 @@ class GroupDetailViewModel @Inject constructor(
                 groupPrivacy = data.groupPrivacy,
                 groupMemberNumber = "${result.data?.size} thành viên",
                 hasJoined = data.hasJoined,
-                groupOwnerId = data.groupOwnerId
+                groupOwnerId = data.groupOwnerId,
+                hasRequested = data.hasRequested
             )
             _listInformationResponse1.value = detailInformation
         }

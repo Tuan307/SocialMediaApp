@@ -28,6 +28,9 @@ class ExploreGroupAdapter(
             listener: OnExploreGroupClick
         ) =
             with(binding) {
+                imageGroup.setOnClickListener {
+                    listener.onClickDetail(data)
+                }
                 textGroupName.text = data.groupName
                 textGroupPrivacy.text = if (data.groupPrivacy == "private") {
                     "Nhóm riêng tư"
@@ -44,7 +47,11 @@ class ExploreGroupAdapter(
                 Glide.with(root.context).load(data.groupImageUrl).into(imageGroup)
                 data.id.let { viewModel.getAllGroupMemberInformation(it, textGroupMember) }
                 buttonJoinGroup.setOnClickListener {
-                    listener.onJoinRequest(data)
+                    if(buttonJoinGroup.text == "Đã gửi yêu cầu"){
+                       listener.onRemoveRequest(data)
+                    }else{
+                        listener.onJoinRequest(data)
+                    }
                 }
             }
     }
@@ -81,5 +88,7 @@ class ExploreGroupAdapter(
 
     interface OnExploreGroupClick {
         fun onJoinRequest(data: GroupDataViewData)
+        fun onRemoveRequest(data: GroupDataViewData)
+        fun onClickDetail(data: GroupDataViewData)
     }
 }

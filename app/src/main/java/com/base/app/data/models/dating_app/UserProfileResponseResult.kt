@@ -12,3 +12,14 @@ data class UserProfileResponseResult(
     @SerializedName("data")
     val data: DatingUser?
 )
+
+data class UserUpdateProfileResponse(
+    @SerializedName("status")
+    val status: Status,
+    @SerializedName("data")
+    val data: DatingUser?,
+    @SerializedName("pageCount")
+    val pageCount: Long,
+    @SerializedName("page")
+    val page: Long
+)

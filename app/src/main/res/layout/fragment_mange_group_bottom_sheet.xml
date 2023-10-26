@@ -82,6 +82,37 @@
             app:layout_constraintStart_toEndOf="@+id/card_edit_group"
             app:layout_constraintTop_toTopOf="@+id/card_edit_group" />
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_verify_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            app:cardBackgroundColor="@color/colorGrayText"
+            app:cardCornerRadius="@dimen/dp180"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_edit_group">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp5"
+                android:src="@drawable/ic_logout"
+                app:tint="@color/colorBlack" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_verify_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:text="@string/text_verify"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintBottom_toBottomOf="@id/card_verify_group"
+            app:layout_constraintStart_toEndOf="@+id/card_verify_group"
+            app:layout_constraintTop_toTopOf="@+id/card_verify_group" />
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_delete_group"
@@ -92,7 +123,7 @@
             app:cardBackgroundColor="@color/colorGrayText"
             app:cardCornerRadius="@dimen/dp180"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_edit_group">
+            app:layout_constraintTop_toBottomOf="@+id/card_verify_group">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"

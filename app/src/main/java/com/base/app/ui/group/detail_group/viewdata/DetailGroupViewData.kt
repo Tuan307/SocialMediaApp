@@ -22,7 +22,7 @@ interface DetailGroupViewData {
             oldItem: DetailGroupViewData,
             newItem: DetailGroupViewData
         ): Boolean {
-            return oldItem.layoutRes == newItem.layoutRes
+            return oldItem == newItem
         }
 
     }

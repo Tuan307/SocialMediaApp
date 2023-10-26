@@ -52,6 +52,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         if (postList.isNotEmpty()) {
             postList.clear()
         }
+        viewModel.getRemoteUserInformation(idKey)
         if (tabType == 0) {
             viewModel.getProfilePost(idKey, 20, 1)
         } else {
