@@ -10,11 +10,11 @@ import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.base.fragment.PagerFragmentAdapter
 import com.base.app.databinding.ActivityMainBinding
+import com.base.app.ui.main.fragment.explore.ExploreFragment
 import com.base.app.ui.main.fragment.home.HomeFragment
 import com.base.app.ui.main.fragment.notification.NotificationFragment
 import com.base.app.ui.main.fragment.profile.MyProfileFragment
 import com.base.app.ui.main.fragment.reel.ReelFragment
-import com.base.app.ui.main.fragment.search.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
 
     private val homeFragment = HomeFragment.newInstance()
     private val myProFileFragment = MyProfileFragment.newInstance()
-    private val searchFragment = SearchFragment.newInstance()
+    private val exploreFragment = ExploreFragment.newInstance()
     private val reelFragment = ReelFragment.newInstance()
     private val notificationFragment = NotificationFragment.newInstance()
     private val viewModel by viewModels<MainViewModel>()
@@ -56,7 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         mPagerAdapter = PagerFragmentAdapter(supportFragmentManager)
         //add all fragment in main
         mPagerAdapter.addFragment(homeFragment)
-        mPagerAdapter.addFragment(searchFragment)
+        mPagerAdapter.addFragment(exploreFragment)
         mPagerAdapter.addFragment(reelFragment)
         mPagerAdapter.addFragment(notificationFragment)
         mPagerAdapter.addFragment(myProFileFragment)

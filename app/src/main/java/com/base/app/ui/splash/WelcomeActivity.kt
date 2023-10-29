@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
+import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.ActivityWelcomeBinding
 import com.base.app.ui.login.LoginActivity
 import com.base.app.ui.main.MainActivity
@@ -41,8 +42,6 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
     }
 
     override fun initListener() {
-        //viewModel.getUserProfile()
-
         binding.apply {
             btnLogin.setOnClickListener {
                 startActivity(Intent(this@WelcomeActivity, LoginActivity::class.java))
@@ -58,10 +57,21 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
     override fun observerLiveData() = with(viewModel) {
         checkUserResponse.observe(this@WelcomeActivity) {
             if (it) {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
-                    finish()
-                }, 1000)
+                viewModel.getUserProfile()
+            }
+        }
+        userResponse.observe(this@WelcomeActivity) {
+            if (it != null) {
+                val realSave = AppPreferencesHelper(this@WelcomeActivity)
+                realSave.save("lat", it.latitude.toString())
+                realSave.save("lng", it.longitude.toString())
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
+                        finish()
+                    },
+                    1000
+                )
             }
         }
     }
@@ -69,9 +79,12 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
     private fun getCurrentLocation() {
         if (checkPermission()) {
             if (isLocationEnabled()) {
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener(this@WelcomeActivity) {task->
-                    val location:Location? = task.result
-                    Log.d("CheckLocation", "${location?.latitude.toString()} and ${location?.longitude.toString()}")
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener(this@WelcomeActivity) { task ->
+                    val location: Location? = task.result
+                    Log.d(
+                        "CheckLocation",
+                        "${location?.latitude.toString()} and ${location?.longitude.toString()}"
+                    )
                 }
             } else {
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)

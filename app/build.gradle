@@ -33,7 +33,6 @@ android {
                 minifyEnabled false
                 buildConfigField("String", "API_URL", apikeyProperties['API_URL_DEV'])
                 buildConfigField("String", "DATING_API_URL", apikeyProperties['DATING_API_URL_DEV'])
-                buildConfigField("String", "BASE_URL_CHAT_BOT", apikeyProperties['BASE_URL_CHAT_BOT_DEV'])
                 debuggable true
             } catch (e) {
                 // add gradle.properties file with the following property:
@@ -43,7 +42,6 @@ android {
         }
         release {
             buildConfigField("String", "API_URL", apikeyProperties['API_URL_LIVE'])
-            buildConfigField("String", "BASE_URL_CHAT_BOT", apikeyProperties['BASE_URL_CHAT_BOT_LIVE'])
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

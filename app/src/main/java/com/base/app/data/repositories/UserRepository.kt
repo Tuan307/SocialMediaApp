@@ -41,4 +41,16 @@ class UserRepository @Inject constructor(
                 }
             }
         }
+
+    suspend fun getAllNearbyUsers(userId: String, latitude: Double, longitude: Double,limit:Int) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.getAllNearbyUsers(userId, latitude, longitude,limit) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
 }

@@ -1,6 +1,7 @@
 package com.base.app.data.apis
 
 import com.base.app.data.models.dating_app.BaseApiResponse
+import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.dating_app.SearchUserResponse
 import com.base.app.data.models.dating_app.UserProfileResponseResult
 import com.base.app.data.models.dating_app.UserUpdateProfileResponse
@@ -62,6 +63,12 @@ interface DatingAPI {
         @Query("keyword") name: String, @Query("pageCount") pageCount: Int,
         @Query("pageNumber") pageNumber: Int
     ): Response<SearchUserResponse>
+
+    @GET("users/nearby")
+    suspend fun getAllNearbyUsers(
+        @Query("userId") userId: String, @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double, @Query("limit") limit: Int
+    ): Response<List<DatingUser>>
 
     @GET("post-image")
     suspend fun getNewsFeed(
