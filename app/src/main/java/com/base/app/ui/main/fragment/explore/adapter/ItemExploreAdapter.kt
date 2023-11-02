@@ -21,17 +21,35 @@ class ItemExploreAdapter(
     class ViewHolder(private val binding: ItemExploreBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ExploreItemViewData, listener: OnItemExploreClick) = with(binding) {
-            if (data.type == 0) {
-                textNumber.visibility = View.GONE
-                cardGroupAndUser.visibility = View.VISIBLE
-                cardDestination.visibility = View.GONE
-                textName.text = data.name
-                Glide.with(root.context).load(data.image).into(imageExplore)
-            }
-            root.setOnClickListener {
-                when (data.type) {
-                    0 -> {
+            when (data.type) {
+                0 -> {
+                    textNumber.visibility = View.GONE
+                    cardGroupAndUser.visibility = View.VISIBLE
+                    cardDestination.visibility = View.GONE
+                    textName.text = data.name
+                    Glide.with(root.context).load(data.image).into(imageExplore)
+                    imageExplore.setOnClickListener {
                         listener.onCLickFriend(data)
+                    }
+                }
+                1 -> {
+                    textNumber.visibility = View.GONE
+                    cardGroupAndUser.visibility = View.VISIBLE
+                    cardDestination.visibility = View.GONE
+                    textName.text = data.name
+                    Glide.with(root.context).load(data.image).into(imageExplore)
+                    imageExplore.setOnClickListener {
+                        listener.onCLickGroup(data)
+                    }
+                }
+                2 -> {
+                    textNumber.visibility = View.GONE
+                    cardGroupAndUser.visibility = View.GONE
+                    cardDestination.visibility = View.VISIBLE
+                    textNameDestination.text = data.name
+                    Glide.with(root.context).load(data.image).into(imageExploreDestination)
+                    imageExploreDestination.setOnClickListener {
+                        listener.onCLickDestination(data)
                     }
                 }
             }
@@ -58,7 +76,7 @@ class ItemExploreAdapter(
 
     interface OnItemExploreClick {
         fun onCLickFriend(data: ExploreItemViewData)
-        fun onCLickGroup()
-        fun onCLickDestination()
+        fun onCLickGroup(data: ExploreItemViewData)
+        fun onCLickDestination(data: ExploreItemViewData)
     }
 }

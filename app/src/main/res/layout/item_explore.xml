@@ -7,13 +7,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp15"
-        android:paddingBottom="@dimen/dp12"
-        android:background="@color/color_background">
+        android:paddingBottom="@dimen/dp12">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_group_and_user"
             android:layout_width="@dimen/dp145"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/colorWhite"
             app:cardCornerRadius="@dimen/dp15"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -69,9 +69,10 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/card_destination"
             android:layout_width="@dimen/dp150"
-            android:layout_height="@dimen/dp250"
-            android:visibility="gone"
-            app:cardCornerRadius="@dimen/dp15"
+            android:layout_height="@dimen/dp220"
+            android:visibility="visible"
+            app:cardBackgroundColor="@color/color_background"
+            app:cardCornerRadius="@dimen/dp20"
             app:cardElevation="@dimen/dp10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,15 +92,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/damsen" />
+                    tools:srcCompat="@drawable/damsen" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_name_destination"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp12"
+                    android:elevation="@dimen/dp2"
                     android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/sp16"
+                    android:textSize="@dimen/sp17"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

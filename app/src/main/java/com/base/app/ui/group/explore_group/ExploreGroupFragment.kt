@@ -171,7 +171,7 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     override fun onRemoveRequest(data: GroupDataViewData) {
-        viewModel.removeGroupRequest(data.id.toLong())
+        viewModel.removeGroupRequest(data.id)
     }
 
     override fun onClickDetail(data: GroupDataViewData) {

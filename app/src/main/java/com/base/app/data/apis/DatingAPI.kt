@@ -1,5 +1,6 @@
 package com.base.app.data.apis
 
+import com.base.app.data.models.city.GetCityResponse
 import com.base.app.data.models.dating_app.BaseApiResponse
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.dating_app.SearchUserResponse
@@ -215,4 +216,7 @@ interface DatingAPI {
         @Query("userId") userId: String,
         @Query("groupId") groupId: Long
     ): Response<BaseApiResponse>
+
+    @GET("city/all")
+    suspend fun getAllCities(): Response<GetCityResponse>
 }

@@ -1,5 +1,6 @@
 package com.base.app.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -36,6 +37,9 @@ class AllExploreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
         val intent = intent
         type = intent.getStringExtra("type").toString()
         with(binding) {
+            imageBack.setOnClickListener {
+                finish()
+            }
             swipeExploreAll.setOnRefreshListener(this@AllExploreActivity)
             if (type == "near_by") {
                 lat = saveShare.getString("lat").toDouble()
@@ -76,12 +80,16 @@ class AllExploreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
     }
 
     override fun onCLickFriend(data: ExploreItemViewData) {
+        val intent = Intent(this@AllExploreActivity, ProfileActivity::class.java)
+        intent.putExtra("userId", data.id)
+        startActivity(intent)
+    }
+
+    override fun onCLickGroup(data: ExploreItemViewData) {
 
     }
 
-    override fun onCLickGroup() {
+    override fun onCLickDestination(data: ExploreItemViewData) {
     }
 
-    override fun onCLickDestination() {
-    }
 }

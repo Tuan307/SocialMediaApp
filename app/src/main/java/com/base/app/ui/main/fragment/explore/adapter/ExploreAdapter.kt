@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.base.app.databinding.LayoutItemExploreBinding
+import com.base.app.ui.group.GroupActivity
+import com.base.app.ui.group.detail_group.GroupDetailActivity
 import com.base.app.ui.main.fragment.explore.viewdata.ExploreItemViewData
 import com.base.app.ui.main.fragment.explore.viewdata.ExploreViewData
 import com.base.app.ui.profile.AllExploreActivity
@@ -31,17 +33,32 @@ class ExploreAdapter :
                         root.context.startActivity(intent)
                     }
 
-                    override fun onCLickGroup() {
+                    override fun onCLickGroup(data: ExploreItemViewData) {
+                        val intent = Intent(root.context, GroupDetailActivity::class.java)
+                        intent.putExtra("groupId", data.id.toLong())
+                        intent.putExtra("groupName", data.name)
+                        root.context.startActivity(intent)
                     }
 
-                    override fun onCLickDestination() {
+                    override fun onCLickDestination(data: ExploreItemViewData) {
                     }
                 })
             textExploreTitle.text = data.title
             imageViewAll.setOnClickListener {
-                val intent = Intent(root.context, AllExploreActivity::class.java)
-                intent.putExtra("type", data.id)
-                root.context.startActivity(intent)
+                when (data.id) {
+                    "near_by" -> {
+                        val intent = Intent(root.context, AllExploreActivity::class.java)
+                        intent.putExtra("type", data.id)
+                        root.context.startActivity(intent)
+                    }
+                    "group" -> {
+                        val intent = Intent(root.context, GroupActivity::class.java)
+                        root.context.startActivity(intent)
+                    }
+                    else -> {
+                        // navigate to detail destination
+                    }
+                }
             }
             listOfExploreItem.apply {
                 layoutManager =
