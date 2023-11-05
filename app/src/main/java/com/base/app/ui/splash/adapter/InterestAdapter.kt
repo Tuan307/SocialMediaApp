@@ -21,7 +21,7 @@ class InterestAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int, listener: OnInterestItemClick) = with(binding) {
             val model = getItem(position)
-            textInterest.text = model.text
+            textInterest.text = model.name
             root.setOnClickListener {
                 listener.onInterestClick(model, position)
             }

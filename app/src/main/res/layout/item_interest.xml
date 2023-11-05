@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_item_interest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp12"
+        android:layout_margin="@dimen/dp10"
         android:background="@drawable/bg_item_interest">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -20,7 +19,7 @@
             android:paddingHorizontal="@dimen/dp10"
             android:paddingVertical="@dimen/dp12"
             android:textColor="@color/black"
-            android:textSize="@dimen/sp18"
+            android:textSize="@dimen/sp16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

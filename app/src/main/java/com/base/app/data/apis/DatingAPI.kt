@@ -21,6 +21,7 @@ import com.base.app.data.models.group.response.GetGroupRequestResponse
 import com.base.app.data.models.group.response.GetGroupResponse
 import com.base.app.data.models.group.response.GetYourOwnGroupResponse
 import com.base.app.data.models.group.response.SearchPostInGroupResponse
+import com.base.app.data.models.interest.InterestResponse
 import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.RegisterRequest
@@ -70,6 +71,10 @@ interface DatingAPI {
         @Query("userId") userId: String, @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double, @Query("limit") limit: Int
     ): Response<List<DatingUser>>
+
+    @GET("users/interest")
+    suspend fun getAllInterests(
+    ): Response<InterestResponse>
 
     @GET("post-image")
     suspend fun getNewsFeed(

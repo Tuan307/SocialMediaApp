@@ -1,13 +1,14 @@
 package com.base.app.ui.splash
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.base.app.R
 import com.base.app.data.models.interest.InterestModel
 import com.base.app.databinding.ActivityChooseInterestBinding
+import com.base.app.ui.main.MainActivity
 import com.base.app.ui.splash.adapter.InterestAdapter
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -27,6 +28,7 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
             R.layout.activity_choose_interest
         )
         setContentView(binding.root)
+        viewModel.getAllInterests()
         initView()
         initListener()
         observeData()
@@ -34,6 +36,8 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
 
     private fun initListener() = with(binding) {
         textDone.setOnClickListener {
+            startActivity(Intent(this@ChooseInterestActivity, MainActivity::class.java))
+            finish()
         }
     }
 
@@ -44,11 +48,14 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
             setHasFixedSize(true)
             adapter = interestAdapter
         }
-        interestAdapter.submitList(list)
     }
 
     private fun observeData() = with(viewModel) {
-
+        interestResponse.observe(this@ChooseInterestActivity) {
+            list.clear()
+            list.addAll(it)
+            interestAdapter.submitList(list)
+        }
     }
 
     private fun setUpFlexBoxLayout(): FlexboxLayoutManager {
