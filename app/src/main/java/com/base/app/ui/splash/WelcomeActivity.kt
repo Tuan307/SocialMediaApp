@@ -67,7 +67,7 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
                 realSave.save("lng", it.longitude.toString())
                 Handler(Looper.getMainLooper()).postDelayed(
                     {
-                        startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
+                        startActivity(Intent(this@WelcomeActivity, ChooseInterestActivity::class.java))
                         finish()
                     },
                     1000

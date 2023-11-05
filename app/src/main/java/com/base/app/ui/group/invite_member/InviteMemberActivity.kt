@@ -116,7 +116,6 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
                 )
                 inviteList[position].hasChosen = true
                 inviteMemberAdapter.submitList(inviteList.toList())
-                inviteMemberAdapter.submitList(inviteList.toList())
                 inviteMemberAdapter.notifyDataSetChanged()
             }
         }
