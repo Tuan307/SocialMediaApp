@@ -22,6 +22,8 @@ import com.base.app.data.models.group.response.GetGroupResponse
 import com.base.app.data.models.group.response.GetYourOwnGroupResponse
 import com.base.app.data.models.group.response.SearchPostInGroupResponse
 import com.base.app.data.models.interest.InterestResponse
+import com.base.app.data.models.interest.request.AddUserInterestRequest
+import com.base.app.data.models.interest.response.AddInterestResponse
 import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.RegisterRequest
@@ -75,6 +77,16 @@ interface DatingAPI {
     @GET("users/interest")
     suspend fun getAllInterests(
     ): Response<InterestResponse>
+
+    @GET("users/interest/check")
+    suspend fun checkIfUserHasInterests(
+        @Query("userId") userId: String
+    ): Response<BaseApiResponse>
+
+    @POST("users/interest/save")
+    suspend fun saveUserInterest(
+        @Body request: AddUserInterestRequest
+    ): Response<AddInterestResponse>
 
     @GET("post-image")
     suspend fun getNewsFeed(

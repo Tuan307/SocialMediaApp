@@ -1,27 +1,49 @@
 package com.base.app.ui.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.data.models.dating_app.BaseApiResponse
+import com.base.app.data.repositories.UserRepository
+import com.base.app.data.repositories.profile.UserProfileRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : BaseViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val repository: UserRepository,
+    private val userProfileRepository: UserProfileRepository,
+) : BaseViewModel() {
+
+    private var _userInterestResponse: MutableLiveData<BaseApiResponse> = MutableLiveData()
+    val userInterestResponse: LiveData<BaseApiResponse>
+        get() = _userInterestResponse
+    private var userUID = ""
     private var loginResponse = MutableLiveData<Boolean>()
     val getLoginResponse = loginResponse as LiveData<Boolean>
+
     fun login(email: String, password: String) {
         showLoading(true)
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
+                    userUID = it.result.user?.uid.toString()
                     loginResponse.postValue(true)
                     registerJobFinish()
                 } else {
                     loginResponse.postValue(false)
                 }
             }
+        }
+    }
+
+    fun checkIfInterestExist() {
+        viewModelScope.launch {
+            val result = repository.checkIfUserHasInterests(userUID)
+            _userInterestResponse.value = result
         }
     }
 

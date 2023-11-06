@@ -2,11 +2,14 @@ package com.base.app.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.base.app.R
 import com.base.app.data.models.interest.InterestModel
+import com.base.app.data.models.interest.request.AddUserInterestRequest
+import com.base.app.data.models.interest.request.InterestModelRequest
 import com.base.app.databinding.ActivityChooseInterestBinding
 import com.base.app.ui.main.MainActivity
 import com.base.app.ui.splash.adapter.InterestAdapter
@@ -36,8 +39,26 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
 
     private fun initListener() = with(binding) {
         textDone.setOnClickListener {
-            startActivity(Intent(this@ChooseInterestActivity, MainActivity::class.java))
-            finish()
+            val checkedList = list.filter { it.isChosen }
+            if (checkedList.isEmpty()) {
+                Toast.makeText(
+                    this@ChooseInterestActivity,
+                    "Bạn phải chọn mục yêu thích",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                viewModel.saveUserInterest(
+                    AddUserInterestRequest(
+                        userId = viewModel.firebaseUser?.uid.toString(),
+                        checkedList.map { data ->
+                            InterestModelRequest(
+                                id = data.id,
+                                name = data.name
+                            )
+                        }
+                    )
+                )
+            }
         }
     }
 
@@ -55,6 +76,18 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
             list.clear()
             list.addAll(it)
             interestAdapter.submitList(list)
+        }
+        addInterestResponse.observe(this@ChooseInterestActivity) {
+            if (it) {
+                startActivity(Intent(this@ChooseInterestActivity, MainActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(
+                    this@ChooseInterestActivity,
+                    "Có lỗi xảy ra, vui lòng thử lại",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

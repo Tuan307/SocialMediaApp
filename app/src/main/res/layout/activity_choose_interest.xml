@@ -23,7 +23,7 @@
                     android:id="@+id/text_interest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mục yêu thích"
+                    android:text="@string/text_interest"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/sp21"
                     android:textStyle="bold"

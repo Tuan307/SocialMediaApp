@@ -9,7 +9,10 @@ import com.base.app.base.activities.BaseActivity
 import com.base.app.databinding.ActivityLoginBinding
 import com.base.app.ui.main.MainActivity
 import com.base.app.ui.register.RegisterActivity
+import com.base.app.ui.splash.ChooseInterestActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     private val viewModel by viewModels<LoginViewModel>()
@@ -64,10 +67,18 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     override fun observerLiveData() {
         viewModel.apply {
-            getLoginResponse.observe(this@LoginActivity) {
-                if (it) {
+            userInterestResponse.observe(this@LoginActivity) {
+                if (it.data == true) {
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
+                } else {
+                    startActivity(Intent(this@LoginActivity, ChooseInterestActivity::class.java))
+                    finish()
+                }
+            }
+            getLoginResponse.observe(this@LoginActivity) {
+                if (it) {
+                    viewModel.checkIfInterestExist()
                 } else {
                     Toast.makeText(
                         this@LoginActivity,

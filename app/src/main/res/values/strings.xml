@@ -432,6 +432,7 @@
     <string name="text_empty_view">Không tìm thấy bài đăng nào</string>
     <string name="text_join">Tham gia</string>
     <string name="text_verify">Xét duyệt</string>
+    <string name="text_interest">Mục yêu thích</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>

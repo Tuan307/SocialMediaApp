@@ -67,7 +67,7 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
                 realSave.save("lng", it.longitude.toString())
                 Handler(Looper.getMainLooper()).postDelayed(
                     {
-                        startActivity(Intent(this@WelcomeActivity, ChooseInterestActivity::class.java))
+                        startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
                         finish()
                     },
                     1000
@@ -85,6 +85,9 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
                         "CheckLocation",
                         "${location?.latitude.toString()} and ${location?.longitude.toString()}"
                     )
+                    val realSave = AppPreferencesHelper(this@WelcomeActivity)
+                    realSave.save("lat", location?.latitude.toString())
+                    realSave.save("lng", location?.longitude.toString())
                 }
             } else {
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
