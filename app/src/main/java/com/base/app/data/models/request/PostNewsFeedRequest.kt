@@ -26,5 +26,7 @@ data class PostNewsFeedRequest(
     @SerializedName("type")
     val type: String,
     @SerializedName("videoUrl")
-    val videoUrl: String?
+    val videoUrl: String?,
+    @SerializedName("question")
+    val question: String?
 )

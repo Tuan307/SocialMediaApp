@@ -17,10 +17,12 @@ import com.base.app.data.models.PostItem
 import com.base.app.data.models.PushNotification
 import com.base.app.data.models.User
 import com.base.app.data.models.mToken
+import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.SavedPostRequest
 import com.base.app.data.models.response.post.ImagePostData
 import com.base.app.data.models.response.post.PostContent
 import com.base.app.data.repositories.feed.NewsFeedRepository
+import com.base.app.data.repositories.notification.NotificationRepository
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,13 +31,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 
 class HomeViewModel @Inject constructor(
     private val api: Api,
-    private val newsFeedRepository: NewsFeedRepository
+    private val newsFeedRepository: NewsFeedRepository,
+    private val notificationRepository: NotificationRepository
 ) : BaseViewModel() {
 
     private var _newFeedResponse: MutableLiveData<ImagePostData?> = MutableLiveData()
@@ -179,14 +183,18 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun addNotifications(postId: String, publisherId: String) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            val hashMap = HashMap<String, Any>()
-            hashMap["userid"] = firebaseUser?.uid.toString()
-            hashMap["postid"] = postId
-            hashMap["text"] = "liked your post!"
-            hashMap["ispost"] = true
-            databaseReference.child("Notifications").child(publisherId)
-                .push().setValue(hashMap)
+        viewModelScope.launch(handler) {
+            notificationRepository.addNotification(
+                AddNotificationRequest(
+                    isPost = true,
+                    isInvitation = false,
+                    text = " đã thích bài viết của bạn",
+                    ownerId = publisherId,
+                    postId = postId,
+                    timeStamp = Calendar.getInstance().time.time.toString(),
+                    userId = firebaseUser?.uid.toString()
+                )
+            )
         }
     }
 

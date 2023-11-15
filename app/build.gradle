@@ -33,6 +33,7 @@ android {
                 minifyEnabled false
                 buildConfigField("String", "API_URL", apikeyProperties['API_URL_DEV'])
                 buildConfigField("String", "DATING_API_URL", apikeyProperties['DATING_API_URL_DEV'])
+                buildConfigField("String", "RECOMMEND_API_URL_DEV", apikeyProperties['RECOMMEND_API_URL_DEV'])
                 debuggable true
             } catch (e) {
                 // add gradle.properties file with the following property:
@@ -42,6 +43,7 @@ android {
         }
         release {
             buildConfigField("String", "API_URL", apikeyProperties['API_URL_LIVE'])
+            buildConfigField("String", "RECOMMEND_API_URL_DEV", apikeyProperties['RECOMMEND_API_URL_DEV'])
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

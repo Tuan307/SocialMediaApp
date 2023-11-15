@@ -9,6 +9,8 @@ import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.base.fragment.PagerFragmentAdapter
+import com.base.app.data.models.request.UpdateProfileRequest
+import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.ActivityMainBinding
 import com.base.app.ui.main.fragment.explore.ExploreFragment
 import com.base.app.ui.main.fragment.home.HomeFragment
@@ -30,6 +32,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     private val notificationFragment = NotificationFragment.newInstance()
     private val viewModel by viewModels<MainViewModel>()
     lateinit var mPagerAdapter: PagerFragmentAdapter
+    private lateinit var saveShare: AppPreferencesHelper
     override fun getContentLayout(): Int {
         return R.layout.activity_main
     }
@@ -48,6 +51,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         binding.apply {
             bottomNav.setOnNavigationItemSelectedListener(this@MainActivity)
         }
+        saveShare = AppPreferencesHelper(this@MainActivity)
+        val lat = saveShare.getString("lat").toDouble()
+        val lng = saveShare.getString("lng").toDouble()
+        viewModel.updateProfile(
+            UpdateProfileRequest(
+                userId = viewModel.firebaseUser?.uid.toString(),
+                userName = "",
+                fullName = "",
+                bio = "",
+                imageUrl = "",
+                latitude = lat,
+                longitude = lng
+            )
+        )
         initPagerFragment()
     }
 

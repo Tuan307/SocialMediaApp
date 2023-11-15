@@ -12,24 +12,18 @@ import com.bumptech.glide.Glide
 
 class SearchAdapter(
     val iCallBack: ICallBack,
-    var isRecent: Boolean = false
 ) : ListAdapter<DatingUser, SearchAdapter.ViewHolder>(SearchUserDiffUtil) {
 
     inner class ViewHolder(val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DatingUser) = with(binding) {
-            if (isRecent) {
-                binding.imgRemove.visibility = View.VISIBLE
-            } else {
-                binding.imgRemove.visibility = View.GONE
-            }
             Glide.with(root.context).load(data.imageUrl).into(binding.imgAvatar)
             binding.txtName.text = data.fullName
             binding.txtUserName.text = data.userName
             binding.searchConstrainView.setOnClickListener {
-                data.userId?.let { it1 -> iCallBack.itemClick(it1) }
+                data.userId.let { it1 -> iCallBack.itemClick(it1) }
             }
             binding.imgRemove.setOnClickListener {
-                data.userId?.let { it1 -> iCallBack.removeSearch(it1) }
+                data.userId.let { it1 -> iCallBack.removeSearch(it1) }
             }
         }
     }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/relative_container"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/list_image_post"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp6"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp26"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/relative_container"
+            tools:text="Ha noi" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp6"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp20"
+            android:maxLines="5"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@+id/text_name"
+            tools:text="Với lợi thế về vị trí địa lý và điều kiện tự nhiên, Đà Nẵng may mắn khi sở hữu nhiều bãi biển đẹp, trải dài thoai thoải và cát trắng miên man. Biển Đà Nẵng được tạp chí Forbes (Mỹ) bình chọn là một trong 6 bãi biển quyến rũ nhất hành tinh. Nếu bạn là người yêu biển chắc chắn sẽ thỏa mãn khi được ngụp lặn trong nước biếc, đùa giỡn với những con sóng hay các trò chơi như lướt ván, chèo thuyền chuối, motor nước.Không chỉ nổi tiếng với những bãi biển, nơi đây còn mang nét đẹp hấp dẫn khi có bản đảo Sơn Trà vươn mình ra biển, có đèo Hải Vân – “thiên hạ đệ nhất hùng quang” với cảnh quan ngoạn mục. Và không thể không nhắc đến đó là danh thắng Ngũ Hành Sơn, đăc biệt là Bà Nà Hills – cái tên làm nên thương hiệu cho du lịch Đà Nẵng và còn rất nhiều địa danh khác nữa." />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp15"
+            android:layout_marginBottom="@dimen/dp12"
+            android:background="@color/color_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

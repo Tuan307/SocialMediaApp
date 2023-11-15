@@ -24,7 +24,8 @@ data class CityModel(
     val cityName: String?,
     val description: String?,
     val tag: String?,
-    val cityImages: List<CityImage>?
+    val cityImages: List<CityImage>?,
+    val url: String?
 )
 
 data class CityImage(

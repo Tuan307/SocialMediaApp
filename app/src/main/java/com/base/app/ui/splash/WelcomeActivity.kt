@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.text.Html
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.base.app.R
@@ -62,9 +61,6 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
         }
         userResponse.observe(this@WelcomeActivity) {
             if (it != null) {
-                val realSave = AppPreferencesHelper(this@WelcomeActivity)
-                realSave.save("lat", it.latitude.toString())
-                realSave.save("lng", it.longitude.toString())
                 Handler(Looper.getMainLooper()).postDelayed(
                     {
                         startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
@@ -81,13 +77,20 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>() {
             if (isLocationEnabled()) {
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener(this@WelcomeActivity) { task ->
                     val location: Location? = task.result
-                    Log.d(
-                        "CheckLocation",
-                        "${location?.latitude.toString()} and ${location?.longitude.toString()}"
-                    )
                     val realSave = AppPreferencesHelper(this@WelcomeActivity)
-                    realSave.save("lat", location?.latitude.toString())
-                    realSave.save("lng", location?.longitude.toString())
+                    var lat = 0.0
+                    var lng = 0.0
+                    if (location?.latitude == null || location?.longitude == null) {
+                        lat = 20.981002135154935
+                        lng = 105.78731967456642
+                        realSave.save("lat", 20.981002135154935.toString())
+                        realSave.save("lng", 105.78731967456642.toString())
+                    } else {
+                        lat = location.latitude
+                        lng = location.longitude
+                        realSave.save("lat", location.latitude.toString())
+                        realSave.save("lng", location.longitude.toString())
+                    }
                 }
             } else {
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)

@@ -34,6 +34,11 @@ object NetworkModule {
     }
 
     @Provides
+    fun provideRecommendApi(@Named("RecommendSite") retrofit: Retrofit): RecommendApi {
+        return retrofit.create(RecommendApi::class.java)
+    }
+
+    @Provides
     @Singleton
     fun provideFCMRetrofit(
         okHttpClient: OkHttpClient,
@@ -76,6 +81,30 @@ object NetworkModule {
 
         return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
             .baseUrl(BuildConfig.DATING_API_URL)
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("RecommendSite")
+    fun provideRecommendRetrofit(
+        okHttpClient: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory
+    ): Retrofit {
+
+        val httpClient = OkHttpClient.Builder()
+        httpClient.connectTimeout(10, TimeUnit.SECONDS);
+        httpClient.readTimeout(10, TimeUnit.SECONDS);
+
+        if (BuildConfig.DEBUG) {
+            val logging = HttpLoggingInterceptor()
+            logging.level = HttpLoggingInterceptor.Level.BODY
+            httpClient.addInterceptor(logging) // <-- this is the important line!
+        }
+
+        return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
+            .baseUrl(BuildConfig.RECOMMEND_API_URL_DEV)
             .client(okHttpClient)
             .build()
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.data.models.city.CityModel
 import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.recommend.RecommendDataModel
 import com.base.app.data.repositories.UserRepository
 import com.base.app.data.repositories.city.CityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,21 +27,27 @@ class ExploreViewModel @Inject constructor(
     val nearByUserResponse: LiveData<List<DatingUser>>
         get() = _nearByUserResponse
 
-    private var _allCityResponse: MutableLiveData<List<CityModel>> = MutableLiveData()
-    val allCityResponse: LiveData<List<CityModel>>
-        get() = _allCityResponse
+    private var _errorResponse: MutableLiveData<String> = MutableLiveData()
+    val errorResponse: LiveData<String>
+        get() = _errorResponse
+
+    private var _recommendCityResponse: MutableLiveData<List<RecommendDataModel>> =
+        MutableLiveData()
+    val recommendCityResponse: LiveData<List<RecommendDataModel>>
+        get() = _recommendCityResponse
+
 
     fun getAllNearByUsers(lat: Double, lng: Double, limit: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getAllNearbyUsers(firebaseUser?.uid.toString(), lat, lng, limit)
             _nearByUserResponse.value = result
         }
     }
 
-    fun getAllCities() {
-        viewModelScope.launch {
-            val result = cityRepository.getAllCities()
-            _allCityResponse.value = result.data.orEmpty()
+    fun getRecommendCities() {
+        viewModelScope.launch(handler) {
+            val result = cityRepository.getRecommendCities(firebaseUser?.uid.toString())
+            _recommendCityResponse.value = result.recommended_cities.orEmpty()
         }
     }
 }

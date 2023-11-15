@@ -65,56 +65,67 @@ class GroupForYouGroupAdapter(
             if (data.address.isEmpty()) {
                 textLocation.visibility = View.GONE
             }
-            textGroupName.text = data.postGroup.groupName
-            Glide.with(root.context).load(data.postGroup.groupImageUrl).into(imageGroup)
-            if (data.type == "image") {
-                val postInPostAdapter =
-                    PostInPostAdapter(
-                        root.context,
-                        data.itemList,
-                        object : PostInPostAdapter.OnImageCLick {
-                            override fun onImageClick(position: Int) {
-                                listener.clickToSeeDetail(data.itemList, position)
-                            }
-                        })
-                videoPost.visibility = View.GONE
-                imageVideoThumbnail.visibility = View.GONE
-                listImagePost.apply {
-                    adapter = postInPostAdapter
-                }
-            } else {
-                imageVideoThumbnail.visibility = View.VISIBLE
-                videoPost.visibility = View.VISIBLE
-                listImagePost.visibility = View.GONE
-                val requestOptions = RequestOptions()
-                requestOptions.isMemoryCacheable
-                Glide.with(root.context).setDefaultRequestOptions(requestOptions)
-                    .load(data.videoUrl)
-                    .into(imageVideoThumbnail)
-                CoroutineScope(Dispatchers.IO).launch {
-                    videoPost.setVideoURI(Uri.parse(data.videoUrl))
-                }
-                videoPost.setOnPreparedListener {
-                    imageReplayVideo.visibility = View.GONE
-                    imageVideoThumbnail.visibility = View.GONE
-                    it.start()
-                    mediaPlayer = it
-                }
-                videoPost.setOnCompletionListener { imageReplayVideo.visibility = View.VISIBLE }
-                imageReplayVideo.setOnClickListener {
-                    imageReplayVideo.visibility = View.GONE
-                    mediaPlayer?.seekTo(0)
-                    mediaPlayer?.start()
-                }
-            }
-            textLocation.text = data.address
-            textTimeAgo.text = data.createdAt
             if (data.description == "") {
                 txtDescription.visibility = View.GONE
             } else {
                 txtDescription.visibility = View.VISIBLE
                 txtDescription.text = data.description
             }
+            textGroupName.text = data.postGroup.groupName
+            Glide.with(root.context).load(data.postGroup.groupImageUrl).into(imageGroup)
+            when (data.type) {
+                "image" -> {
+                    textQuestion.visibility = View.GONE
+                    val postInPostAdapter =
+                        PostInPostAdapter(
+                            root.context,
+                            data.itemList,
+                            object : PostInPostAdapter.OnImageCLick {
+                                override fun onImageClick(position: Int) {
+                                    listener.clickToSeeDetail(data.itemList, position)
+                                }
+                            })
+                    videoPost.visibility = View.GONE
+                    imageVideoThumbnail.visibility = View.GONE
+                    listImagePost.apply {
+                        adapter = postInPostAdapter
+                    }
+                }
+                "video" -> {
+                    textQuestion.visibility = View.GONE
+                    imageVideoThumbnail.visibility = View.VISIBLE
+                    videoPost.visibility = View.VISIBLE
+                    listImagePost.visibility = View.GONE
+                    val requestOptions = RequestOptions()
+                    requestOptions.isMemoryCacheable
+                    Glide.with(root.context).setDefaultRequestOptions(requestOptions)
+                        .load(data.videoUrl)
+                        .into(imageVideoThumbnail)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        videoPost.setVideoURI(Uri.parse(data.videoUrl))
+                    }
+                    videoPost.setOnPreparedListener {
+                        imageReplayVideo.visibility = View.GONE
+                        imageVideoThumbnail.visibility = View.GONE
+                        it.start()
+                        mediaPlayer = it
+                    }
+                    videoPost.setOnCompletionListener { imageReplayVideo.visibility = View.VISIBLE }
+                    imageReplayVideo.setOnClickListener {
+                        imageReplayVideo.visibility = View.GONE
+                        mediaPlayer?.seekTo(0)
+                        mediaPlayer?.start()
+                    }
+                }
+                else -> {
+                    txtDescription.visibility = View.GONE
+                    textQuestion.visibility = View.VISIBLE
+                    textQuestion.text = data.question
+                    relativeContainer.visibility = View.GONE
+                }
+            }
+            textLocation.text = data.address
+            textTimeAgo.text = data.createdAt
             data.id.let { viewModel.isLikeGroupPost(it, imgHeart) }
             data.id.let { viewModel.isSavedPost(it, imgSave) }
             txtUserName.text = data.postUser.userName

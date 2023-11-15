@@ -7,61 +7,74 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBlack"
-        tools:context=".ui.main.fragment.search.SearchFragment">
+        android:background="@color/colorWhite"
+        tools:context=".ui.main.fragment.search.SearchForFriendActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/appBarSearch"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_search_for_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_search_for_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp8"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:navigationIcon="@drawable/ic_arrow_back_black"
+                app:title="Tìm kiếm bạn bè" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_search_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp10"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginVertical="@dimen/dp10"
+            android:background="@drawable/custom_search"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp12"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_search_for_friend">
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/imgSearch"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="@dimen/dp24"
+                android:backgroundTint="@color/color_search_text"
+                android:src="@drawable/ic_search" />
+
+            <EditText
+                android:id="@+id/edtSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_search"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp12">
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:layout_marginStart="@dimen/dp10"
+                android:background="@android:color/transparent"
+                android:hint="@string/search_vn"
+                android:minHeight="28dp"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/color_search_text" />
 
-                <ImageView
-                    android:id="@+id/imgSearch"
-                    android:layout_width="@dimen/dp24"
-                    android:layout_height="@dimen/dp24"
-                    android:backgroundTint="@color/color_search_text"
-                    android:src="@drawable/ic_search" />
-
-                <EditText
-                    android:id="@+id/edtSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp10"
-                    android:background="@android:color/transparent"
-                    android:hint="@string/search"
-                    android:minHeight="28dp"
-                    android:textColor="@color/color_app_text"
-                    android:textColorHint="@color/color_search_text" />
-
-            </LinearLayout>
-        </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txtRecent"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp12"
             android:layout_marginTop="@dimen/dp12"
             android:text="@string/strRecent"
-            android:textColor="@color/white"
+            android:textColor="@color/colorBlack"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarSearch" />
+            app:layout_constraintTop_toBottomOf="@+id/linear_search_friend" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvSearch"

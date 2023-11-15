@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_background"
+        android:background="@color/colorWhite"
         tools:context=".ui.main.fragment.explore.ExploreFragment">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -22,14 +22,20 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_of_explore"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/explore_refresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_bar_explore" />
+            app:layout_constraintTop_toBottomOf="@+id/app_bar_explore">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_of_explore"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

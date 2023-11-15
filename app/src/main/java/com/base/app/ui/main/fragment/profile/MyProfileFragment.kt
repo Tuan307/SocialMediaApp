@@ -234,7 +234,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                             checkInLongitude = data.post_saved_id?.checkInLongitude,
                             type = data.post_saved_id?.type,
                             videoUrl = data.post_saved_id?.videoUrl,
-                            postUserId = data.post_saved_id?.postUserId
+                            postUserId = data.post_saved_id?.postUserId,
+                            question = data.post_saved_id?.question
                         )
                     })
                 }
@@ -253,7 +254,8 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                             checkInLongitude = data.post_saved_id?.checkInLongitude,
                             type = data.post_saved_id?.type,
                             videoUrl = data.post_saved_id?.videoUrl,
-                            postUserId = data.post_saved_id?.postUserId
+                            postUserId = data.post_saved_id?.postUserId,
+                            question = data.post_saved_id?.question
                         )
                     })
                 }

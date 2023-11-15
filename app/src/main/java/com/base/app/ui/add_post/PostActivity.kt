@@ -26,6 +26,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.util.*
 
 @AndroidEntryPoint
 class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowImageClickListener {
@@ -89,22 +90,42 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
                 startAutoCompleteActivity()
             }
             textSharePost.setOnClickListener {
-                if (viewModel.postType == "image") {
-                    viewModel.uploadImage(
-                        imageUri,
-                        imagePath,
-                        edtDescription.text.toString(),
-                        from,
-                        groupId
-                    )
-                } else {
-                    viewModel.uploadVideo(
-                        videoUri,
-                        videoPath,
-                        edtDescription.text.toString(),
-                        from,
-                        groupId
-                    )
+                when (viewModel.postType) {
+                    "image" -> {
+                        viewModel.uploadImage(
+                            imageUri,
+                            imagePath,
+                            edtDescription.text.toString(),
+                            from,
+                            groupId
+                        )
+                    }
+                    "video" -> {
+                        viewModel.uploadVideo(
+                            videoUri,
+                            videoPath,
+                            edtDescription.text.toString(),
+                            from,
+                            groupId
+                        )
+                    }
+                    else -> {
+                        viewModel.uploadQuestion(
+                            PostNewsFeedRequest(
+                                id = "${Calendar.getInstance().time.time}${viewModel.firebaseUser?.uid}",
+                                description = edtDescription.text.toString(),
+                                imagesList = arrayListOf(),
+                                userId = viewModel.firebaseUser?.uid.toString(),
+                                checkInTimestamp = Calendar.getInstance().time.time.toString(),
+                                checkInAddress = viewModel.checkInAddress,
+                                checkInLatitude = viewModel.checkInLatitude,
+                                checkInLongitude = viewModel.checkInLongitude,
+                                type = "question",
+                                videoUrl = null,
+                                question = edtDescription.text.toString(),
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -135,15 +156,15 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
 //                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
 //                    viewModel.postNewsFeedRequest = it
 //                } else {
-                    uploadImagePostToDB(it)
+                uploadImagePostToDB(it)
                 //}
             }
             uploadImageList.observe(this@PostActivity) {
 //                if (checkInLatitude == 0.0 || checkInLongitude == 0.0 || checkInAddress == "") {
 //                    viewModel.postNewsFeedRequest = it
 //                } else {
-                    uploadImagePostToDB(it)
-     //           }
+                uploadImagePostToDB(it)
+                //           }
             }
 
             uploadGroupVideoResponse.observe(this@PostActivity) {
@@ -241,7 +262,8 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
                                     place.latLng?.latitude ?: 21.028511,
                                     place.latLng?.longitude ?: 105.804817,
                                     it.type,
-                                    it.videoUrl
+                                    it.videoUrl,
+                                    it.question
                                 )
                             }
                             data?.let { viewModel.uploadImagePostToDB(it) }

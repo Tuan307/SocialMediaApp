@@ -60,6 +60,8 @@ data class PostContent(
     val checkInLongitude: Double?,
     @SerializedName("type")
     val type: String?,
+    @SerializedName("question")
+    val question: String?,
     @SerializedName("videoUrl")
     val videoUrl: String?,
     @SerializedName("postUserId")

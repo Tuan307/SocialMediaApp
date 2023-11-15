@@ -34,6 +34,10 @@ class AddPostViewModel @Inject constructor(
     val uploadGroupImagesList: LiveData<CreateGroupPostRequest>
         get() = _uploadGroupImagesList
 
+    private var _uploadGroupQuestion: MutableLiveData<CreateGroupPostRequest> = MutableLiveData()
+    val uploadGroupQuestion: LiveData<CreateGroupPostRequest>
+        get() = _uploadGroupQuestion
+
     private var _uploadGroupVideoResponse: MutableLiveData<CreateGroupPostRequest> =
         MutableLiveData()
     val uploadGroupVideoResponse: LiveData<CreateGroupPostRequest>
@@ -44,12 +48,28 @@ class AddPostViewModel @Inject constructor(
     var checkInLongitude = 0.0
     var postNewsFeedRequest: PostNewsFeedRequest? = null
     var groupPostNewsFeedRequest: CreateGroupPostRequest? = null
-    var postType = ""
+    var postType = "question"
 
     private var _addGroupPostResponse: MutableLiveData<AddPostByGroupResponse> =
         MutableLiveData()
     val addGroupPostResponse: LiveData<AddPostByGroupResponse>
         get() = _addGroupPostResponse
+
+    fun uploadQuestion(postNewsFeedRequest: PostNewsFeedRequest){
+        showLoading(true)
+        parentJob = viewModelScope.launch {
+            val result = newsFeedRepository.addNewsPost(postNewsFeedRequest)
+            if (result == null) {
+                uploadImageResponse.postValue(false)
+                registerJobFinish()
+            } else {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    uploadImageResponse.postValue(true)
+                    registerJobFinish()
+                }, 1000)
+            }
+        }
+    }
 
 
     fun uploadImage(
@@ -111,6 +131,7 @@ class AddPostViewModel @Inject constructor(
                                             checkInLatitude,
                                             checkInLongitude,
                                             "image",
+                                            null,
                                             null
                                         )
                                     )
@@ -195,7 +216,8 @@ class AddPostViewModel @Inject constructor(
                                     checkInLatitude,
                                     checkInLongitude,
                                     "video",
-                                    downloadUri
+                                    downloadUri,
+                                    null
                                 )
                             )
                         } else {

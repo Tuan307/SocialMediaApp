@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(
+class SearchForFriendViewModel @Inject constructor(
     private val repository: UserRepository
 ) : BaseViewModel() {
 
@@ -29,19 +29,19 @@ class SearchViewModel @Inject constructor(
     val searchUserLoadMoreResponse: LiveData<List<DatingUser>>
         get() = _searchUserLoadMoreResponse
 
-    fun setRecent(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("RecentSearch").child(firebaseUser?.uid.toString()).child(id)
-                .setValue(true)
-        }
-    }
-
-    fun removeRecent(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("RecentSearch").child(firebaseUser?.uid.toString()).child(id)
-                .removeValue()
-        }
-    }
+//    fun setRecent(id: String) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            databaseReference.child("RecentSearch").child(firebaseUser?.uid.toString()).child(id)
+//                .setValue(true)
+//        }
+//    }
+//
+//    fun removeRecent(id: String) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            databaseReference.child("RecentSearch").child(firebaseUser?.uid.toString()).child(id)
+//                .removeValue()
+//        }
+//    }
 
     private var recentList = ArrayList<String>()
     var searchRecentKeyResponse: MutableLiveData<List<String>> = MutableLiveData()
@@ -107,23 +107,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun searchUser(s: String, pageCount: Int, pageNumber: Int) {
-        viewModelScope.launch {
-//            databaseReference.child("Users").orderByChild("username").startAt(s).endAt(s + "\uf8ff")
-//                .addValueEventListener(object : ValueEventListener {
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        list.clear()
-//                        for (data in snapshot.children) {
-//                            val user = data.getValue(User::class.java)
-//                            if (user != null) {
-//                                list.add(user)
-//                            }
-//                        }
-//                        getUserResponse.postValue(list)
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {
-//                    }
-//                })
+        viewModelScope.launch(handler) {
             val result = repository.searchUsers(s, pageCount, pageNumber)
             if (pageNumber == 1) {
                 _searchUserResponse.value = result.data

@@ -8,6 +8,9 @@ import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.base.dialogs.ConfirmDialog
 import com.base.app.databinding.ActivityOptionBinding
+import com.base.app.ui.explore_city.ExploreCityActivity
+import com.base.app.ui.group.GroupActivity
+import com.base.app.ui.main.fragment.search.SearchForFriendActivity
 import com.base.app.ui.splash.WelcomeActivity
 import com.bumptech.glide.Glide
 
@@ -26,6 +29,18 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(), ConfirmDialog.Conf
             }
             btnLogOut.setOnClickListener {
                 showLogoutDialog()
+            }
+            textFriend.setOnClickListener {
+                val intent = Intent(this@OptionActivity, SearchForFriendActivity::class.java)
+                startActivity(intent)
+            }
+            textGroup.setOnClickListener {
+                val intent = Intent(this@OptionActivity, GroupActivity::class.java)
+                startActivity(intent)
+            }
+            textLocation.setOnClickListener {
+                val intent = Intent(this@OptionActivity, ExploreCityActivity::class.java)
+                startActivity(intent)
             }
             darkModeSwitch.setOnCheckedChangeListener { _, p1 ->
                 if (p1) {

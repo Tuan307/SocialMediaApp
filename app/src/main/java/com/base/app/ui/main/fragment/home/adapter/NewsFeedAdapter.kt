@@ -45,44 +45,66 @@ class NewsFeedAdapter(
         @SuppressLint("SimpleDateFormat")
         var mediaPlayer: MediaPlayer? = null
         fun bind(data: PostContent, iPostCallBack: IPostCallBack) = with(binding) {
-            if (data.type == "image") {
-                val postInPostAdapter =
-                    PostInPostAdapter(
-                        binding.root.context,
-                        data.imagesList,
-                        object : PostInPostAdapter.OnImageCLick {
-                            override fun onImageClick(position: Int) {
-                                iPostCallBack.clickToSeeDetail(data.imagesList.orEmpty(), position)
-                            }
-                        })
-                videoPost.visibility = View.GONE
-                imageVideoThumbnail.visibility = View.GONE
-                listImagePost.apply {
-                    adapter = postInPostAdapter
-                }
-            } else {
-                imageVideoThumbnail.visibility = View.VISIBLE
-                videoPost.visibility = View.VISIBLE
-                listImagePost.visibility = View.GONE
-                val requestOptions = RequestOptions()
-                requestOptions.isMemoryCacheable
-                Glide.with(root.context).setDefaultRequestOptions(requestOptions)
-                    .load(data.videoUrl)
-                    .into(imageVideoThumbnail)
-                CoroutineScope(Dispatchers.IO).launch {
-                    videoPost.setVideoURI(Uri.parse(data.videoUrl))
-                }
-                videoPost.setOnPreparedListener {
-                    imageReplayVideo.visibility = View.GONE
+            when (data.type) {
+                "image" -> {
+                    relativeContainer.visibility = View.VISIBLE
+                    imgSave.visibility = View.VISIBLE
+                    imgShare.visibility = View.VISIBLE
+                    val postInPostAdapter =
+                        PostInPostAdapter(
+                            binding.root.context,
+                            data.imagesList,
+                            object : PostInPostAdapter.OnImageCLick {
+                                override fun onImageClick(position: Int) {
+                                    iPostCallBack.clickToSeeDetail(
+                                        data.imagesList.orEmpty(),
+                                        position
+                                    )
+                                }
+                            })
+                    textQuestion.visibility = View.GONE
+                    videoPost.visibility = View.GONE
                     imageVideoThumbnail.visibility = View.GONE
-                    it.start()
-                    mediaPlayer = it
+                    listImagePost.apply {
+                        adapter = postInPostAdapter
+                    }
                 }
-                videoPost.setOnCompletionListener { imageReplayVideo.visibility = View.VISIBLE }
-                imageReplayVideo.setOnClickListener {
-                    imageReplayVideo.visibility = View.GONE
-                    mediaPlayer?.seekTo(0)
-                    mediaPlayer?.start()
+                "video" -> {
+                    relativeContainer.visibility = View.VISIBLE
+                    imgSave.visibility = View.VISIBLE
+                    imgShare.visibility = View.VISIBLE
+                    textQuestion.visibility = View.GONE
+                    imageVideoThumbnail.visibility = View.VISIBLE
+                    videoPost.visibility = View.VISIBLE
+                    listImagePost.visibility = View.GONE
+                    val requestOptions = RequestOptions()
+                    requestOptions.isMemoryCacheable
+                    Glide.with(root.context).setDefaultRequestOptions(requestOptions)
+                        .load(data.videoUrl)
+                        .into(imageVideoThumbnail)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        videoPost.setVideoURI(Uri.parse(data.videoUrl))
+                    }
+                    videoPost.setOnPreparedListener {
+                        imageReplayVideo.visibility = View.GONE
+                        imageVideoThumbnail.visibility = View.GONE
+                        it.start()
+                        mediaPlayer = it
+                    }
+                    videoPost.setOnCompletionListener { imageReplayVideo.visibility = View.VISIBLE }
+                    imageReplayVideo.setOnClickListener {
+                        imageReplayVideo.visibility = View.GONE
+                        mediaPlayer?.seekTo(0)
+                        mediaPlayer?.start()
+                    }
+                }
+                else -> {
+                    imgShare.visibility = View.GONE
+                    imgSave.visibility = View.GONE
+                    txtDescription.visibility = View.GONE
+                    textQuestion.visibility = View.VISIBLE
+                    textQuestion.text = data.question
+                    relativeContainer.visibility = View.GONE
                 }
             }
             textLocation.text = data.checkInAddress

@@ -28,8 +28,8 @@ import com.base.app.data.models.PushNotification
 import com.base.app.data.models.response.post.ImagesList
 import com.base.app.data.models.response.post.PostContent
 import com.base.app.databinding.FragmentHome2Binding
+import com.base.app.ui.chat.ChatActivity
 import com.base.app.ui.comment.CommentActivity
-import com.base.app.ui.group.GroupActivity
 import com.base.app.ui.main.MainViewModel
 import com.base.app.ui.main.fragment.home.adapter.NewsFeedAdapter
 import com.base.app.ui.main.fragment.home.bottom_sheet.AddPostBottomSheetFragment
@@ -89,8 +89,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun initListener() = with(binding) {
         imgDM.setOnClickListener {
-            //startActivity(Intent(requireContext(), ChatActivity::class.java))
-            startActivity(Intent(requireContext(), GroupActivity::class.java))
+            startActivity(Intent(requireContext(), ChatActivity::class.java))
         }
         imgAddPost.setOnClickListener {
             val fragment = AddPostBottomSheetFragment.newInstance()
@@ -118,7 +117,8 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
                             checkInLongitude = data.checkInLongitude,
                             type = data.type,
                             videoUrl = data.videoUrl,
-                            postUserId = data.postUserId
+                            postUserId = data.postUserId,
+                            question = data.question
                         )
                     })
                     feedAdapter.submitList(newsFeedList.toList())
@@ -141,7 +141,8 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
                             checkInLongitude = data.checkInLongitude,
                             type = data.type,
                             videoUrl = data.videoUrl,
-                            postUserId = data.postUserId
+                            postUserId = data.postUserId,
+                            question = data.question
                         )
                     })
                     feedAdapter.submitList(newsFeedList.toList())

@@ -1,13 +1,15 @@
 package com.base.app.ui.main.fragment.explore
 
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.FragmentExploreBinding
 import com.base.app.ui.group.explore_group.ExploreGroupViewModel
@@ -18,7 +20,7 @@ import com.base.app.ui.main.fragment.explore.viewmodel.ExploreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ExploreFragment : Fragment() {
+class ExploreFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var _binding: FragmentExploreBinding? = null
     val binding: FragmentExploreBinding
         get() = _binding!!
@@ -39,10 +41,13 @@ class ExploreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val lat = saveShare.getString("lat").toDouble()
-        val lng = saveShare.getString("lng").toDouble()
-        viewModel.getAllNearByUsers(lat, lng, 6)
+        if (saveShare.getString("lat") != null && saveShare.getString("lng") != null) {
+            val lat = saveShare.getString("lat").toDouble()
+            val lng = saveShare.getString("lng").toDouble()
+            viewModel.getAllNearByUsers(lat, lng, 6)
+        }
         with(binding) {
+            exploreRefresh.setOnRefreshListener(this@ExploreFragment)
             listOfExplore.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = exploreAdapter
@@ -101,22 +106,16 @@ class ExploreFragment : Fragment() {
                 )
             )
             exploreAdapter.submitList(exploreList.toList())
-            viewModel.getAllCities()
+            viewModel.getRecommendCities()
         }
-        allCityResponse.observe(viewLifecycleOwner) {
-            val list = arrayListOf<ExploreItemViewData>()
-            for (i in it.indices) {
-                if (i == 5) {
-                    break
-                }
-                list.add(
-                    ExploreItemViewData(
-                        id = it[i].cityId.toString(),
-                        name = it[i].cityName.toString(),
-                        image = it[i].cityImages?.get(0)?.imageUrl.toString(),
-                        type = 2,
-                        groupMember = null
-                    )
+        recommendCityResponse.observe(viewLifecycleOwner) {
+            val list = it.map { data ->
+                ExploreItemViewData(
+                    id = data.city_id.toString(),
+                    name = data.city_name.toString(),
+                    image = data.image_url?.get(0)?.imageUrl ?: "",
+                    type = 2,
+                    groupMember = null
                 )
             }
             exploreList.add(
@@ -126,9 +125,21 @@ class ExploreFragment : Fragment() {
                     list.toList()
                 )
             )
-            Log.d("CheckList", exploreList.toString())
             exploreAdapter.submitList(exploreList.toList())
         }
+    }
+
+    private fun loadRefreshData() {
+        val lat = saveShare.getString("lat").toDouble()
+        val lng = saveShare.getString("lng").toDouble()
+        viewModel.getAllNearByUsers(lat, lng, 6)
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.exploreRefresh.isRefreshing = false
+        }, 1500)
+    }
+
+    override fun onRefresh() {
+        loadRefreshData()
     }
 
     companion object {

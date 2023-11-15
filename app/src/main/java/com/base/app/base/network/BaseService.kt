@@ -20,8 +20,4 @@ abstract class BaseService {
     protected fun parseNetworkErrorException(throwable: Throwable): NetworkErrorException {
         return NetworkErrorException(throwable.message)
     }
-
-
-
-
 }

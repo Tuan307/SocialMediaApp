@@ -16,7 +16,6 @@
             android:layout_marginTop="@dimen/dp10"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/sp22"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/relative_container"
             tools:text="Moi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voiMoi nguoi oi cho minhf hoi cai nay voi" />
 
@@ -145,29 +144,34 @@
 
         <TextView
             android:id="@+id/text_location"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:maxLength="30"
             android:layout_marginStart="@dimen/dp20"
             android:layout_marginTop="@dimen/dp6"
             android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp15"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@+id/card_view_avatar"
             app:layout_constraintTop_toBottomOf="@+id/txtUserName"
-            tools:text="Ha noi" />
+            tools:text="Ha noi,Qua ng An, Viet Nam" />
 
         <TextView
             android:id="@+id/text_time_ago"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_bias="0"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp20"
             android:layout_marginTop="@dimen/dp6"
+            app:layout_constraintEnd_toEndOf="parent"
             android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp15"
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@+id/text_location"
             app:layout_constraintTop_toBottomOf="@+id/txtUserName"
-            tools:text="1 day ago" />
+            tools:text="15 minutess ago" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_follow"

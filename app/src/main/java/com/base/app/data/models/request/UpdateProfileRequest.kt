@@ -9,5 +9,7 @@ data class UpdateProfileRequest(
     val userName: String,
     val fullName: String,
     val bio: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val latitude: Double?,
+    val longitude: Double?,
 )

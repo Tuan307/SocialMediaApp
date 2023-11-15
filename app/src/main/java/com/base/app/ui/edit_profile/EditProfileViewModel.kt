@@ -75,7 +75,9 @@ class EditProfileViewModel @Inject constructor(
                             fullName = fullName,
                             userName = userName,
                             bio = bio,
-                            imageUrl = downloadUri
+                            imageUrl = downloadUri,
+                            latitude = null,
+                            longitude = null
                         )
                         _updateProfileRemoteRequest.postValue(request)
                     } else {
@@ -90,7 +92,9 @@ class EditProfileViewModel @Inject constructor(
                     fullName = fullName,
                     userName = userName,
                     bio = bio,
-                    imageUrl = ""
+                    imageUrl = "",
+                    latitude = null,
+                    longitude = null
                 )
                 _updateProfileRemoteRequest.postValue(request)
             }

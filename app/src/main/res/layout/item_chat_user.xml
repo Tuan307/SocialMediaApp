@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp10"
-        android:background="@color/black"
+        android:background="@color/colorWhite"
         android:padding="@dimen/dp10">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp20"
-            android:textColor="@color/white"
+            android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp20"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -236,4 +236,7 @@ interface DatingAPI {
 
     @GET("city/all")
     suspend fun getAllCities(): Response<GetCityResponse>
+
+    @GET("city/search")
+    suspend fun searchForCity(@Query("keyword") keyword: String): Response<GetCityResponse>
 }

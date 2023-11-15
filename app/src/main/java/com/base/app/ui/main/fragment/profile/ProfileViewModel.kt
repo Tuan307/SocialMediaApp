@@ -173,7 +173,7 @@ class ProfileViewModel @Inject constructor(
                 AddNotificationRequest(
                     isPost = false,
                     isInvitation = false,
-                    text = "$userName started following you",
+                    text = " started following you",
                     ownerId = profileId,
                     postId = "",
                     timeStamp = Calendar.getInstance().time.time.toString(),

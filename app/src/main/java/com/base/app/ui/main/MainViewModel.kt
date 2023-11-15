@@ -1,22 +1,50 @@
 package com.base.app.ui.main
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.data.models.User
+import com.base.app.data.models.dating_app.UserUpdateProfileResponse
 import com.base.app.data.models.mToken
+import com.base.app.data.models.request.UpdateProfileRequest
+import com.base.app.data.repositories.profile.UserProfileRepository
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import dagger.hilt.android.lifecycle.HiltViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel() : BaseViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val repository: UserProfileRepository
+) : BaseViewModel() {
+
+    private var _updateProfileRemote = MutableLiveData<UserUpdateProfileResponse>()
+    val updateProfileRemote: LiveData<UserUpdateProfileResponse>
+        get() = _updateProfileRemote
+
+    fun updateProfile(request: UpdateProfileRequest) {
+        showLoading(true)
+        viewModelScope.launch {
+            val result = repository.updateUserProfile(request)
+            _updateProfileRemote.value = result
+            Handler(Looper.getMainLooper()).postDelayed({
+                registerJobFinish()
+            }, 1000)
+        }
+    }
+
+
     var currentIndex = MutableLiveData<Int>(0)
     fun setCurrentIndex(i: Int) {
         currentIndex.postValue(i)
@@ -57,6 +85,7 @@ class MainViewModel() : BaseViewModel() {
                             userResponse.postValue(user)
                         }
                     }
+
                     override fun onCancelled(error: DatabaseError) {
                     }
                 })
@@ -89,6 +118,4 @@ class MainViewModel() : BaseViewModel() {
             databaseReference.child("Tokens").child(firebaseUser.uid).setValue(mToken)
         }
     }
-
-
 }
