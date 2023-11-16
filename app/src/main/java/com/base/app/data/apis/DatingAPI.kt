@@ -10,6 +10,7 @@ import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
 import com.base.app.data.models.group.request.JoinGroupRequest
+import com.base.app.data.models.group.request.UpdateGroupRequest
 import com.base.app.data.models.group.response.AddPostByGroupResponse
 import com.base.app.data.models.group.response.CheckIfRequestToJoinGroupResponse
 import com.base.app.data.models.group.response.CreateGroupResponse
@@ -141,6 +142,12 @@ interface DatingAPI {
 
     @POST("group/create")
     suspend fun createGroup(@Body request: CreateGroupRequest): Response<CreateGroupResponse>
+
+    @POST("group/update")
+    suspend fun updateGroup(
+        @Query("groupId") groupId: Long,
+        @Body request: UpdateGroupRequest
+    ): Response<CreateGroupResponse>
 
     @POST("group/invite")
     suspend fun addGroupInvitation(@Body request: CreateGroupInvitationRequest): Response<CreateInvitationResponse>

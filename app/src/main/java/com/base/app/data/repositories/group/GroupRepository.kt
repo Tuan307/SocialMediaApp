@@ -7,6 +7,7 @@ import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
 import com.base.app.data.models.group.request.JoinGroupRequest
+import com.base.app.data.models.group.request.UpdateGroupRequest
 import com.base.app.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -23,6 +24,17 @@ class GroupRepository @Inject constructor(
 
     suspend fun createGroup(request: CreateGroupRequest) = withContext(dispatcher) {
         when (val result = callApi { api.createGroup(request) }) {
+            is NetworkResult.Success -> {
+                result.data
+            }
+            is NetworkResult.Error -> {
+                throw result.exception
+            }
+        }
+    }
+
+    suspend fun updateGroup(groupId: Long,request: UpdateGroupRequest) = withContext(dispatcher) {
+        when (val result = callApi { api.updateGroup(groupId,request) }) {
             is NetworkResult.Success -> {
                 result.data
             }

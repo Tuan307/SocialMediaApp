@@ -21,3 +21,10 @@ data class DetailGroupInformationViewData(
     override val layoutRes: Int
         get() = R.layout.layout_detail_group_information
 }
+
+data class DetailUpdateGroupInformationViewData(
+    val groupName: String,
+    val groupDescription: String,
+    val groupImage: String,
+    val privacy: String,
+)

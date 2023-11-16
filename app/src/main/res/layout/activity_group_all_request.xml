@@ -16,6 +16,34 @@
             app:navigationIcon="@drawable/ic_arrow_back_black"
             app:title="Yêu cầu tham gia" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4"
+            app:srcCompat="@drawable/ic_dialog_astronaut" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_empty_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:gravity="center_horizontal"
+            android:text="@string/text_empty_request"
+            android:textColor="@color/color_app_text"
+            android:textSize="@dimen/sp18"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_empty_view"
+            app:layout_constraintVertical_bias="0" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_of_request"
             android:layout_width="match_parent"

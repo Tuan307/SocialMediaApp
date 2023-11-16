@@ -195,7 +195,7 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
         val intent = Intent(this@GroupDetailActivity, DetailHomePostActivity::class.java)
         val bundle = Bundle()
         bundle.putInt("postPosition", position)
-        bundle.putParcelableArrayList("postList", java.util.ArrayList(listData))
+        bundle.putParcelableArrayList("postList", ArrayList(listData))
         intent.putExtras(bundle)
         startActivity(intent)
     }

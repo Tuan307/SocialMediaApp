@@ -43,6 +43,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.group.update_group.UpdateGroupActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.explore_city.detail_city.DetailExploreActivity"
             android:exported="false">
             <meta-data

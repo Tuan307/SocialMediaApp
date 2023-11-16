@@ -1,6 +1,7 @@
 package com.base.app.ui.group.detail_group
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +21,7 @@ class GroupAllRequestActivity : AppCompatActivity(), GroupRequestAdapter.OnGroup
     private var groupId = 0.toLong()
     private var agreeGroupPosition = -1
     private var declineGroupPosition = -1
-    private val listOfRequest: ArrayList<RequestModel> = arrayListOf()
+    private val listOfRequests: ArrayList<RequestModel> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
@@ -47,15 +48,24 @@ class GroupAllRequestActivity : AppCompatActivity(), GroupRequestAdapter.OnGroup
 
     private fun observeData() = with(viewModel) {
         requestResponse.observe(this@GroupAllRequestActivity) {
-            listOfRequest.clear()
-            listOfRequest.addAll(it.data.orEmpty())
-            requestAdapter.submitList(listOfRequest.toList())
+            listOfRequests.clear()
+            listOfRequests.addAll(it.data.orEmpty())
+            if (listOfRequests.isEmpty()) {
+                binding.textEmptyView.visibility = View.VISIBLE
+                binding.imageEmptyView.visibility = View.VISIBLE
+                binding.listOfRequest.visibility = View.GONE
+            } else {
+                binding.textEmptyView.visibility = View.GONE
+                binding.imageEmptyView.visibility = View.GONE
+                binding.listOfRequest.visibility = View.VISIBLE
+                requestAdapter.submitList(listOfRequests.toList())
+            }
         }
         agreeRequestResponse.observe(this@GroupAllRequestActivity) {
             if (it.data != null) {
-                listOfRequest.removeAt(agreeGroupPosition)
+                listOfRequests.removeAt(agreeGroupPosition)
                 val list = arrayListOf<RequestModel>()
-                list.addAll(listOfRequest)
+                list.addAll(listOfRequests)
                 requestAdapter.submitList(list.toList())
             }
             Toast.makeText(this@GroupAllRequestActivity, it.status?.message, Toast.LENGTH_SHORT)
@@ -63,12 +73,12 @@ class GroupAllRequestActivity : AppCompatActivity(), GroupRequestAdapter.OnGroup
         }
         removeRequestGroupsResponse.observe(this@GroupAllRequestActivity) {
             if (it.data == true) {
-                listOfRequest.removeAt(declineGroupPosition)
+                listOfRequests.removeAt(declineGroupPosition)
                 val list = arrayListOf<RequestModel>()
-                list.addAll(listOfRequest)
+                list.addAll(listOfRequests)
                 requestAdapter.submitList(list.toList())
             }
-            Toast.makeText(this@GroupAllRequestActivity, it.status?.message, Toast.LENGTH_SHORT)
+            Toast.makeText(this@GroupAllRequestActivity, it.status.message, Toast.LENGTH_SHORT)
                 .show()
         }
     }

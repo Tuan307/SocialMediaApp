@@ -420,6 +420,7 @@
     <string name="text_group_your">Nhóm của bạn</string>
     <string name="text_group_explore">Khám phá</string>
     <string name="text_create_group">Tạo nhóm</string>
+    <string name="text_update_group">Chỉnh sửa nhóm</string>
     <string name="text_name_title">Tên</string>
     <string name="text_group_description">Mô tả</string>
     <string name="text_group_privacy">Quyền riêng tư</string>
@@ -431,6 +432,7 @@
     <string name="text_has_invited">Đã mời</string>
     <string name="text_write_something">Bạn viết gì đi</string>
     <string name="text_empty_view">Không tìm thấy bài đăng nào</string>
+    <string name="text_empty_request">Hiện tại không có yêu cầu nào, hãy mời bạn bè tham gia nhé!</string>
     <string name="text_join">Tham gia</string>
     <string name="text_verify">Xét duyệt</string>
     <string name="text_interest">Mục yêu thích</string>

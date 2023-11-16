@@ -28,6 +28,7 @@ import com.base.app.base.dialogs.ErrorDialog
 import com.base.app.base.dialogs.NotifyDialog
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.common.CommonUtils
+import com.base.app.common.EventObserver
 import com.base.app.common.RESULT_CODE_UPDATE_APP
 import com.esafirm.imagepicker.features.ImagePickerConfig
 import com.esafirm.imagepicker.features.ImagePickerMode
@@ -406,6 +407,20 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
         viewModel.isLoading.observe(viewLifecycleOwner) { isShow ->
             showLoading(isShow)
         }
+    }
+
+    protected fun registerObserverErrorEvent(
+        viewModel: BaseViewModel,
+        viewLifecycleOwner: LifecycleOwner
+    ) {
+        viewModel.baseNetworkException.observe(viewLifecycleOwner, EventObserver {
+            showLoading(false)
+            Toast.makeText(this, it.responseMessage.toString(), Toast.LENGTH_SHORT).show()
+        })
+        viewModel.networkException.observe(viewLifecycleOwner, EventObserver {
+            showLoading(false)
+            Toast.makeText(this, it.responseMessage.toString(), Toast.LENGTH_SHORT).show()
+        })
     }
 
     fun getFileExtension(uri: Uri): String? {

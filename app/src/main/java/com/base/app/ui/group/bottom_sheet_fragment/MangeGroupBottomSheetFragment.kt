@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.base.app.R
 import com.base.app.databinding.FragmentMangeGroupBottomSheetBinding
 import com.base.app.ui.group.detail_group.GroupAllRequestActivity
+import com.base.app.ui.group.update_group.UpdateGroupActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,6 +62,11 @@ class MangeGroupBottomSheetFragment : BottomSheetDialogFragment() {
                 textVerifyGroup.visibility = View.GONE
                 cardLogOut.visibility = View.VISIBLE
                 textLogOut.visibility = View.VISIBLE
+            }
+            cardEditGroup.setOnClickListener {
+                val intent = Intent(requireContext(), UpdateGroupActivity::class.java)
+                intent.putExtra("groupId", groupId)
+                startActivity(intent)
             }
             cardDeleteGroup.setOnClickListener {
                 groupId?.let { it1 -> viewModel.deleteGroup(it1) }
