@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <LinearLayout
+        android:id="@+id/linear_home_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -19,8 +21,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:paddingVertical="@dimen/dp8"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/dp8">
 
                 <TextView
                     android:id="@+id/txtName"
@@ -45,13 +47,22 @@
                     app:layout_constraintStart_toEndOf="@+id/txtName"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_notification"
+                    android:layout_width="@dimen/dp24"
+                    android:layout_height="@dimen/dp24"
+                    android:layout_marginEnd="@dimen/dp20"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imgDM"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/notification"
+                    app:tint="@color/color_app_text" />
+
                 <ImageView
                     android:id="@+id/imgDM"
-                    android:layout_width="@dimen/dp30"
-                    android:layout_height="@dimen/dp30"
-                    android:layout_gravity="center_vertical"
+                    android:layout_width="@dimen/dp24"
+                    android:layout_height="@dimen/dp24"
                     android:layout_marginEnd="@dimen/dp16"
-                    android:layout_weight="1"
                     android:contentDescription="@string/todo"
                     android:src="@drawable/messanger"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -62,16 +73,16 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/homeRefresh"
-            android:layout_marginTop="@dimen/dp5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp5"
             android:background="@color/white">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvHome"
-                tools:listitem="@layout/layout_home_adapter"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:listitem="@layout/layout_home_adapter" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </layout>

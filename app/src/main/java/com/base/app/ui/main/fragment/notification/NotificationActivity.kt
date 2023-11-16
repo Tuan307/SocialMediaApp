@@ -3,21 +3,21 @@ package com.base.app.ui.main.fragment.notification
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
-import com.base.app.base.fragment.BaseFragment
+import com.base.app.base.activities.BaseActivity
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.response.NotificationContent
-import com.base.app.databinding.FragmentNotificationBinding
+import com.base.app.databinding.ActivityNotificationBinding
 import dagger.hilt.android.AndroidEntryPoint
 import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
 
 @AndroidEntryPoint
-class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
+class NotificationActivity : BaseActivity<ActivityNotificationBinding>(),
     SwipeRefreshLayout.OnRefreshListener, NotificationAdapter.OnNotificationClick {
 
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
@@ -27,17 +27,20 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
     private lateinit var prettyTime: PrettyTime
     private var removeAtPosition = -1
     override fun getContentLayout(): Int {
-        return R.layout.fragment_notification
+        return R.layout.activity_notification
     }
 
     override fun initView() {
         viewModel.getAllNotification(10, 1)
         prettyTime = PrettyTime(Locale.getDefault())
         with(binding) {
-            swipeRefreshNotification.setOnRefreshListener(this@NotificationFragment)
-            notificationAdapter = NotificationAdapter(this@NotificationFragment)
+            imageBack.setOnClickListener {
+                finish()
+            }
+            swipeRefreshNotification.setOnRefreshListener(this@NotificationActivity)
+            notificationAdapter = NotificationAdapter(this@NotificationActivity)
             listNotification.apply {
-                layoutManager = LinearLayoutManager(requireContext())
+                layoutManager = LinearLayoutManager(this@NotificationActivity)
                 adapter = notificationAdapter
             }
             endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
@@ -58,7 +61,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
 
     override fun observerLiveData() {
         with(viewModel) {
-            getAllNotificationResponse.observe(this@NotificationFragment) {
+            getAllNotificationResponse.observe(this@NotificationActivity) {
                 val data = it.data?.content
                 if (data != null) {
                     notificationList.clear()
@@ -83,7 +86,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
                     notificationAdapter.submitList(notificationList.toList())
                 }
             }
-            getMoreNotificationResponse.observe(this@NotificationFragment) {
+            getMoreNotificationResponse.observe(this@NotificationActivity) {
                 val data = it.data?.content
                 if (data != null) {
                     notificationList.addAll(data.map { itemData ->
@@ -107,21 +110,15 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
                     notificationAdapter.submitList(notificationList.toList())
                 }
             }
-            removeNotificationResponse.observe(this@NotificationFragment) {
+            removeNotificationResponse.observe(this@NotificationActivity) {
                 notificationList.removeAt(removeAtPosition)
                 val list = arrayListOf<NotificationContent>()
                 list.addAll(notificationList)
                 notificationAdapter.submitList(list.toList())
             }
-            removeNotificationErrorResponse.observe(this@NotificationFragment) {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            removeNotificationErrorResponse.observe(this@NotificationActivity) {
+                Toast.makeText(this@NotificationActivity, it, Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    companion object {
-        fun newInstance(): NotificationFragment {
-            return NotificationFragment()
         }
     }
 

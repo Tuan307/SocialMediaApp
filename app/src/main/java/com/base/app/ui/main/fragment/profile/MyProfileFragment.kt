@@ -20,7 +20,6 @@ import com.base.app.ui.edit_profile.EditProfileActivity
 import com.base.app.ui.follow.FollowerActivity
 import com.base.app.ui.main.MainViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
-import com.base.app.ui.options.OptionActivity
 import com.base.app.ui.profile_detail_post.PostDetailActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
@@ -103,9 +102,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                 true
             }
             popupMenu.show()
-        }
-        binding.imgOptions.setOnClickListener {
-            startActivity(Intent(requireContext(), OptionActivity::class.java))
         }
         binding.btnFollowProfile.setOnClickListener {
             if (binding.btnFollowProfile.text.toString().lowercase() == "follow") {

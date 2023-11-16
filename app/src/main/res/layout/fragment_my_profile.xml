@@ -53,15 +53,17 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/dp20"
-                        android:src="@drawable/ic_menu" />
+                        android:src="@drawable/ic_menu"
+                        android:visibility="gone"
+                        app:tint="@color/color_app_text" />
 
                     <ImageView
                         android:id="@+id/imgAddImage"
                         android:layout_width="@dimen/dp32"
                         android:layout_height="@dimen/dp32"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/dp20"
-                        android:layout_toLeftOf="@+id/imgOptions"
                         android:src="@drawable/addimage" />
 
 
@@ -73,10 +75,10 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAvatar"
             android:layout_width="@dimen/dp80"
-            android:src="@drawable/damsen"
             android:layout_height="@dimen/dp80"
             android:layout_marginStart="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
+            android:src="@drawable/damsen"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarProfile" />
 
@@ -262,12 +264,12 @@
             android:id="@+id/rcvProfile"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:itemCount="1"
             android:layout_marginTop="@dimen/dp8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabLayoutProfile"
+            tools:itemCount="1"
             tools:listitem="@layout/profile_post_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

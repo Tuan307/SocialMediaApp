@@ -14,9 +14,9 @@ import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.ActivityMainBinding
 import com.base.app.ui.main.fragment.explore.ExploreFragment
 import com.base.app.ui.main.fragment.home.HomeFragment
-import com.base.app.ui.main.fragment.notification.NotificationFragment
 import com.base.app.ui.main.fragment.profile.MyProfileFragment
 import com.base.app.ui.main.fragment.reel.ReelFragment
+import com.base.app.ui.options.OptionsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +29,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     private val myProFileFragment = MyProfileFragment.newInstance()
     private val exploreFragment = ExploreFragment.newInstance()
     private val reelFragment = ReelFragment.newInstance()
-    private val notificationFragment = NotificationFragment.newInstance()
+    private val optionsFragment = OptionsFragment.newInstance()
     private val viewModel by viewModels<MainViewModel>()
     lateinit var mPagerAdapter: PagerFragmentAdapter
     private lateinit var saveShare: AppPreferencesHelper
@@ -75,8 +75,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         mPagerAdapter.addFragment(homeFragment)
         mPagerAdapter.addFragment(exploreFragment)
         mPagerAdapter.addFragment(reelFragment)
-        mPagerAdapter.addFragment(notificationFragment)
         mPagerAdapter.addFragment(myProFileFragment)
+        mPagerAdapter.addFragment(optionsFragment)
         binding.mainViewPager.adapter = mPagerAdapter
         binding.mainViewPager.offscreenPageLimit = mPagerAdapter.count
     }
@@ -109,15 +109,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
                 binding.mainViewPager.currentItem = 2
                 return true
             }
-            R.id.navigation_notify -> {
-                binding.mainViewPager.currentItem = 3
-                return true
-            }
             R.id.navigation_user -> {
                 if (dataManager.getString("id") == null) {
                     viewModel.saveId()
                 }
                 viewModel.setSomething(false)
+                binding.mainViewPager.currentItem = 3
+                return true
+            }
+            R.id.navigation_option -> {
                 binding.mainViewPager.currentItem = 4
                 return true
             }

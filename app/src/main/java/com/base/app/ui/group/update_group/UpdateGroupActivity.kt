@@ -127,7 +127,7 @@ class UpdateGroupActivity : BaseActivity<ActivityUpdateGroupBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE || resultCode == AppCompatActivity.RESULT_OK) {
+        if (requestCode == PICK_IMAGE || resultCode == RESULT_OK) {
             if (data != null) {
                 imageUri = data.data
                 imagePath = data.data?.let { getFileExtension(it) }

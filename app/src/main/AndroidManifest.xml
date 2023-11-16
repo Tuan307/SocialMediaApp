@@ -178,10 +178,10 @@
             android:name=".ui.add_post.PostActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.options.OptionActivity"
+            android:name=".ui.comment.CommentActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.comment.CommentActivity"
+            android:name=".ui.main.fragment.notification.NotificationActivity"
             android:exported="false" />
         <activity
             android:name=".ui.edit_profile.EditProfileActivity"

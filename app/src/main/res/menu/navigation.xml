@@ -14,13 +14,14 @@
         android:id="@+id/navigation_reel"
         android:icon="@drawable/ic_reel"
         android:title="" />
-    <item
-        android:id="@+id/navigation_notify"
-        android:icon="@drawable/notification"
-        android:title="" />
+
     <item
         android:id="@+id/navigation_user"
         android:icon="@drawable/profile"
+        android:title="" />
+    <item
+        android:id="@+id/navigation_option"
+        android:icon="@drawable/ic_menu"
         android:title="" />
 
 </menu>
