@@ -56,7 +56,7 @@ class CreateGroupInformationViewModel @Inject constructor(
     }
 
     fun createGroup(request: CreateGroupRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.createGroup(request)
             _createGroupResponse.value = Event(result)
         }

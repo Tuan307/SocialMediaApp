@@ -35,7 +35,7 @@ class EditProfileViewModel @Inject constructor(
 
     fun getInformation() {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = repository.getUserProfile(firebaseUser?.uid.toString())
             userInformation.value = result.data
             Handler(Looper.getMainLooper()).postDelayed({
@@ -103,7 +103,7 @@ class EditProfileViewModel @Inject constructor(
 
     fun updateProfile(request: UpdateProfileRequest) {
         showLoading(true)
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.updateUserProfile(request)
             _updateProfileRemote.value = result
             Handler(Looper.getMainLooper()).postDelayed({

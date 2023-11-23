@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(
 
     fun updateProfile(request: UpdateProfileRequest) {
         showLoading(true)
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.updateUserProfile(request)
             _updateProfileRemote.value = result
             Handler(Looper.getMainLooper()).postDelayed({

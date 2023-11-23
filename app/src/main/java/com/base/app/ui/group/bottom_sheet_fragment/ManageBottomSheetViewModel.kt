@@ -23,7 +23,7 @@ class ManageBottomSheetViewModel @Inject constructor(
         get() = _deleteGroupResponse
 
     fun deleteGroup(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.deleteGroup(id)
             _deleteGroupResponse.value = result.status.code == 200.toLong()
         }

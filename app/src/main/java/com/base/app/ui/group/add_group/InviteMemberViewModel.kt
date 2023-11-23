@@ -42,7 +42,7 @@ class InviteMemberViewModel @Inject constructor(
 
 
     fun inviteMember(request: CreateGroupInvitationRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = groupRepository.createGroupInvitation(request)
             _inviteUserResponse.value = result
         }
@@ -94,7 +94,7 @@ class InviteMemberViewModel @Inject constructor(
     }
 
     fun searchUser(s: String, pageCount: Int, pageNumber: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.searchUsers(s, pageCount, pageNumber)
             if (pageNumber == 1) {
                 _searchUserResponse.value = result.data

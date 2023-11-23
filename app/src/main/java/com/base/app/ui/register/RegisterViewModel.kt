@@ -65,7 +65,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun registerUser(user: RegisterRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.registerUser(user)
             _registerUserToDBResponse.value = result
         }

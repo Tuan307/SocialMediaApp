@@ -3,6 +3,7 @@ package com.base.app.ui.main
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.base.app.CustomApplication.Companion.dataManager
@@ -85,14 +86,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     }
 
     override fun observerLiveData() {
-        viewModel.currentIndex.observe(this@MainActivity, Observer {
+        viewModel.currentIndex.observe(this@MainActivity) {
             binding.mainViewPager.currentItem = it
-        })
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_home -> {
+                binding.bottomNav.visibility = View.VISIBLE
                 if (isDoubleClick() && binding.mainViewPager.currentItem == 0) {
                     viewModel.setRefresh(true)
                 } else {
@@ -101,15 +103,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
                 return true
             }
             R.id.navigation_feature -> {
+                binding.bottomNav.visibility = View.VISIBLE
                 binding.mainViewPager.currentItem = 1
                 return true
             }
             R.id.navigation_reel -> {
                 viewModel.setReelClick()
+                binding.bottomNav.visibility = View.GONE
                 binding.mainViewPager.currentItem = 2
                 return true
             }
             R.id.navigation_user -> {
+                binding.bottomNav.visibility = View.VISIBLE
                 if (dataManager.getString("id") == null) {
                     viewModel.saveId()
                 }
@@ -118,6 +123,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
                 return true
             }
             R.id.navigation_option -> {
+                binding.bottomNav.visibility = View.VISIBLE
                 binding.mainViewPager.currentItem = 4
                 return true
             }

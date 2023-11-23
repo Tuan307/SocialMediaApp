@@ -45,7 +45,7 @@ class ExploreGroupViewModel @Inject constructor(
         get() = _removeRequestGroupsResponse
 
     fun getAllGroups(pageCount: Int, page: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getAllGroups(firebaseUser?.uid.toString(), pageCount, page)
             if (page == 1) {
                 _getAllGroupsResponse.value = result.data?.map { data ->
@@ -64,22 +64,22 @@ class ExploreGroupViewModel @Inject constructor(
         }
     }
 
-    fun removeGroupRequest(groupId: Long){
-        viewModelScope.launch {
+    fun removeGroupRequest(groupId: Long) {
+        viewModelScope.launch(handler) {
             val result = repository.removeGroupRequest(firebaseUser?.uid.toString(), groupId)
             _removeRequestGroupsResponse.value = result
         }
     }
 
     fun getAllGroupMemberInformation(groupId: Long, view: AppCompatTextView) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getAllGroupMemberByGroupId(groupId)
             view.text = "${result.data?.size} thành viên"
         }
     }
 
     fun joinGroup(groupId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result =
                 repository.addMemberToGroup(JoinGroupRequest(firebaseUser?.uid.toString(), groupId))
             _joinGroupsResponse.value = result
@@ -87,7 +87,7 @@ class ExploreGroupViewModel @Inject constructor(
     }
 
     fun requestJoinGroup(request: CreateGroupInvitationRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.createGroupJoinRequest(request)
             _requestJoinGroupsResponse.value = result
         }

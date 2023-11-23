@@ -41,7 +41,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun checkIfInterestExist() {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.checkIfUserHasInterests(userUID)
             _userInterestResponse.value = result
         }
@@ -51,7 +51,7 @@ class LoginViewModel @Inject constructor(
     val getSendResetPasswordResponse = sendResetPasswordResponse as LiveData<Boolean>
     fun forgetPassword(email: String) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener {
                 if (it.isSuccessful) {
                     sendResetPasswordResponse.postValue(true)

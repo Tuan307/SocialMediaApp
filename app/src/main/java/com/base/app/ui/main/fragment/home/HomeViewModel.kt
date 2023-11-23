@@ -138,7 +138,7 @@ class HomeViewModel @Inject constructor(
 
     fun getNewsFeedData(pageCount: Int, pageNumber: Int) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = newsFeedRepository.getNewsFeed(pageCount, pageNumber)
             if (pageNumber == 1) {
                 _newFeedResponse.value = result.data
@@ -157,7 +157,7 @@ class HomeViewModel @Inject constructor(
 
     fun getDetailPost(postId: String) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = newsFeedRepository.getDetailPost(postId)
             if (result != null) {
                 _detailPostResponse.value = result[0]
@@ -199,7 +199,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun savePost(postId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             newsFeedRepository.addSavedPost(
                 SavedPostRequest(
                     firebaseUser?.uid.toString(),
@@ -246,7 +246,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun isSavedPost(postId: String, image: ImageView) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = newsFeedRepository.checkIfSavedPostExist(
                 SavedPostRequest(
                     firebaseUser?.uid.toString(),
@@ -261,26 +261,6 @@ class HomeViewModel @Inject constructor(
                 image.tag = "save"
             }
         }
-//        parentJob = viewModelScope.launch(Dispatchers.IO) {
-//            val uid = firebaseUser?.uid
-//            if (uid != null) {
-//                databaseReference.child("Saves").child(uid)
-//                    .addValueEventListener(object : ValueEventListener {
-//                        override fun onDataChange(snapshot: DataSnapshot) {
-//                            if (snapshot.child(postId).exists()) {
-//                                image.tag = "saved"
-//                                image.setImageResource(R.drawable.ic_bookmark_boder_black)
-//                            } else {
-//                                image.setImageResource(R.drawable.ic_bookmark_border)
-//                                image.tag = "save"
-//                            }
-//                        }
-//
-//                        override fun onCancelled(error: DatabaseError) {
-//                        }
-//                    })
-//            }
-//        }
     }
 
     private var _deletePostResponse = MutableLiveData<String>()
@@ -289,14 +269,7 @@ class HomeViewModel @Inject constructor(
 
     fun deletePost(postId: String) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
-//            databaseReference.child("Posts").child(postId).removeValue().addOnCompleteListener {
-//                if (it.isSuccessful) {
-//                    deletePostResponse.postValue(true)
-//                } else {
-//                    deletePostResponse.postValue(false)
-//                }
-//            }
+        parentJob = viewModelScope.launch(handler) {
             val result = newsFeedRepository.deleteNewPost(postId)
             _deletePostResponse.value = result.status.message
             registerJobFinish()

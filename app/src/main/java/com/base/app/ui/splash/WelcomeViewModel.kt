@@ -32,7 +32,7 @@ class WelcomeViewModel @Inject constructor(
 
     var checkUserResponse = MutableLiveData<Boolean>()
     fun checkUser() {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             if (firebaseUser != null) {
                 checkUserResponse.postValue(true)
             } else {
@@ -42,14 +42,14 @@ class WelcomeViewModel @Inject constructor(
     }
 
     fun getUserProfile() {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getUserProfile(firebaseUser?.uid.toString())
             _userResponse.value = result.data
         }
     }
 
     fun getAllInterests() {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = userRepository.getAllInterests()
             if (result.data != null) {
                 _interestResponse.value = result.data.orEmpty()
@@ -58,7 +58,7 @@ class WelcomeViewModel @Inject constructor(
     }
 
     fun saveUserInterest(request: AddUserInterestRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = userRepository.saveUserInterest(request)
             _addInterestResponse.value = !result.data.isNullOrEmpty()
         }

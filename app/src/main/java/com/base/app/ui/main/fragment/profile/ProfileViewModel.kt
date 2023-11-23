@@ -52,7 +52,7 @@ class ProfileViewModel @Inject constructor(
     val getUserRemoteResponse = userRemoteResponse as LiveData<DatingUser?>
     fun getRemoteUserInformation(id: String) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = repository.getUserProfile(id)
             if (result.data != null) {
                 userRemoteResponse.postValue(result.data)
@@ -102,7 +102,7 @@ class ProfileViewModel @Inject constructor(
     private var moreProfilePost = MutableLiveData<List<PostContent>>()
     val getMoreProfilePost = moreProfilePost as LiveData<List<PostContent>>
     fun getProfilePost(id: String, pageCount: Int, pageNumber: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getUserProfileImagePost(id, pageCount, pageNumber)
             if (pageNumber == 1) {
                 profilePost.value = result.data.orEmpty()
@@ -120,7 +120,7 @@ class ProfileViewModel @Inject constructor(
         get() = _getMoreSavedPostResponse
 
     fun getSavePost(userId: String, pageCount: Int, pageNumber: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result =
                 repository.getAllSavedPost(userId, pageCount, pageNumber)
             if (pageNumber == 1) {
@@ -168,7 +168,7 @@ class ProfileViewModel @Inject constructor(
 
     fun addNotifications(profileId: String) {
         val userName = userRemoteResponse.value?.userName ?: "Someone"
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             notificationRepository.addNotification(
                 AddNotificationRequest(
                     isPost = false,

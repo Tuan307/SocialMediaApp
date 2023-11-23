@@ -57,7 +57,7 @@ class AddPostViewModel @Inject constructor(
 
     fun uploadQuestion(postNewsFeedRequest: PostNewsFeedRequest){
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = newsFeedRepository.addNewsPost(postNewsFeedRequest)
             if (result == null) {
                 uploadImageResponse.postValue(false)
@@ -150,7 +150,7 @@ class AddPostViewModel @Inject constructor(
 
     fun uploadImagePostToDB(postNewsFeedRequest: PostNewsFeedRequest) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = newsFeedRepository.addNewsPost(postNewsFeedRequest)
             if (result == null) {
                 uploadImageResponse.postValue(false)
@@ -166,7 +166,7 @@ class AddPostViewModel @Inject constructor(
 
     fun uploadGroupPostToDB(request: CreateGroupPostRequest) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = groupRepository.addGroupPost(request)
             if (result.data == null) {
                 uploadImageResponse.postValue(false)

@@ -39,7 +39,7 @@ class GroupAllYourGroupViewModel @Inject constructor(
         get() = _joinedGroupListLoadMoreResponse
 
     fun getGroup(type: Int, pageNumber: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             if (type == 0) {
                 val result =
                     repository.getYourOwnGroup(firebaseUser?.uid.toString(), 10, pageNumber)

@@ -83,7 +83,7 @@ class GroupDetailViewModel @Inject constructor(
         get() = _removeRequestGroupsResponse
 
     fun joinGroup(groupId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result =
                 repository.addMemberToGroup(JoinGroupRequest(firebaseUser?.uid.toString(), groupId))
             _joinGroupsResponse.value = result
@@ -91,27 +91,28 @@ class GroupDetailViewModel @Inject constructor(
     }
 
     fun requestJoinGroup(request: CreateGroupInvitationRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.createGroupJoinRequest(request)
             _requestJoinGroupsResponse.value = result
         }
     }
 
-    fun removeGroupRequest(groupId: Long){
-        viewModelScope.launch {
+    fun removeGroupRequest(groupId: Long) {
+        viewModelScope.launch(handler) {
             val result = repository.removeGroupRequest(firebaseUser?.uid.toString(), groupId)
             _removeRequestGroupsResponse.value = result
         }
     }
+
     fun checkIfJoinedGroup(groupId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.checkIfJoinedGroup(firebaseUser?.uid.toString(), groupId)
             // _checkIfJoinedGroupResponse.value = result
         }
     }
 
     fun checkIfRequestToJoinGroup(groupId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.checkIfRequestToJoinGroup(firebaseUser?.uid.toString(), groupId)
             when (result.data) {
                 2 -> {
@@ -132,14 +133,14 @@ class GroupDetailViewModel @Inject constructor(
     }
 
     fun removeUserFromGroup(groupId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.removeUserFromGroup(firebaseUser?.uid.toString(), groupId)
             _removeUserFromGroupResponse.value = result
         }
     }
 
     fun getGroupInformation(groupId: Long, isJoined: Boolean, hasRequested: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getGroupById(groupId)
             val groupData = result.data
             val detailInformation = DetailGroupInformationViewData(
@@ -159,7 +160,7 @@ class GroupDetailViewModel @Inject constructor(
     }
 
     fun getAllGroupMemberInformation(groupId: Long, data: DetailGroupInformationViewData) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getAllGroupMemberByGroupId(groupId)
             val detailInformation = DetailGroupInformationViewData(
                 id = data.id,
@@ -177,7 +178,7 @@ class GroupDetailViewModel @Inject constructor(
     }
 
     fun getGroupPost(groupId: Long, pageCount: Int, pageNumber: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getAllGroupPost(groupId, pageCount, pageNumber)
             _listGroupPostResponse.value = result.data?.content?.map { data ->
                 DetailGroupPostViewData(
@@ -227,7 +228,7 @@ class GroupDetailViewModel @Inject constructor(
     }
 
     fun isSavedPost(postId: String, image: ImageView) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
 //            val result = newsFeedRepository.checkIfSavedPostExist(
 //                SavedPostRequest(
 //                    firebaseUser?.uid.toString(),
@@ -315,7 +316,7 @@ class GroupDetailViewModel @Inject constructor(
         get() = _searchPostInGroupResponse
 
     fun searchPostInGroup(groupId: Long, keyword: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.searchPostInGroup(groupId, keyword)
             _searchPostInGroupResponse.value = result.data?.map { data ->
                 SearchGroupViewData(
@@ -344,7 +345,7 @@ class GroupDetailViewModel @Inject constructor(
 
     fun deleteGroupPost(postId: String) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
 //            val result = newsFeedRepository.deleteNewPost(postId)
 //            _deletePostResponse.value = result.status.message
             registerJobFinish()

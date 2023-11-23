@@ -42,7 +42,9 @@ class ReelFragment : BaseFragment<FragmentReelBinding>(),
     }
 
     override fun initListener() {
-
+        binding.imageBack.setOnClickListener {
+            mainViewModel.setCurrentIndex(0)
+        }
     }
 
     override fun observerLiveData() {

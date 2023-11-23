@@ -33,14 +33,14 @@ class GroupForYouViewModel @Inject constructor(private val repository: GroupRepo
         get() = _groupGroupNewsFeedResponse
 
     fun getYourGroup() {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getYourOwnGroup(firebaseUser?.uid.toString(), 6, 1)
             _groupYourGroupResponse.value = result
         }
     }
 
     fun getGroupNewsFeed(count: Int, page: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getAllGroupNewsFeed(count, page)
             _groupGroupNewsFeedResponse.value = result.data?.content?.map { data ->
                 GroupForYouPostViewData(

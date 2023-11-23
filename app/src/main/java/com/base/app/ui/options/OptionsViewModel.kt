@@ -36,7 +36,7 @@ class OptionsViewModel : BaseViewModel() {
 
     var logOutResponse = MutableLiveData<Boolean>()
     fun logOut() {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             auth.signOut()
             logOutResponse.postValue(true)
         }

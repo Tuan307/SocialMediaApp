@@ -44,7 +44,7 @@ class PostDetailViewModel @Inject constructor(
 
     fun getUserDetailPost(userId: String, pageCount: Int, pageNumber: Int) {
         showLoading(true)
-        parentJob = viewModelScope.launch {
+        parentJob = viewModelScope.launch(handler) {
             val result = repository.getUserProfileImagePost(userId, pageCount, pageNumber)
             _detailUserPostResponse.value = result
             registerJobFinish()

@@ -40,7 +40,7 @@ class NotificationViewModel @Inject constructor(
         get() = _removeNotificationErrorResponse
 
     fun getAllNotification(pageCount: Int, pageNumber: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result =
                 repository.getAllNotification(firebaseUser?.uid.toString(), pageCount, pageNumber)
             if (pageNumber == 1) {
@@ -52,14 +52,14 @@ class NotificationViewModel @Inject constructor(
     }
 
     private fun removeNotification(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.removeNotification(id)
             _removeNotificationResponse.value = result
         }
     }
 
     fun cancelJoinInvitation(groupId: Long, id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = groupRepository.cancelInvitation(
                 JoinGroupRequest(
                     firebaseUser?.uid.toString(),
@@ -75,7 +75,7 @@ class NotificationViewModel @Inject constructor(
     }
 
     fun joinGroup(groupId: Long, id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result =
                 groupRepository.addMemberToGroup(
                     JoinGroupRequest(

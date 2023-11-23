@@ -35,14 +35,14 @@ class GroupAllRequestViewModel @Inject constructor(
         get() = _removeRequestGroupsResponse
 
     fun getAllGroupRequest(groupId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.getAllGroupRequest(groupId)
             _requestResponse.value = result
         }
     }
 
     fun joinGroup(groupId: Long, userId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result =
                 repository.addMemberToGroup(
                     JoinGroupRequest(
@@ -55,7 +55,7 @@ class GroupAllRequestViewModel @Inject constructor(
     }
 
     fun removeGroupRequest(groupId: Long, userId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             val result = repository.removeGroupRequest(userId, groupId)
             _removeRequestGroupsResponse.value = result
         }
