@@ -3,155 +3,181 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite"
         tools:context=".ui.options.OptionsFragment">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgAvatar"
-            android:layout_width="@dimen/dp80"
-            android:layout_height="@dimen/dp80"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp20"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txtUserName"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp5"
-            android:gravity="center_horizontal"
-            android:textColor="@color/color_app_text"
-            android:textSize="@dimen/sp20"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/imgAvatar"
-            tools:text="ptuan307" />
+            android:background="@color/colorWhite">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text_all_shortcut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp12"
-            android:layout_marginTop="@dimen/dp20"
-            android:text="@string/text_all_shortcut"
-            android:textColor="@color/color_app_text"
-            android:textSize="@dimen/sp20"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="@dimen/dp80"
+                android:layout_height="@dimen/dp80"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_of_shortcut"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="@dimen/dp12"
-            android:layout_marginVertical="@dimen/dp10"
-            app:layout_constraintBottom_toTopOf="@+id/btnLogOut"
-            app:layout_constraintTop_toBottomOf="@+id/text_all_shortcut" />
-        <!--        <TextView-->
-        <!--            android:id="@+id/text_group"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp20"-->
-        <!--            android:layout_marginTop="@dimen/dp20"-->
-        <!--            android:text="Nhóm du lịch"-->
-        <!--            android:textColor="@color/color_app_text"-->
-        <!--            android:textSize="@dimen/sp20"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/txtSettings" />-->
+            <TextView
+                android:id="@+id/txtUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:gravity="center_horizontal"
+                android:textColor="@color/color_app_text"
+                android:textSize="@dimen/sp20"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/imgAvatar"
+                tools:text="ptuan307" />
 
-        <!--        <View-->
-        <!--            android:id="@+id/view_side_1"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="1dp"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp15"-->
-        <!--            android:layout_marginTop="@dimen/dp10"-->
-        <!--            android:background="#8A8787"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/text_group" />-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp18"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintTop_toBottomOf="@+id/txtUserName">
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/text_friend"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp20"-->
-        <!--            android:layout_marginTop="@dimen/dp20"-->
-        <!--            android:text="Tìm bạn bè"-->
-        <!--            android:textColor="@color/color_app_text"-->
-        <!--            android:textSize="@dimen/sp20"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/text_group" />-->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginStart="15dp"
+                    android:orientation="vertical">
 
-        <!--        <View-->
-        <!--            android:id="@+id/view_side_2"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="1dp"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp15"-->
-        <!--            android:layout_marginTop="@dimen/dp10"-->
-        <!--            android:background="#8A8787"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/text_friend" />-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_number_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp20"
+                        android:textStyle="bold" />
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/text_location"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp20"-->
-        <!--            android:layout_marginTop="@dimen/dp20"-->
-        <!--            android:text="Khám phá địa điểm du lịch"-->
-        <!--            android:textColor="@color/color_app_text"-->
-        <!--            android:textSize="@dimen/sp20"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/text_friend" />-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_follow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Theo dõi"
+                        android:textColor="@color/color_search_text"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <!--        <View-->
-        <!--            android:id="@+id/view_side_3"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="1dp"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp15"-->
-        <!--            android:layout_marginTop="@dimen/dp10"-->
-        <!--            android:background="#8A8787"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/text_location" />-->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-        <!--        <Switch-->
-        <!--            android:id="@+id/darkModeSwitch"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp20"-->
-        <!--            android:layout_marginTop="@dimen/dp10"-->
-        <!--            android:text="@string/dark_mode"-->
-        <!--            android:enabled="true"-->
-        <!--            android:textColor="@color/color_app_text"-->
-        <!--            android:textSize="@dimen/sp20"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/view_side_3"-->
-        <!--            tools:ignore="UseSwitchCompatOrMaterialXml" />-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_number_following"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp20"
+                        android:textStyle="bold" />
 
-        <!--        <View-->
-        <!--            android:id="@+id/view_side1"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="1dp"-->
-        <!--            android:layout_marginHorizontal="@dimen/dp15"-->
-        <!--            android:layout_marginTop="@dimen/dp10"-->
-        <!--            android:background="#8A8787"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/darkModeSwitch" />-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_following"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đang theo dõi"
+                        android:textColor="@color/color_search_text"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <Button
-            android:id="@+id/btnLogOut"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp40"
-            android:layout_marginBottom="@dimen/dp40"
-            android:background="@drawable/edit_btn"
-            android:gravity="center"
-            android:text="@string/str_logout"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp18"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="0dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_number_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp20"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/text_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bài viết"
+                        android:textColor="@color/color_search_text"
+                        android:textSize="@dimen/sp18"
+                        android:textStyle="normal" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_my_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp18"
+                android:background="@drawable/bg_btn_white"
+                android:text="Trang cá nhân của tôi"
+                android:textAllCaps="false"
+                android:textColor="@color/color_login_text"
+                android:textSize="@dimen/sp19"
+                app:layout_constraintTop_toBottomOf="@id/linear_menu" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_all_shortcut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/text_all_shortcut"
+                android:textColor="@color/color_app_text"
+                android:textSize="@dimen/sp20"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_my_profile" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_of_shortcut"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/dp12"
+                android:layout_marginVertical="@dimen/dp10"
+                app:layout_constraintBottom_toTopOf="@+id/btnLogOut"
+                app:layout_constraintTop_toBottomOf="@+id/text_all_shortcut"
+                tools:itemCount="4"
+                tools:listitem="@layout/layout_item_option_shortcut" />
+
+            <Button
+                android:id="@+id/btnLogOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_marginBottom="@dimen/dp40"
+                android:background="@drawable/edit_btn"
+                android:gravity="center"
+                android:text="@string/str_logout"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp18"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

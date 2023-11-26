@@ -181,9 +181,6 @@
             android:name=".ui.comment.CommentActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.main.fragment.notification.NotificationActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.edit_profile.EditProfileActivity"
             android:exported="false" />
         <activity

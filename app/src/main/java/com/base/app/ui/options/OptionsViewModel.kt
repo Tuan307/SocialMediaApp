@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
+import com.base.app.common.ERROR
 import com.base.app.data.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,6 +40,40 @@ class OptionsViewModel : BaseViewModel() {
         viewModelScope.launch(handler) {
             auth.signOut()
             logOutResponse.postValue(true)
+        }
+    }
+
+    private var followerNumber = MutableLiveData<Long>()
+    val getFollowerNumber = followerNumber as LiveData<Long>
+    fun getFollower(id: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Follow").child(id).child("follower")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        followerNumber.postValue(snapshot.childrenCount)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        responseMessage.postValue(ERROR)
+                    }
+                })
+        }
+    }
+
+    private var followingNumber = MutableLiveData<Long>()
+    val getFollowingNumber = followingNumber as LiveData<Long>
+    fun getFollowing(id: String) {
+        parentJob = viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("Follow").child(id).child("following")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        followingNumber.postValue(snapshot.childrenCount)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        responseMessage.postValue(ERROR)
+                    }
+                })
         }
     }
 }

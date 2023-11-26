@@ -206,33 +206,41 @@
             app:layout_constraintTop_toBottomOf="@+id/txtFullName"
             tools:text="Something is written here" />
 
-        <Button
-            android:id="@+id/btnEditProfile"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linear_profile_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp10"
-            android:background="@drawable/edit_btn"
-            android:text="@string/edit_profile"
-            android:textAllCaps="false"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/sp15"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/txtBio" />
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/txtBio">
 
-        <Button
-            android:id="@+id/btnFollowProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp10"
-            android:background="@drawable/edit_btn"
-            android:text="@string/follow"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp15"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/txtBio" />
+            <Button
+                android:id="@+id/btnEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="@drawable/edit_btn"
+                android:text="@string/edit_profile"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/sp15"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/txtBio" />
+
+            <Button
+                android:id="@+id/btnFollowProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="@drawable/edit_btn"
+                android:text="@string/follow"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp15"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/txtBio" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayoutProfile"
@@ -242,7 +250,7 @@
             android:layout_marginTop="@dimen/dp10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
+            app:layout_constraintTop_toBottomOf="@+id/linear_profile_button"
             app:tabIconTint="@color/tab_color"
             app:tabIndicatorColor="@color/color_app_text">
 

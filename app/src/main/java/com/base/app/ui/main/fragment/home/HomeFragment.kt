@@ -33,7 +33,7 @@ import com.base.app.ui.comment.CommentActivity
 import com.base.app.ui.main.MainViewModel
 import com.base.app.ui.main.fragment.home.adapter.NewsFeedAdapter
 import com.base.app.ui.main.fragment.home.bottom_sheet.AddPostBottomSheetFragment
-import com.base.app.ui.main.fragment.notification.NotificationActivity
+import com.base.app.ui.main.fragment.notification.NotificationFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
@@ -93,7 +93,7 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
             startActivity(Intent(requireContext(), ChatActivity::class.java))
         }
         imageNotification.setOnClickListener {
-            startActivity(Intent(requireActivity(), NotificationActivity::class.java))
+            startActivity(Intent(requireActivity(), NotificationFragment::class.java))
         }
         imgAddPost.setOnClickListener {
             val fragment = AddPostBottomSheetFragment.newInstance()

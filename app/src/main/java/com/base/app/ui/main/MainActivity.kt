@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
-import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.base.fragment.PagerFragmentAdapter
@@ -15,7 +13,7 @@ import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.ActivityMainBinding
 import com.base.app.ui.main.fragment.explore.ExploreFragment
 import com.base.app.ui.main.fragment.home.HomeFragment
-import com.base.app.ui.main.fragment.profile.MyProfileFragment
+import com.base.app.ui.main.fragment.notification.NotificationFragment
 import com.base.app.ui.main.fragment.reel.ReelFragment
 import com.base.app.ui.options.OptionsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,10 +25,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private val homeFragment = HomeFragment.newInstance()
-    private val myProFileFragment = MyProfileFragment.newInstance()
     private val exploreFragment = ExploreFragment.newInstance()
     private val reelFragment = ReelFragment.newInstance()
     private val optionsFragment = OptionsFragment.newInstance()
+    private val notificationFragment = NotificationFragment.newInstance()
     private val viewModel by viewModels<MainViewModel>()
     lateinit var mPagerAdapter: PagerFragmentAdapter
     private lateinit var saveShare: AppPreferencesHelper
@@ -76,7 +74,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         mPagerAdapter.addFragment(homeFragment)
         mPagerAdapter.addFragment(exploreFragment)
         mPagerAdapter.addFragment(reelFragment)
-        mPagerAdapter.addFragment(myProFileFragment)
+        mPagerAdapter.addFragment(notificationFragment)
         mPagerAdapter.addFragment(optionsFragment)
         binding.mainViewPager.adapter = mPagerAdapter
         binding.mainViewPager.offscreenPageLimit = mPagerAdapter.count
@@ -113,12 +111,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
                 binding.mainViewPager.currentItem = 2
                 return true
             }
-            R.id.navigation_user -> {
+            R.id.navigation_notification -> {
                 binding.bottomNav.visibility = View.VISIBLE
-                if (dataManager.getString("id") == null) {
-                    viewModel.saveId()
-                }
-                viewModel.setSomething(false)
+//                if (dataManager.getString("id") == null) {
+//                    viewModel.saveId()
+//                }
+//                viewModel.setSomething(false)
                 binding.mainViewPager.currentItem = 3
                 return true
             }

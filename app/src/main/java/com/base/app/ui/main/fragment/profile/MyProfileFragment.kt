@@ -131,7 +131,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         }
         binding.btnEditProfile.setOnClickListener {
             startActivity(Intent(requireContext(), EditProfileActivity::class.java))
-
         }
         binding.tabLayoutProfile.getTabAt(0)?.setIcon(R.drawable.ic_grid)
         binding.tabLayoutProfile.getTabAt(1)?.setIcon(R.drawable.ic_bookmark_border)

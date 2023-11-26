@@ -16,8 +16,8 @@
         android:title="" />
 
     <item
-        android:id="@+id/navigation_user"
-        android:icon="@drawable/profile"
+        android:id="@+id/navigation_notification"
+        android:icon="@drawable/notification"
         android:title="" />
     <item
         android:id="@+id/navigation_option"

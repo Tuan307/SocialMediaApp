@@ -3,46 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_group_and_user"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="@dimen/dp12"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_icon_shortcut">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/view2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:elevation="12dp"
+            app:cardBackgroundColor="@color/regular_price_color"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp12"
-                android:layout_marginTop="@dimen/dp12"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/notification" />
+                android:layout_width="30dp"
+                app:srcCompat="@drawable/icon_find_friend"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                />
+        </androidx.cardview.widget.CardView>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_shortcut_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp10"
-                android:layout_marginTop="@dimen/dp10"
-                android:paddingBottom="@dimen/dp12"
-                android:textColor="@color/color_app_text"
-                android:textSize="@dimen/sp20"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/image_icon"
-                tools:text="@string/app_name" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_shortcut_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp12"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintBottom_toBottomOf="@id/view2"
+            app:layout_constraintStart_toEndOf="@+id/view2"
+            app:layout_constraintTop_toTopOf="@+id/view2"
+            tools:text="@string/app_name" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp12"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_forward_ios" />
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp12"
+            android:layout_marginEnd="-6dp"
+            android:background="@color/regular_price_color"
+            app:layout_constraintEnd_toStartOf="@+id/image_forward"
+            app:layout_constraintStart_toStartOf="@id/view2"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

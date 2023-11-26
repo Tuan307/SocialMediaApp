@@ -2,6 +2,7 @@ package com.base.app.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -12,6 +13,7 @@ import com.base.app.R
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.response.post.PostContent
 import com.base.app.databinding.ActivityProfileBinding
+import com.base.app.ui.edit_profile.EditProfileActivity
 import com.base.app.ui.follow.FollowerActivity
 import com.base.app.ui.main.fragment.profile.ProfileViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
@@ -58,6 +60,9 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
                 }
             }
             binding.rcvProfile.addOnScrollListener(endlessRecyclerViewScrollListener)
+            btnEditProfile.setOnClickListener {
+                startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
+            }
             txtFollowing.setOnClickListener {
                 val intent1 = Intent(this@ProfileActivity, FollowerActivity::class.java)
                 intent.putExtra("id", userId)
@@ -85,6 +90,13 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
     private fun observeData() = with(viewModel) {
         getUserRemoteResponse.observe(this@ProfileActivity) {
             if (it != null) {
+                if (it.userId == viewModel.firebaseUser?.uid.toString()) {
+                    binding.btnEditProfile.visibility = View.VISIBLE
+                    binding.btnFollowProfile.visibility = View.GONE
+                } else {
+                    binding.btnEditProfile.visibility = View.GONE
+                    binding.btnFollowProfile.visibility = View.VISIBLE
+                }
                 binding.apply {
                     txtUserName.text = it.userName
                     txtBio.text = it.bio

@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        tools:context=".ui.main.fragment.notification.NotificationActivity">
+        tools:context=".ui.main.fragment.notification.NotificationFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarNotification"
@@ -23,14 +23,6 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/image_back"
-                    android:layout_width="wrap_content"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_arrow_back_black" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

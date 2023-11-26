@@ -4,12 +4,12 @@ import android.content.Intent
 import android.view.Gravity
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.dialogs.ConfirmDialog
 import com.base.app.base.fragment.BaseFragment
-import com.base.app.common.recycleview_utils.GridSpacingItemDecoration
 import com.base.app.databinding.FragmentOptionsBinding
+import com.base.app.ui.profile.ProfileActivity
 import com.base.app.ui.splash.WelcomeActivity
 import com.bumptech.glide.Glide
 
@@ -20,25 +20,31 @@ class OptionsFragment : BaseFragment<FragmentOptionsBinding>(), ConfirmDialog.Co
 
     override fun initView() {
         val optionsList = arrayListOf<OptionViewData>()
-        optionsList.add(OptionViewData("Nhóm du lịch", R.drawable.group_people))
-        optionsList.add(OptionViewData("Tìm bạn bè", R.drawable.ic_find_user))
+        optionsList.add(OptionViewData("Nhóm du lịch", R.drawable.icon_travel_group))
+        optionsList.add(OptionViewData("Tìm bạn bè", R.drawable.icon_find_friend))
         optionsList.add(OptionViewData("Khám phá du lịch", R.drawable.ic_explore_location))
         optionsList.add(OptionViewData("Chế độ sáng/tối", R.drawable.icon_dark_mode_setting))
         optionsAdapter = OptionsAdapter(optionsList)
         viewModel.getInformation()
         with(binding) {
             listOfShortcut.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                isNestedScrollingEnabled = false
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(requireContext())
                 adapter = optionsAdapter
-                addItemDecoration(GridSpacingItemDecoration(2, 30, false, 0))
             }
         }
     }
 
     override fun initListener() {
-        binding.apply {
+        with(binding) {
             btnLogOut.setOnClickListener {
                 showLogoutDialog()
+            }
+            buttonMyProfile.setOnClickListener {
+                val intent = Intent(requireContext(), ProfileActivity::class.java)
+                intent.putExtra("userId", viewModel.firebaseUser?.uid.toString())
+                startActivity(intent)
             }
         }
     }
@@ -62,6 +68,12 @@ class OptionsFragment : BaseFragment<FragmentOptionsBinding>(), ConfirmDialog.Co
 
     override fun observerLiveData() {
         viewModel.apply {
+            getFollowerNumber.observe(this@OptionsFragment) {
+                binding.textNumberFollow.text = it.toString()
+            }
+            getFollowingNumber.observe(this@OptionsFragment) {
+                binding.textNumberFollowing.text = it.toString()
+            }
             getUserInformation.observe(viewLifecycleOwner) {
                 binding.txtUserName.text = it?.username.toString()
                 Glide.with(requireContext()).load(it?.imageurl).into(binding.imgAvatar)
