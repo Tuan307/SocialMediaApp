@@ -19,6 +19,7 @@ import com.base.app.ui.main.fragment.profile.ProfileViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
 import com.base.app.ui.profile_detail_post.PostDetailActivity
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,6 +30,8 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     private lateinit var profileAdapter: ProfilePostAdapter
     private var postList = ArrayList<PostContent>()
+    private var tabType: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@ProfileActivity, R.layout.activity_profile)
@@ -49,17 +52,21 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
             rcvProfile.setHasFixedSize(true)
             profileAdapter =
                 ProfilePostAdapter(this@ProfileActivity, postList, this@ProfileActivity)
-            binding.rcvProfile.adapter = profileAdapter
+            rcvProfile.adapter = profileAdapter
             endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
                 binding.rcvProfile.layoutManager as LinearLayoutManager
             ) {
                 override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                     if (page > 1) {
-                        viewModel.getProfilePost(userId, 20, page)
+                        if (tabType == 0) {
+                            viewModel.getProfilePost(userId, 20, page)
+                        } else {
+                            viewModel.getSavePost(userId, 20, page)
+                        }
                     }
                 }
             }
-            binding.rcvProfile.addOnScrollListener(endlessRecyclerViewScrollListener)
+            rcvProfile.addOnScrollListener(endlessRecyclerViewScrollListener)
             btnEditProfile.setOnClickListener {
                 startActivity(Intent(this@ProfileActivity, EditProfileActivity::class.java))
             }
@@ -76,13 +83,40 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
                 startActivity(intent2)
             }
             btnFollowProfile.setOnClickListener {
-                if (binding.btnFollowProfile.text.toString().lowercase() == "follow") {
+                if (btnFollowProfile.text.toString().lowercase() == "follow") {
                     viewModel.followUser(true, userId)
                     viewModel.addNotifications(userId)
                 } else {
                     viewModel.followUser(false, userId)
                 }
             }
+            tabLayoutProfile.getTabAt(0)?.setIcon(R.drawable.ic_grid)
+            tabLayoutProfile.getTabAt(1)?.setIcon(R.drawable.ic_bookmark_border)
+            tabLayoutProfile.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    when (tab.position) {
+                        0 -> {
+                            tabType = 0
+                            endlessRecyclerViewScrollListener.resetState()
+                            viewModel.getProfilePost(userId, 50, 1)
+                        }
+                        1 -> {
+                            tabType = 1
+                            if (postList.isNotEmpty()) {
+                                postList.clear()
+                            }
+                            endlessRecyclerViewScrollListener.resetState()
+                            viewModel.getSavePost(userId, 50, 1)
+                        }
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                }
+            })
         }
         observeData()
     }
@@ -129,6 +163,51 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
             binding.txtPostNumber.text = postList.size.toString()
             profileAdapter.notifyDataSetChanged()
         }
+
+        getSavedPostResponse.observe(this@ProfileActivity) {
+            if (postList.isNotEmpty()) {
+                postList.clear()
+            }
+            if (it.data != null) {
+                postList.addAll(it.data.map { data ->
+                    PostContent(
+                        postId = data.post_saved_id?.postId,
+                        description = data.post_saved_id?.description,
+                        imagesList = data.post_saved_id?.imagesList,
+                        checkInTimestamp = data.post_saved_id?.checkInTimestamp,
+                        checkInAddress = data.post_saved_id?.checkInAddress,
+                        checkInLatitude = data.post_saved_id?.checkInLatitude,
+                        checkInLongitude = data.post_saved_id?.checkInLongitude,
+                        type = data.post_saved_id?.type,
+                        videoUrl = data.post_saved_id?.videoUrl,
+                        postUserId = data.post_saved_id?.postUserId,
+                        question = data.post_saved_id?.question
+                    )
+                })
+            }
+            profileAdapter.notifyDataSetChanged()
+        }
+        getMoreSavedPostResponse.observe(this@ProfileActivity) {
+            if (it.data != null) {
+                postList.addAll(it.data.map { data ->
+                    PostContent(
+                        postId = data.post_saved_id?.postId,
+                        description = data.post_saved_id?.description,
+                        imagesList = data.post_saved_id?.imagesList,
+                        checkInTimestamp = data.post_saved_id?.checkInTimestamp,
+                        checkInAddress = data.post_saved_id?.checkInAddress,
+                        checkInLatitude = data.post_saved_id?.checkInLatitude,
+                        checkInLongitude = data.post_saved_id?.checkInLongitude,
+                        type = data.post_saved_id?.type,
+                        videoUrl = data.post_saved_id?.videoUrl,
+                        postUserId = data.post_saved_id?.postUserId,
+                        question = data.post_saved_id?.question
+                    )
+                })
+            }
+            profileAdapter.notifyDataSetChanged()
+        }
+
     }
 
     override fun onCLick(position: Int) {

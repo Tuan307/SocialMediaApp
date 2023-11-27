@@ -26,6 +26,8 @@ class OptionsFragment : BaseFragment<FragmentOptionsBinding>(), ConfirmDialog.Co
         optionsList.add(OptionViewData("Chế độ sáng/tối", R.drawable.icon_dark_mode_setting))
         optionsAdapter = OptionsAdapter(optionsList)
         viewModel.getInformation()
+        viewModel.getFollower()
+        viewModel.getFollowing()
         with(binding) {
             listOfShortcut.apply {
                 isNestedScrollingEnabled = false

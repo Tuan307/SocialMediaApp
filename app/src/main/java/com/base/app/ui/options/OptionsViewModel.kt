@@ -45,9 +45,9 @@ class OptionsViewModel : BaseViewModel() {
 
     private var followerNumber = MutableLiveData<Long>()
     val getFollowerNumber = followerNumber as LiveData<Long>
-    fun getFollower(id: String) {
+    fun getFollower() {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Follow").child(id).child("follower")
+            databaseReference.child("Follow").child(firebaseUser?.uid.toString()).child("follower")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         followerNumber.postValue(snapshot.childrenCount)
@@ -62,9 +62,9 @@ class OptionsViewModel : BaseViewModel() {
 
     private var followingNumber = MutableLiveData<Long>()
     val getFollowingNumber = followingNumber as LiveData<Long>
-    fun getFollowing(id: String) {
+    fun getFollowing() {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Follow").child(id).child("following")
+            databaseReference.child("Follow").child(firebaseUser?.uid.toString()).child("following")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         followingNumber.postValue(snapshot.childrenCount)

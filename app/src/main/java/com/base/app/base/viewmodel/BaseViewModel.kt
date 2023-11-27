@@ -2,12 +2,10 @@ package com.base.app.base.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.network.BaseNetworkException
 import com.base.app.base.network.NetworkErrorException
 import com.base.app.common.Event
 import com.base.app.common.FIREBASE_URL
-import com.base.app.common.PPREF_PIN_STATUS
 import com.base.app.common.STORAGE_URL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,6 +18,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 
 abstract class BaseViewModel : ViewModel() {
+
 
     private val storage = Firebase.storage(STORAGE_URL)
     val storageRef = storage.reference
@@ -74,14 +73,6 @@ abstract class BaseViewModel : ViewModel() {
 
     protected fun addBaseNetworkException(exception: BaseNetworkException) {
         baseNetworkException.postValue(Event(exception))
-    }
-
-    fun savePinStatus(value: Boolean) {
-        dataManager.save(PPREF_PIN_STATUS, value)
-    }
-
-    fun getPinStatus(): Boolean {
-        return dataManager.getBoolean(PPREF_PIN_STATUS)
     }
 
     protected fun addNetworkException(exception: NetworkErrorException) {

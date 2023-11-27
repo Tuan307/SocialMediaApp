@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.data.models.dating_app.BaseApiResponse
+import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.repositories.UserRepository
 import com.base.app.data.repositories.profile.UserProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,19 @@ class LoginViewModel @Inject constructor(
     private var userUID = ""
     private var loginResponse = MutableLiveData<Boolean>()
     val getLoginResponse = loginResponse as LiveData<Boolean>
+
+    private var userRemoteResponse = MutableLiveData<DatingUser?>()
+    val getUserRemoteResponse = userRemoteResponse as LiveData<DatingUser?>
+    fun getRemoteUserInformation() {
+        parentJob = viewModelScope.launch(handler) {
+            val result = userProfileRepository.getUserProfile(userUID)
+            if (result.data != null) {
+                userRemoteResponse.postValue(result.data)
+            } else {
+                responseMessage.postValue(result.status.message)
+            }
+        }
+    }
 
     fun login(email: String, password: String) {
         showLoading(true)

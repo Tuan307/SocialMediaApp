@@ -74,13 +74,27 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="@string/change_your_profile_picture"
+                android:text="@string/change_your_profile_picture_vn"
                 android:textColor="#16C8DF"
                 android:textSize="@dimen/sp20"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imgAvatar" />
+
+            <TextView
+                android:id="@+id/text_update_user_interest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="@string/text_update_travel_interest"
+                android:textColor="#16C8DF"
+                android:textSize="@dimen/sp18"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtChangeAvatar" />
 
             <TextView
                 android:id="@+id/txtName"
@@ -93,7 +107,7 @@
                 android:textSize="@dimen/sp16"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtChangeAvatar" />
+                app:layout_constraintTop_toBottomOf="@+id/text_update_user_interest" />
 
             <com.base.app.ui.custom.InputEdittextCustom
                 android:id="@+id/edtEditName"

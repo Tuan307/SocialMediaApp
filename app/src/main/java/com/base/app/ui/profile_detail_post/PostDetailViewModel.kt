@@ -51,32 +51,6 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun getDataDetail(id: String) {
-        showLoading(true)
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Posts")
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        dataListDetail.clear()
-                        for (dataSnapshot in snapshot.children) {
-                            val post = dataSnapshot.getValue(PostItem::class.java)
-                            if (post != null && post.publicher == id) {
-                                dataListDetail.add(post)
-                            }
-                        }
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            listResponseDetail.postValue(dataListDetail)
-                            registerJobFinish()
-                        }, 1000)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.d("CheckAAA", "Yes Here")
-                    }
-                })
-        }
-    }
-
     fun likePost(postId: String, status: String, publisherId: String) {
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             if (status == "like") {
@@ -232,21 +206,6 @@ class PostDetailViewModel @Inject constructor(
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val count = snapshot.childrenCount
                         text.text = "$count likes"
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-                })
-        }
-    }
-
-    fun getPostDisLikes(text: TextView, postId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Dislikes").child(postId)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val count = snapshot.childrenCount
-                        text.text = "$count dislikes"
                     }
 
                     override fun onCancelled(error: DatabaseError) {

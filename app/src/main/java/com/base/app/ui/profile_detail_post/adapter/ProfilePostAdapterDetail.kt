@@ -39,7 +39,8 @@ class ProfilePostAdapterDetail(
                 listImagePost.apply {
                     adapter = postInPostAdapter
                 }
-
+                textLocation.text = data.checkInAddress
+                textTimeAgo.text = data.checkInTimestamp
                 if (data.description.equals("")) {
                     txtDescription.visibility = View.GONE
                 } else {

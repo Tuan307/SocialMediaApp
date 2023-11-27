@@ -24,3 +24,21 @@ data class InterestModel(
     val name: String,
     var isChosen: Boolean = false
 )
+
+data class UpdateInterestResponse(
+    @SerializedName("status")
+    val status: Status?,
+    @SerializedName("data")
+    val data: List<UpdateInterestModel>?,
+    val pageCount: Long?,
+    val page: Long?
+)
+
+data class UpdateInterestModel(
+    @SerializedName("id")
+    val id: Long?,
+    @SerializedName("name")
+    val name: String?,
+    @SerializedName("hasChosen")
+    var hasChosen: Boolean?
+)

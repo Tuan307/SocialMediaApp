@@ -376,6 +376,7 @@
     <string name="error">Something is wrong,please try again</string>
     <string name="edit_profile_activity">Edit Profile</string>
     <string name="change_your_profile_picture">Change your profile picture</string>
+    <string name="change_your_profile_picture_vn">Thay đổi ảnh đại diện</string>
     <string name="name">Name</string>
     <string name="bio">Bio</string>
     <string name="comment">Comment</string>
@@ -437,6 +438,7 @@
     <string name="text_verify">Xét duyệt</string>
     <string name="text_interest">Mục yêu thích</string>
     <string name="text_all_shortcut">Tất cả lối tắt</string>
+    <string name="text_update_travel_interest">Cập nhật sở thích du lịch</string>
     <string-array name="array_name">
         <item>+</item>
         <item>-</item>

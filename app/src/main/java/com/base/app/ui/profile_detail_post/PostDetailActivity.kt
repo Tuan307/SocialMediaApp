@@ -17,14 +17,16 @@ import com.base.app.base.activities.BaseActivity
 import com.base.app.common.EMPTY_STRING
 import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
-import com.base.app.data.models.response.post.PostContent
 import com.base.app.data.models.response.post.ImagesList
+import com.base.app.data.models.response.post.PostContent
 import com.base.app.databinding.FragmentPostDetailBinding
 import com.base.app.ui.comment.CommentActivity
 import com.base.app.ui.main.fragment.home.DetailHomePostActivity
 import com.base.app.ui.profile_detail_post.adapter.ProfilePostAdapterDetail
 import dagger.hilt.android.AndroidEntryPoint
+import org.ocpsoft.prettytime.PrettyTime
 import java.io.File
+import java.util.*
 
 @AndroidEntryPoint
 class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
@@ -33,12 +35,14 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
     private var list: ArrayList<PostContent> = ArrayList()
     private var imagePosition = 0
     private var txtName = ""
+    private lateinit var prettyTime: PrettyTime
     private lateinit var postAdapter: ProfilePostAdapterDetail
     override fun getContentLayout(): Int {
         return R.layout.fragment_post_detail
     }
 
     override fun initView() {
+        prettyTime = PrettyTime(Locale.getDefault())
         registerObserverLoadingEvent(viewModel, this@PostDetailActivity)
         val intent = intent
         val idKey = intent.getStringExtra("idKey")
@@ -64,7 +68,27 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
         with(viewModel) {
             detailUserPostResponse.observe(this@PostDetailActivity) {
                 list.clear()
-                it.data?.let { it1 -> list.addAll(it1) }
+                it.data?.let { it1 ->
+                    list.addAll(it1.map { it2 ->
+                        PostContent(
+                            postId = it2.postId,
+                            description = it2.description,
+                            imagesList = it2.imagesList,
+                            checkInTimestamp = prettyTime.format(it2.checkInTimestamp?.let { it3 ->
+                                Date(
+                                    it3.toLong()
+                                )
+                            }),
+                            checkInAddress = it2.checkInAddress,
+                            checkInLongitude = it2.checkInLongitude,
+                            checkInLatitude = it2.checkInLatitude,
+                            type = it2.type,
+                            question = it2.question,
+                            videoUrl = it2.videoUrl,
+                            postUserId = it2.postUserId
+                        )
+                    })
+                }
                 postAdapter.submitList(list.toList())
                 binding.rcvPhoto.scrollToPosition(imagePosition)
             }

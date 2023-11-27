@@ -86,7 +86,10 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
                     email = "",
                     latitude = 0.0,
                     longitude = 0.0,
-                    hasChosen = data.hasInvite
+                    hasChosen = data.hasInvite,
+                    lastOnline = "",
+                    isBlock = false,
+                    userInterestProfiles = null
                 )
             })
             inviteMemberAdapter.submitList(it.map { data ->
@@ -99,7 +102,10 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
                     email = "",
                     latitude = 0.0,
                     longitude = 0.0,
-                    hasChosen = data.hasInvite
+                    hasChosen = data.hasInvite,
+                    lastOnline = "",
+                    isBlock = false,
+                    userInterestProfiles = null
                 )
             })
         }
@@ -118,7 +124,7 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
                 groupId.toLong(),
                 Calendar.getInstance().time.time.toString(),
                 "Mời bạn tham gia nhóm $groupName",
-                user.userId,
+                user.userId.toString(),
                 "invite",
                 viewModel.firebaseUser?.uid.toString(),
             )

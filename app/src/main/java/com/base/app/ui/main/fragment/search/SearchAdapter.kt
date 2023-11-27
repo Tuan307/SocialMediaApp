@@ -20,10 +20,18 @@ class SearchAdapter(
             binding.txtName.text = data.fullName
             binding.txtUserName.text = data.userName
             binding.searchConstrainView.setOnClickListener {
-                data.userId.let { it1 -> iCallBack.itemClick(it1) }
+                data.userId.let { it1 ->
+                    if (it1 != null) {
+                        iCallBack.itemClick(it1)
+                    }
+                }
             }
             binding.imgRemove.setOnClickListener {
-                data.userId.let { it1 -> iCallBack.removeSearch(it1) }
+                data.userId.let { it1 ->
+                    if (it1 != null) {
+                        iCallBack.removeSearch(it1)
+                    }
+                }
             }
         }
     }

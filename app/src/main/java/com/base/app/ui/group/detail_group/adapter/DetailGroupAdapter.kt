@@ -188,10 +188,12 @@ class DetailGroupAdapter(
             imgHeart.setOnClickListener {
                 data.id.let { it1 ->
                     data.user.userId.let { it2 ->
-                        listener.likePost(
-                            it1, imgHeart.tag.toString(),
-                            it2
-                        )
+                        if (it2 != null) {
+                            listener.likePost(
+                                it1, imgHeart.tag.toString(),
+                                it2
+                            )
+                        }
                     }
                 }
             }
@@ -219,10 +221,12 @@ class DetailGroupAdapter(
             txtViewAllComments.setOnClickListener {
                 data.id.let { it1 ->
                     data.user.userId.let { it2 ->
-                        listener.clickPost(
-                            it1,
-                            it2
-                        )
+                        if (it2 != null) {
+                            listener.clickPost(
+                                it1,
+                                it2
+                            )
+                        }
                     }
                 }
             }

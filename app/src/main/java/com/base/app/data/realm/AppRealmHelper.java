@@ -5,6 +5,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.realm.Case;
 import io.realm.DynamicRealm;
 import io.realm.Realm;

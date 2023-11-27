@@ -1,11 +1,13 @@
 package com.base.app.ui.edit_profile
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.viewModels
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.databinding.ActivityEditProfileBinding
+import com.base.app.ui.splash.ChooseInterestActivity
 import com.bumptech.glide.Glide
 import com.esafirm.imagepicker.features.registerImagePicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +42,12 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
     }
 
     override fun initListener() {
-        binding.apply {
+        with(binding) {
+            textUpdateUserInterest.setOnClickListener {
+                val intent = Intent(this@EditProfileActivity, ChooseInterestActivity::class.java)
+                intent.putExtra("from", "update")
+                startActivity(intent)
+            }
             imgClose.setOnClickListener {
                 finish()
             }
@@ -67,9 +74,9 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
             currentUser = it
             if (it != null) {
                 with(binding) {
-                    edtEditUserName.setText(it.userName)
+                    it.userName?.let { it1 -> edtEditUserName.setText(it1) }
                     it.bio?.let { it1 -> edtEditBio.setText(it1) }
-                    edtEditName.setText(it.fullName)
+                    it.fullName?.let { it1 -> edtEditName.setText(it1) }
                     Glide.with(this@EditProfileActivity).load(it.imageUrl).into(imgAvatar)
                 }
             }
@@ -81,10 +88,10 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
             if (it.data != null) {
                 val data = it.data
                 updateProfileFireBase(
-                    data.fullName,
-                    data.userName,
+                    data.fullName.toString(),
+                    data.userName.toString(),
                     data.bio.toString(),
-                    data.imageUrl
+                    data.imageUrl.toString()
                 )
                 showToast(this@EditProfileActivity, resources.getString(R.string.str_success))
                 finish()

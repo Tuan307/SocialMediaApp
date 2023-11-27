@@ -166,17 +166,19 @@ class GroupForYouGroupAdapter(
             imgHeart.setOnClickListener {
                 data.id.let { it1 ->
                     data.postUser.userId.let { it2 ->
-                        listener.likePost(
-                            it1, imgHeart.tag.toString(),
-                            it2
-                        )
+                        if (it2 != null) {
+                            listener.likePost(
+                                it1, imgHeart.tag.toString(),
+                                it2
+                            )
+                        }
                     }
                 }
             }
             imgComment.setOnClickListener {
                 listener.commentPost(
                     data.id,
-                    data.postUser.userId,
+                    data.postUser.userId.toString(),
                     data.itemList[0].imageUrl.toString()
                 )
             }
@@ -195,10 +197,12 @@ class GroupForYouGroupAdapter(
             txtViewAllComments.setOnClickListener {
                 data.id.let { it1 ->
                     data.postUser.userId.let { it2 ->
-                        listener.clickPost(
-                            it1,
-                            it2
-                        )
+                        if (it2 != null) {
+                            listener.clickPost(
+                                it1,
+                                it2
+                            )
+                        }
                     }
                 }
             }

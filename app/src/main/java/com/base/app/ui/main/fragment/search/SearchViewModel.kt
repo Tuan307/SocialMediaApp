@@ -95,7 +95,10 @@ class SearchForFriendViewModel @Inject constructor(
                                 "",
                                 20.0,
                                 20.0,
-                                false
+                                false,
+                                 "",
+                              false,
+                                 null
                             )
                         })
                     }

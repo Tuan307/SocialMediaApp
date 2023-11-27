@@ -68,6 +68,18 @@ class UserRepository @Inject constructor(
             }
         }
 
+    suspend fun getUpdateInterests(userId: String) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.getUpdateInterests(userId) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
     suspend fun checkIfUserHasInterests(userId: String) =
         withContext(dispatcher) {
             when (val result = callApi { api.checkIfUserHasInterests(userId) }) {
@@ -83,6 +95,18 @@ class UserRepository @Inject constructor(
     suspend fun saveUserInterest(request: AddUserInterestRequest) =
         withContext(dispatcher) {
             when (val result = callApi { api.saveUserInterest(request) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
+    suspend fun updateUserInterest(request: AddUserInterestRequest) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.updateUserInterest(request) }) {
                 is NetworkResult.Success -> {
                     result.data
                 }

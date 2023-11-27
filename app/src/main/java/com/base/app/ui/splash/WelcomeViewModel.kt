@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.interest.InterestModel
+import com.base.app.data.models.interest.UpdateInterestResponse
 import com.base.app.data.models.interest.request.AddUserInterestRequest
 import com.base.app.data.repositories.UserRepository
 import com.base.app.data.repositories.profile.UserProfileRepository
@@ -29,6 +30,17 @@ class WelcomeViewModel @Inject constructor(
     private var _addInterestResponse: MutableLiveData<Boolean> = MutableLiveData()
     val addInterestResponse: LiveData<Boolean>
         get() = _addInterestResponse
+
+    private var _updateAllInterest: MutableLiveData<UpdateInterestResponse> = MutableLiveData()
+    val updateAllInterest: LiveData<UpdateInterestResponse>
+        get() = _updateAllInterest
+
+    fun getUpdateInterests() {
+        viewModelScope.launch(handler) {
+            val result = userRepository.getUpdateInterests(firebaseUser?.uid.toString())
+            _updateAllInterest.value = result
+        }
+    }
 
     var checkUserResponse = MutableLiveData<Boolean>()
     fun checkUser() {
@@ -60,6 +72,13 @@ class WelcomeViewModel @Inject constructor(
     fun saveUserInterest(request: AddUserInterestRequest) {
         viewModelScope.launch(handler) {
             val result = userRepository.saveUserInterest(request)
+            _addInterestResponse.value = !result.data.isNullOrEmpty()
+        }
+    }
+
+    fun updateUserInterest(request: AddUserInterestRequest) {
+        viewModelScope.launch(handler) {
+            val result = userRepository.updateUserInterest(request)
             _addInterestResponse.value = !result.data.isNullOrEmpty()
         }
     }

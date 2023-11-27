@@ -85,6 +85,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
 
     override fun observerLiveData() {
         viewModel.currentIndex.observe(this@MainActivity) {
+            binding.bottomNav.visibility = View.VISIBLE
             binding.mainViewPager.currentItem = it
         }
     }

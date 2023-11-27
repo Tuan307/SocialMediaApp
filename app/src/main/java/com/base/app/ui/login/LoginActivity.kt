@@ -66,7 +66,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     }
 
     override fun observerLiveData() {
-        viewModel.apply {
+        with(viewModel) {
             userInterestResponse.observe(this@LoginActivity) {
                 if (it.data == true) {
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
@@ -76,9 +76,25 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                     finish()
                 }
             }
+            getUserRemoteResponse.observe(this@LoginActivity) {
+                if (it?.isBlock == true) {
+                    Toast.makeText(this@LoginActivity, "tai khoan da bi khoa", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    if (it?.userInterestProfiles?.isEmpty() == true) {
+                        val intent = Intent(this@LoginActivity, ChooseInterestActivity::class.java)
+                        intent.putExtra("from", "start")
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    }
+                }
+            }
             getLoginResponse.observe(this@LoginActivity) {
                 if (it) {
-                    viewModel.checkIfInterestExist()
+                    viewModel.getRemoteUserInformation()
                 } else {
                     Toast.makeText(
                         this@LoginActivity,

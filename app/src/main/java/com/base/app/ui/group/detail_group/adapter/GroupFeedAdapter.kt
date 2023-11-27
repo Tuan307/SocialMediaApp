@@ -135,17 +135,19 @@ class GroupFeedAdapter(
             imgHeart.setOnClickListener {
                 data.groupPostId.let { it1 ->
                     data.groupPostUser.userId.let { it2 ->
-                        listener.likePost(
-                            it1, imgHeart.tag.toString(),
-                            it2
-                        )
+                        if (it2 != null) {
+                            listener.likePost(
+                                it1, imgHeart.tag.toString(),
+                                it2
+                            )
+                        }
                     }
                 }
             }
             imgComment.setOnClickListener {
                 listener.commentPost(
                     data.groupPostId,
-                    data.groupPostUser.userId,
+                    data.groupPostUser.userId.toString(),
                     data.groupPostContentItemList[0].imageUrl.toString()
                 )
             }
@@ -164,10 +166,12 @@ class GroupFeedAdapter(
             txtViewAllComments.setOnClickListener {
                 data.groupPostId.let { it1 ->
                     data.groupPostUser.userId.let { it2 ->
-                        listener.clickPost(
-                            it1,
-                            it2
-                        )
+                        if (it2 != null) {
+                            listener.clickPost(
+                                it1,
+                                it2
+                            )
+                        }
                     }
                 }
             }

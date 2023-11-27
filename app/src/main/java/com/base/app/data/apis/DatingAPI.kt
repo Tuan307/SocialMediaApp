@@ -23,6 +23,7 @@ import com.base.app.data.models.group.response.GetGroupResponse
 import com.base.app.data.models.group.response.GetYourOwnGroupResponse
 import com.base.app.data.models.group.response.SearchPostInGroupResponse
 import com.base.app.data.models.interest.InterestResponse
+import com.base.app.data.models.interest.UpdateInterestResponse
 import com.base.app.data.models.interest.request.AddUserInterestRequest
 import com.base.app.data.models.interest.response.AddInterestResponse
 import com.base.app.data.models.request.AddNotificationRequest
@@ -79,6 +80,11 @@ interface DatingAPI {
     suspend fun getAllInterests(
     ): Response<InterestResponse>
 
+    @GET("users/interest/get_user_interest")
+    suspend fun getUpdateInterests(
+        @Query("userId") userId: String
+    ): Response<UpdateInterestResponse>
+
     @GET("users/interest/check")
     suspend fun checkIfUserHasInterests(
         @Query("userId") userId: String
@@ -86,6 +92,11 @@ interface DatingAPI {
 
     @POST("users/interest/save")
     suspend fun saveUserInterest(
+        @Body request: AddUserInterestRequest
+    ): Response<AddInterestResponse>
+
+    @POST("users/interest/update")
+    suspend fun updateUserInterest(
         @Body request: AddUserInterestRequest
     ): Response<AddInterestResponse>
 

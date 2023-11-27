@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBlack"
+        android:background="@color/colorWhite"
         tools:context=".ui.profile_detail_post.PostDetailActivity">
 
         <androidx.appcompat.widget.Toolbar
@@ -18,16 +18,16 @@
 
             <ImageView
                 android:id="@+id/imgBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_back" />
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_back_black" />
 
             <TextView
                 android:id="@+id/txtPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp20"
-                android:text="Photo"
+                android:layout_marginStart="@dimen/dp25"
+                android:text="Bài đăng"
                 android:textColor="@color/color_app_text"
                 android:textSize="@dimen/sp22"
                 android:textStyle="bold" />

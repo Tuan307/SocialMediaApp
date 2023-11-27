@@ -70,9 +70,9 @@ class ExploreFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     "Người dùng gần bạn",
                     it.map { data ->
                         ExploreItemViewData(
-                            id = data.userId,
-                            name = data.userName,
-                            image = data.imageUrl,
+                            id = data.userId.toString(),
+                            name = data.userName.toString(),
+                            image = data.imageUrl.toString(),
                             type = 0,
                             groupMember = null
                         )

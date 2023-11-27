@@ -24,6 +24,7 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
     private lateinit var interestAdapter: InterestAdapter
     private val viewModel by viewModels<WelcomeViewModel>()
     val list = arrayListOf<InterestModel>()
+    private var from = "start"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
@@ -31,7 +32,13 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
             R.layout.activity_choose_interest
         )
         setContentView(binding.root)
-        viewModel.getAllInterests()
+        val intent = intent
+        from = intent.getStringExtra("from").toString()
+        if (from == "update") {
+            viewModel.getUpdateInterests()
+        } else {
+            viewModel.getAllInterests()
+        }
         initView()
         initListener()
         observeData()
@@ -47,17 +54,31 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                viewModel.saveUserInterest(
-                    AddUserInterestRequest(
-                        userId = viewModel.firebaseUser?.uid.toString(),
-                        checkedList.map { data ->
-                            InterestModelRequest(
-                                id = data.id,
-                                name = data.name
-                            )
-                        }
+                if (from == "update") {
+                    viewModel.updateUserInterest(
+                        AddUserInterestRequest(
+                            userId = viewModel.firebaseUser?.uid.toString(),
+                            checkedList.map { data ->
+                                InterestModelRequest(
+                                    id = data.id,
+                                    name = data.name
+                                )
+                            }
+                        )
                     )
-                )
+                } else {
+                    viewModel.saveUserInterest(
+                        AddUserInterestRequest(
+                            userId = viewModel.firebaseUser?.uid.toString(),
+                            checkedList.map { data ->
+                                InterestModelRequest(
+                                    id = data.id,
+                                    name = data.name
+                                )
+                            }
+                        )
+                    )
+                }
             }
         }
     }
@@ -77,6 +98,19 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
             list.addAll(it)
             interestAdapter.submitList(list)
         }
+
+        updateAllInterest.observe(this@ChooseInterestActivity) {
+            list.clear()
+            list.addAll(it.data?.map { data ->
+                InterestModel(
+                    id = data.id ?: 0,
+                    name = data.name.toString(),
+                    isChosen = data.hasChosen ?: false
+                )
+            }.orEmpty())
+            interestAdapter.submitList(list.toList())
+        }
+
         addInterestResponse.observe(this@ChooseInterestActivity) {
             if (it) {
                 startActivity(Intent(this@ChooseInterestActivity, MainActivity::class.java))

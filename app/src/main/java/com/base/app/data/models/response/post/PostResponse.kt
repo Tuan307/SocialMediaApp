@@ -48,7 +48,9 @@ data class ImagePostData(
 data class PostContent(
     @SerializedName("postId")
     val postId: String?,
+    @SerializedName("description")
     val description: String?,
+    @SerializedName("imagesList")
     val imagesList: List<ImagesList>?,
     @SerializedName("checkInTimestamp")
     val checkInTimestamp: String?,
@@ -86,7 +88,11 @@ data class PostUserID(
     @SerializedName("longitude")
     val longitude: Double?,
     @SerializedName("postItemList")
-    val postItemList: Any?
+    val postItemList: Any?,
+    @SerializedName("lastOnline")
+    val lastOnline: String?,
+    @SerializedName("isBlock")
+    val isBlock: Boolean
 )
 
 @Parcelize
