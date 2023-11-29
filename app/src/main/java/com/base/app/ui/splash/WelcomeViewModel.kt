@@ -17,30 +17,10 @@ import javax.inject.Inject
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
     private val repository: UserProfileRepository,
-    private val userRepository: UserRepository
 ) : BaseViewModel() {
     private var _userResponse: MutableLiveData<DatingUser?> = MutableLiveData()
     val userResponse: LiveData<DatingUser?>
         get() = _userResponse
-
-    private var _interestResponse: MutableLiveData<List<InterestModel>> = MutableLiveData()
-    val interestResponse: LiveData<List<InterestModel>>
-        get() = _interestResponse
-
-    private var _addInterestResponse: MutableLiveData<Boolean> = MutableLiveData()
-    val addInterestResponse: LiveData<Boolean>
-        get() = _addInterestResponse
-
-    private var _updateAllInterest: MutableLiveData<UpdateInterestResponse> = MutableLiveData()
-    val updateAllInterest: LiveData<UpdateInterestResponse>
-        get() = _updateAllInterest
-
-    fun getUpdateInterests() {
-        viewModelScope.launch(handler) {
-            val result = userRepository.getUpdateInterests(firebaseUser?.uid.toString())
-            _updateAllInterest.value = result
-        }
-    }
 
     var checkUserResponse = MutableLiveData<Boolean>()
     fun checkUser() {
@@ -60,26 +40,5 @@ class WelcomeViewModel @Inject constructor(
         }
     }
 
-    fun getAllInterests() {
-        viewModelScope.launch(handler) {
-            val result = userRepository.getAllInterests()
-            if (result.data != null) {
-                _interestResponse.value = result.data.orEmpty()
-            }
-        }
-    }
 
-    fun saveUserInterest(request: AddUserInterestRequest) {
-        viewModelScope.launch(handler) {
-            val result = userRepository.saveUserInterest(request)
-            _addInterestResponse.value = !result.data.isNullOrEmpty()
-        }
-    }
-
-    fun updateUserInterest(request: AddUserInterestRequest) {
-        viewModelScope.launch(handler) {
-            val result = userRepository.updateUserInterest(request)
-            _addInterestResponse.value = !result.data.isNullOrEmpty()
-        }
-    }
 }

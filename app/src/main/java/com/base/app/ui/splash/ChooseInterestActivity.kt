@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestItemClick {
     private lateinit var binding: ActivityChooseInterestBinding
     private lateinit var interestAdapter: InterestAdapter
-    private val viewModel by viewModels<WelcomeViewModel>()
+    private val viewModel by viewModels<ChooseInterestViewModel>()
     val list = arrayListOf<InterestModel>()
     private var from = "start"
     override fun onCreate(savedInstanceState: Bundle?) {
