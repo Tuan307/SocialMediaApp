@@ -27,12 +27,16 @@ import com.base.app.data.models.interest.UpdateInterestResponse
 import com.base.app.data.models.interest.request.AddUserInterestRequest
 import com.base.app.data.models.interest.response.AddInterestResponse
 import com.base.app.data.models.request.AddNotificationRequest
+import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.RegisterRequest
 import com.base.app.data.models.request.SavedPostRequest
 import com.base.app.data.models.request.UpdateProfileRequest
+import com.base.app.data.models.response.FollowUserResponse
 import com.base.app.data.models.response.GetNotificationResponse
+import com.base.app.data.models.response.ListFollowResponse
 import com.base.app.data.models.response.NotificationResponse
+import com.base.app.data.models.response.UnFollowUserResponse
 import com.base.app.data.models.response.post.AddPostImageResponse
 import com.base.app.data.models.response.post.CheckExistSavedPostResponse
 import com.base.app.data.models.response.post.GetAllSavedPostResponse
@@ -99,6 +103,27 @@ interface DatingAPI {
     suspend fun updateUserInterest(
         @Body request: AddUserInterestRequest
     ): Response<AddInterestResponse>
+
+    @POST("users/follow")
+    suspend fun followUser(
+        @Body request: FollowUserRequest
+    ): Response<FollowUserResponse>
+
+    @POST("users/unfollow")
+    suspend fun unfollowUser(
+        @Body request: FollowUserRequest
+    ): Response<UnFollowUserResponse>
+
+    @POST("users/is_following")
+    suspend fun isFollowingUser(
+        @Body request: FollowUserRequest
+    ): Response<UnFollowUserResponse>
+
+    @GET("users/follow/list")
+    suspend fun getFollowList(
+        @Query("sourceId") sourceId: String,
+        @Query("type") type: String
+    ): Response<ListFollowResponse>
 
     @GET("post-image")
     suspend fun getNewsFeed(

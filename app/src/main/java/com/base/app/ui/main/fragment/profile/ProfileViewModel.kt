@@ -5,18 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.common.ERROR
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.request.AddNotificationRequest
+import com.base.app.data.models.request.FollowUserRequest
+import com.base.app.data.models.response.FollowUserResponse
+import com.base.app.data.models.response.ListFollowResponse
+import com.base.app.data.models.response.UnFollowUserResponse
 import com.base.app.data.models.response.post.GetAllSavedPostResponse
 import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.repositories.UserRepository
 import com.base.app.data.repositories.notification.NotificationRepository
 import com.base.app.data.repositories.profile.UserProfileRepository
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -24,8 +24,29 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val repository: UserProfileRepository,
+    private val userRepository: UserRepository,
     private val notificationRepository: NotificationRepository
 ) : BaseViewModel() {
+
+    private var _followUserResponse: MutableLiveData<FollowUserResponse> = MutableLiveData()
+    val followUserResponse: LiveData<FollowUserResponse>
+        get() = _followUserResponse
+
+    private var _unfollowUserResponse: MutableLiveData<UnFollowUserResponse> = MutableLiveData()
+    val unfollowUserResponse: LiveData<UnFollowUserResponse>
+        get() = _unfollowUserResponse
+
+    private var _isFollowingUserResponse: MutableLiveData<UnFollowUserResponse> = MutableLiveData()
+    val isFollowingUserResponse: LiveData<UnFollowUserResponse>
+        get() = _isFollowingUserResponse
+
+    private var _getFollowingResponse = MutableLiveData<ListFollowResponse>()
+    val getFollowingResponse: LiveData<ListFollowResponse>
+        get() = _getFollowingResponse
+
+    private var _getFollowerResponse = MutableLiveData<ListFollowResponse>()
+    val getFollowerResponse: LiveData<ListFollowResponse>
+        get() = _getFollowerResponse
 
     private var key = MutableLiveData<String?>()
     val getKey = key as LiveData<String?>
@@ -63,37 +84,15 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private var followerNumber = MutableLiveData<Long>()
-    val getFollowerNumber = followerNumber as LiveData<Long>
-    fun getFollower(id: String) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Follow").child(id).child("follower")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        followerNumber.postValue(snapshot.childrenCount)
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        responseMessage.postValue(ERROR)
-                    }
-                })
-        }
-    }
-
-    private var followingNumber = MutableLiveData<Long>()
-    val getFollowingNumber = followingNumber as LiveData<Long>
-    fun getFollowing(id: String) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Follow").child(id).child("following")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        followingNumber.postValue(snapshot.childrenCount)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        responseMessage.postValue(ERROR)
-                    }
-                })
+    fun getFollow(sourceId: String, type: String) {
+        viewModelScope.launch(handler) {
+            val result = userRepository.getFollowList(sourceId, type)
+            if (type == "follow") {
+                _getFollowingResponse.value = result
+            } else {
+                _getFollowerResponse.value = result
+            }
         }
     }
 
@@ -131,49 +130,34 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun followUser(t: Boolean, id: String) {
-        if (t) {
-            databaseReference.child("Follow").child(firebaseUser?.uid.toString())
-                .child("following")
-                .child(id).setValue(true)
-            databaseReference.child("Follow").child(id).child("follower")
-                .child(firebaseUser?.uid.toString()).setValue(true)
-        } else {
-            databaseReference.child("Follow").child(firebaseUser?.uid.toString())
-                .child("following")
-                .child(id).removeValue()
-            databaseReference.child("Follow").child(id).child("follower")
-                .child(firebaseUser?.uid.toString()).removeValue()
+    fun followUser(request: FollowUserRequest) {
+        viewModelScope.launch(handler) {
+            val result = userRepository.followUser(request)
+            _followUserResponse.value = result
         }
     }
 
-    var followResponse = MutableLiveData<Boolean>()
-    fun isFollowing(id: String) {
-        if (id != "") {
-            databaseReference.child("Follow").child(firebaseUser?.uid.toString())
-                .child("following").addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.child(id).exists()) {
-                            followResponse.postValue(true)
-                        } else {
-                            followResponse.postValue(false)
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-                })
+    fun unfollowUser(request: FollowUserRequest) {
+        viewModelScope.launch(handler) {
+            val result = userRepository.unfollowUser(request)
+            _unfollowUserResponse.value = result
         }
     }
 
-    fun addNotifications(profileId: String) {
-        val userName = userRemoteResponse.value?.userName ?: "Someone"
+    fun isFollowing(request: FollowUserRequest) {
+        viewModelScope.launch(handler) {
+            val result = userRepository.isFollowingUser(request)
+            _isFollowingUserResponse.value = result
+        }
+    }
+
+    fun addNotifications(profileId: String,userName:String) {
         viewModelScope.launch(handler) {
             notificationRepository.addNotification(
                 AddNotificationRequest(
                     isPost = false,
                     isInvitation = false,
-                    text = " started following you",
+                    text = "$userName started following you",
                     ownerId = profileId,
                     postId = "",
                     timeStamp = Calendar.getInstance().time.time.toString(),

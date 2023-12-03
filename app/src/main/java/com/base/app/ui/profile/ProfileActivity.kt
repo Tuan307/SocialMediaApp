@@ -3,6 +3,7 @@ package com.base.app.ui.profile
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.base.app.R
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
+import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.ActivityProfileBinding
 import com.base.app.ui.edit_profile.EditProfileActivity
 import com.base.app.ui.follow.FollowerActivity
@@ -21,6 +24,7 @@ import com.base.app.ui.profile_detail_post.PostDetailActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
@@ -31,18 +35,19 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
     private lateinit var profileAdapter: ProfilePostAdapter
     private var postList = ArrayList<PostContent>()
     private var tabType: Int = 0
-
+    private lateinit var saveShare: AppPreferencesHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@ProfileActivity, R.layout.activity_profile)
         setContentView(binding.root)
+        saveShare = AppPreferencesHelper(this@ProfileActivity)
         val intent = intent
         userId = intent.getStringExtra("userId").toString()
         viewModel.getRemoteUserInformation(userId)
         viewModel.getProfilePost(userId, 20, 1)
-        viewModel.isFollowing(userId)
-        viewModel.getFollowing(userId)
-        viewModel.getFollower(userId)
+        viewModel.isFollowing(FollowUserRequest(userId, viewModel.firebaseUser?.uid.toString(), ""))
+        viewModel.getFollow(userId, "follow")
+        viewModel.getFollow(userId, "follower")
         with(binding) {
             imgBackProfile.setOnClickListener {
                 finish()
@@ -84,10 +89,23 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
             }
             btnFollowProfile.setOnClickListener {
                 if (btnFollowProfile.text.toString().lowercase() == "follow") {
-                    viewModel.followUser(true, userId)
-                    viewModel.addNotifications(userId)
+                    viewModel.followUser(
+                        FollowUserRequest(
+                            userId,
+                            viewModel.firebaseUser?.uid.toString(),
+                            Calendar.getInstance().time.time.toString()
+                        )
+                    )
+                    val userName = saveShare.getString("user_name") ?: ""
+                    viewModel.addNotifications(userId, userName)
                 } else {
-                    viewModel.followUser(false, userId)
+                    viewModel.unfollowUser(
+                        FollowUserRequest(
+                            userId,
+                            viewModel.firebaseUser?.uid.toString(),
+                            Calendar.getInstance().time.time.toString()
+                        )
+                    )
                 }
             }
             tabLayoutProfile.getTabAt(0)?.setIcon(R.drawable.ic_grid)
@@ -139,18 +157,38 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
                 }
             }
         }
-        followResponse.observe(this@ProfileActivity) {
-            if (it) {
+        followUserResponse.observe(this@ProfileActivity) {
+            viewModel.getFollow(userId, "follow")
+            viewModel.getFollow(userId, "follower")
+        }
+        unfollowUserResponse.observe(this@ProfileActivity) {
+            viewModel.getFollow(userId, "follow")
+            viewModel.getFollow(userId, "follower")
+        }
+        isFollowingUserResponse.observe(this@ProfileActivity) {
+            if (it.data == true) {
                 binding.btnFollowProfile.text = resources.getString(R.string.un_follow)
             } else {
                 binding.btnFollowProfile.text = resources.getString(R.string.follow)
             }
         }
-        getFollowerNumber.observe(this@ProfileActivity) {
-            binding.txtFollowerNumber.text = it.toString()
+        followUserResponse.observe(this@ProfileActivity) {
+            if (it.status?.code == 200.toLong()) {
+                binding.btnFollowProfile.text = resources.getString(R.string.un_follow)
+            }
         }
-        getFollowingNumber.observe(this@ProfileActivity) {
-            binding.txtFollowingNumber.text = it.toString()
+        unfollowUserResponse.observe(this@ProfileActivity) {
+            if (it.data == true) {
+                binding.btnFollowProfile.text = resources.getString(R.string.follow)
+            } else {
+                Toast.makeText(this@ProfileActivity, it.status?.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+        getFollowerResponse.observe(this@ProfileActivity) {
+            binding.txtFollowerNumber.text = it.data?.size.toString()
+        }
+        getFollowingResponse.observe(this@ProfileActivity) {
+            binding.txtFollowingNumber.text = it.data?.size.toString()
         }
         getProfilePost.observe(this@ProfileActivity) {
             postList.clear()
@@ -163,7 +201,6 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
             binding.txtPostNumber.text = postList.size.toString()
             profileAdapter.notifyDataSetChanged()
         }
-
         getSavedPostResponse.observe(this@ProfileActivity) {
             if (postList.isNotEmpty()) {
                 postList.clear()

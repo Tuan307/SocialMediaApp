@@ -103,14 +103,14 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
             }
             popupMenu.show()
         }
-        binding.btnFollowProfile.setOnClickListener {
-            if (binding.btnFollowProfile.text.toString().lowercase() == "follow") {
-                viewModel.followUser(true, idKey)
-                viewModel.addNotifications(idKey)
-            } else {
-                viewModel.followUser(false, idKey)
-            }
-        }
+//        binding.btnFollowProfile.setOnClickListener {
+//            if (binding.btnFollowProfile.text.toString().lowercase() == "follow") {
+//                viewModel.followUser(true, idKey)
+//                viewModel.addNotifications(idKey)
+//            } else {
+//                viewModel.followUser(false, idKey)
+//            }
+//        }
         binding.imgBackProfile.setOnClickListener {
             dataManager.remove("id")
             mainViewModel.setSomething(false)
@@ -191,12 +191,12 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                     }
                 }
             }
-            getFollowerNumber.observe(this@MyProfileFragment) {
-                binding.txtFollowerNumber.text = it.toString()
-            }
-            getFollowingNumber.observe(this@MyProfileFragment) {
-                binding.txtFollowingNumber.text = it.toString()
-            }
+//            getFollowerNumber.observe(this@MyProfileFragment) {
+//                binding.txtFollowerNumber.text = it.toString()
+//            }
+//            getFollowingNumber.observe(this@MyProfileFragment) {
+//                binding.txtFollowingNumber.text = it.toString()
+//            }
             responseMessage.observe(viewLifecycleOwner) {
                 if (it != null) {
                     showToast(requireContext(), it)
@@ -256,26 +256,26 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                 }
                 profileAdapter.notifyDataSetChanged()
             }
-            followResponse.observe(this@MyProfileFragment) {
-                if (it) {
-                    binding.btnFollowProfile.text = resources.getString(R.string.un_follow)
-                } else {
-                    binding.btnFollowProfile.text = resources.getString(R.string.follow)
-                }
-            }
-            getKey.observe(this@MyProfileFragment) {
-                idKey = it ?: viewModel.firebaseUser?.uid.toString()
-                viewModel.isFollowing(idKey)
-                viewModel.setId(idKey)
-                viewModel.getRemoteUserInformation(idKey)
-                viewModel.getFollowing(idKey)
-                viewModel.getFollower(idKey)
-                if (tabType == 0) {
-                    viewModel.getProfilePost(idKey, 20, 1)
-                } else {
-                    viewModel.getSavePost(idKey, 20, 1)
-                }
-            }
+//            followResponse.observe(this@MyProfileFragment) {
+//                if (it) {
+//                    binding.btnFollowProfile.text = resources.getString(R.string.un_follow)
+//                } else {
+//                    binding.btnFollowProfile.text = resources.getString(R.string.follow)
+//                }
+//            }
+//            getKey.observe(this@MyProfileFragment) {
+//                idKey = it ?: viewModel.firebaseUser?.uid.toString()
+//                viewModel.isFollowing(idKey)
+//                viewModel.setId(idKey)
+//                viewModel.getRemoteUserInformation(idKey)
+//                viewModel.getFollowing(idKey)
+//                viewModel.getFollower(idKey)
+//                if (tabType == 0) {
+//                    viewModel.getProfilePost(idKey, 20, 1)
+//                } else {
+//                    viewModel.getSavePost(idKey, 20, 1)
+//                }
+//            }
         }
     }
 
