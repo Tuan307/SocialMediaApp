@@ -1,6 +1,7 @@
 package com.base.app.ui.main.fragment.search
 
 import android.content.Intent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,8 +65,15 @@ class SearchForFriendActivity : BaseActivity<FragmentSearchBinding>(),
     override fun observerLiveData() = with(viewModel) {
         searchUserResponse.observe(this@SearchForFriendActivity) {
             userList.clear()
-            userList.addAll(it)
-            searchAdapter.submitList(userList.toList())
+            if(it.isEmpty()){
+                binding.linearEmptyView.visibility = View.VISIBLE
+                binding.rcvSearch.visibility = View.GONE
+            }else{
+                binding.linearEmptyView.visibility = View.GONE
+                binding.rcvSearch.visibility = View.VISIBLE
+                userList.addAll(it)
+                searchAdapter.submitList(userList.toList())
+            }
         }
         searchUserLoadMoreResponse.observe(this@SearchForFriendActivity) {
             userList.addAll(it)

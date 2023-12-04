@@ -68,10 +68,24 @@ class ExploreCityActivity : BaseActivity<ActivityExploreCityBinding>(),
     override fun observerLiveData() {
         with(viewModel) {
             allCityResponse.observe(this@ExploreCityActivity) {
-                cityAdapter.submitList(it.toList())
+                if (it.isEmpty()) {
+                    binding.linearEmptyView.visibility = View.VISIBLE
+                    binding.listOfCities.visibility = View.GONE
+                } else {
+                    binding.linearEmptyView.visibility = View.GONE
+                    binding.listOfCities.visibility = View.VISIBLE
+                    cityAdapter.submitList(it.toList())
+                }
             }
             searchCityResponse.observe(this@ExploreCityActivity) {
-                cityAdapter.submitList(it.toList())
+                if (it.isEmpty()) {
+                    binding.linearEmptyView.visibility = View.VISIBLE
+                    binding.listOfCities.visibility = View.GONE
+                } else {
+                    binding.linearEmptyView.visibility = View.GONE
+                    binding.listOfCities.visibility = View.VISIBLE
+                    cityAdapter.submitList(it.toList())
+                }
             }
         }
     }
