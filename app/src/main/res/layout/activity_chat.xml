@@ -43,14 +43,56 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <LinearLayout
+            android:id="@+id/linear_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="@drawable/custom_search"
+            android:backgroundTint="@color/color_search_text"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp8"
+            android:weightSum="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chatAppBar">
+
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp10"
+                android:layout_weight="3"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="@dimen/dp6"
+                android:hint="@string/search_vn"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:minHeight="28dp"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/color_line"
+                android:textSize="@dimen/sp22" />
+
+            <ImageView
+                android:id="@+id/image_close"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="@dimen/dp24"
+                android:src="@drawable/ic_close_dialog"
+                android:visibility="gone"
+                app:tint="@color/colorBlack" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvChat"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp10"
-            tools:listitem="@layout/item_chat_user"
             android:layout_marginHorizontal="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp10"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chatAppBar" />
+            app:layout_constraintTop_toBottomOf="@+id/linear_search"
+            tools:listitem="@layout/item_chat_user" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

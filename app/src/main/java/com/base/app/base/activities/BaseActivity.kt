@@ -403,7 +403,6 @@ abstract class BaseActivity<BINDING : ViewDataBinding> :
         viewModel: BaseViewModel,
         viewLifecycleOwner: LifecycleOwner
     ) {
-        Log.d("CheckLoading", viewModel.isLoading.value.toString())
         viewModel.isLoading.observe(viewLifecycleOwner) { isShow ->
             showLoading(isShow)
         }

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.RecyclerView
-import com.base.app.data.models.User
+import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.databinding.ItemChatUserBinding
 import com.bumptech.glide.Glide
 
@@ -16,15 +16,16 @@ class ChatAdapter(
 ) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemChatUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: User) {
-            binding.apply {
-                txtChatName.text = data.username
-                Glide.with(context).load(data.imageurl).into(imgAvatar)
+        fun bind(data: DatingUser) {
+            with(binding) {
+                txtChatName.text = data.userName
+                textTimeAgo.text = data.lastOnline
+                Glide.with(context).load(data.imageUrl).into(imgAvatar)
                 root.setOnClickListener {
                     listener.onItemCLick(
-                        data.id.toString(),
-                        data.username.toString(),
-                        data.imageurl.toString()
+                        data.userId.toString(),
+                        data.userName.toString(),
+                        data.imageUrl.toString()
                     )
                 }
             }
@@ -45,12 +46,12 @@ class ChatAdapter(
         return differ.currentList.size
     }
 
-    private val diffUtil = object : ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
-            return oldItem.id == newItem.id
+    private val diffUtil = object : ItemCallback<DatingUser>() {
+        override fun areItemsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
+            return oldItem.userId == newItem.userId
         }
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+        override fun areContentsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
             return oldItem == newItem
         }
 

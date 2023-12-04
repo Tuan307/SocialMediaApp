@@ -40,7 +40,7 @@ data class UserFollow(
     val type: String?,
     val createdAt: String?,
     @SerializedName("sourceId")
-    val sourceID: DatingUser?,
+    val sourceId: DatingUser?,
     @SerializedName("targetId")
-    val targetID: DatingUser?
+    val targetId: DatingUser?
 )

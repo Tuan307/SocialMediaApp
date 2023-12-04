@@ -27,10 +27,19 @@
             android:textColor="@color/color_app_text"
             android:textSize="@dimen/sp20"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imgAvatar"
             tools:text="Some name in here" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_time_ago"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp3"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintStart_toStartOf="@+id/txtChatName"
+            app:layout_constraintTop_toBottomOf="@+id/txtChatName"
+            tools:text="30 min ago" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

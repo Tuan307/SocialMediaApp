@@ -17,6 +17,8 @@ import com.base.app.data.models.ChatModel
 import com.base.app.data.models.PushNotification
 import com.base.app.data.models.User
 import com.base.app.data.models.mToken
+import com.base.app.data.models.response.ListFollowResponse
+import com.base.app.data.repositories.UserRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -29,7 +31,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val api: Api
+    private val api: Api,
+    private val repository: UserRepository
 ) : BaseViewModel() {
 
     private var _isLoadingResponse: MutableLiveData<Boolean> = MutableLiveData()
@@ -38,49 +41,16 @@ class ChatViewModel @Inject constructor(
     private var followerResponse = MutableLiveData<ArrayList<String>>()
     val getFollowerResponse = followerResponse as LiveData<ArrayList<String>>
     private var followerList: ArrayList<String> = ArrayList()
-    fun getFollower() {
-        viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Follow").child(firebaseUser?.uid.toString()).child("follower")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        followerList.clear()
-                        for (data in snapshot.children) {
-                            followerList.add(data.key.toString())
-                        }
-                        followerResponse.postValue(followerList)
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-                })
+    private var _chatListUserResponse: MutableLiveData<ListFollowResponse> = MutableLiveData()
+    val chatListUserResponse: LiveData<ListFollowResponse>
+        get() = _chatListUserResponse
+
+    fun getChatList() {
+        viewModelScope.launch(handler) {
+            val result = repository.getFollowList(firebaseUser?.uid.toString(), "follower")
+            _chatListUserResponse.value = result
         }
-    }
-
-
-    private var userResponse = MutableLiveData<ArrayList<User>>()
-    val getUserResponse = userResponse as LiveData<ArrayList<User>>
-    private var userList: ArrayList<User> = ArrayList()
-    fun getUserView(list: ArrayList<String>) {
-        databaseReference.child("Users")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    userList.clear()
-                    for (data in snapshot.children) {
-                        val user = data.getValue(User::class.java)
-                        if (user != null) {
-                            for (key in list) {
-                                if (user.id == key) {
-                                    userList.add(user)
-                                }
-                            }
-                        }
-                    }
-                    userResponse.postValue(userList)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
     }
 
     private var _chatListResponse = MutableLiveData<ArrayList<ChatModel>>()
@@ -188,7 +158,7 @@ class ChatViewModel @Inject constructor(
                     _isLoadingResponse.value = false
                 }
             }
-        }else{
+        } else {
             _isLoadingResponse.value = false
         }
     }
