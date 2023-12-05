@@ -20,10 +20,12 @@ import com.base.app.R
 import com.base.app.common.EMPTY_STRING
 import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
+import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.FragmentDetailChatBinding
 import com.base.app.ui.video_call.MainActivity
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.HashMap
 
 @AndroidEntryPoint
 class DetailChatFragment : Fragment(), ImagesAdapter.ChooseImage, DetailChatAdapter.OnMessageClick {
@@ -79,7 +81,7 @@ class DetailChatFragment : Fragment(), ImagesAdapter.ChooseImage, DetailChatAdap
             imgSend.setOnClickListener {
                 val message = edtInputText.text.toString()
                 if (message.isNotEmpty()) {
-                    viewModel.sendMessage(message, chatId)
+                    viewModel.sendMessage(message, chatId,chatName,url)
                 } else {
                     showToast(
                         requireContext(),

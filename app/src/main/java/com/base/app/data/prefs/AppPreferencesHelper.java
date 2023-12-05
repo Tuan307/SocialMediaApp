@@ -4,7 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
+@Singleton
 public class AppPreferencesHelper implements PreferencesHelper {
 
     private static final long DEFAULT_VALUE_LONG = -1;
@@ -20,7 +25,8 @@ public class AppPreferencesHelper implements PreferencesHelper {
 
     private final SharedPreferences mPrefs;
 
-    public AppPreferencesHelper(Context context) {
+    @Inject
+    public AppPreferencesHelper(@ApplicationContext Context context) {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 

@@ -88,6 +88,7 @@ class OptionsFragment : BaseFragment<FragmentOptionsBinding>(), ConfirmDialog.Co
             userRemoteResponse.observe(this@OptionsFragment) {
                 binding.txtUserName.text = it?.userName.toString()
                 saveShare.save("user_name", it?.userName)
+                saveShare.save("user_image", it?.imageUrl)
                 Glide.with(requireContext()).load(it?.imageUrl).into(binding.imgAvatar)
             }
             logOutResponse.observe(viewLifecycleOwner) {

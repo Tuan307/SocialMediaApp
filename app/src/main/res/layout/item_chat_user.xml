@@ -15,7 +15,6 @@
             android:id="@+id/imgAvatar"
             android:layout_width="@dimen/dp50"
             android:layout_height="@dimen/dp50"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,12 +32,24 @@
             tools:text="Some name in here" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_last_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp15"
+            app:layout_constraintEnd_toStartOf="@id/text_time_ago"
+            app:layout_constraintStart_toStartOf="@+id/txtChatName"
+            app:layout_constraintTop_toBottomOf="@+id/txtChatName"
+            tools:text="tin nhawns cuoi: HELLOHELLO" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_time_ago"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp3"
+            app:layout_constraintEnd_toEndOf="parent"
             android:textSize="@dimen/sp16"
-            app:layout_constraintStart_toStartOf="@+id/txtChatName"
             app:layout_constraintTop_toBottomOf="@+id/txtChatName"
             tools:text="30 min ago" />
     </androidx.constraintlayout.widget.ConstraintLayout>

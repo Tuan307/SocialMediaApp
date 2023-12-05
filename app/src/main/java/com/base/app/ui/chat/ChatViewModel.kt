@@ -15,9 +15,10 @@ import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.data.apis.Api
 import com.base.app.data.models.ChatModel
 import com.base.app.data.models.PushNotification
-import com.base.app.data.models.User
+import com.base.app.data.models.chat.RecentChatModel
 import com.base.app.data.models.mToken
 import com.base.app.data.models.response.ListFollowResponse
+import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.data.repositories.UserRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,11 +29,13 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val api: Api,
-    private val repository: UserRepository
+    private val repository: UserRepository,
+    private val saveShare: AppPreferencesHelper
 ) : BaseViewModel() {
 
     private var _isLoadingResponse: MutableLiveData<Boolean> = MutableLiveData()
@@ -46,10 +49,38 @@ class ChatViewModel @Inject constructor(
     val chatListUserResponse: LiveData<ListFollowResponse>
         get() = _chatListUserResponse
 
-    fun getChatList() {
+    private var _recentChatResponse: MutableLiveData<ArrayList<RecentChatModel>> = MutableLiveData()
+    val recentChatResponse: LiveData<ArrayList<RecentChatModel>>
+        get() = _recentChatResponse
+
+    fun getChatFollowList() {
         viewModelScope.launch(handler) {
-            val result = repository.getFollowList(firebaseUser?.uid.toString(), "follower")
+            val result = repository.getFollowList(firebaseUser?.uid.toString(), "follow")
             _chatListUserResponse.value = result
+        }
+    }
+
+    private var userRecentList: ArrayList<RecentChatModel> = arrayListOf()
+    fun getRecentChatUserList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseReference.child("ChatRecent").child(firebaseUser?.uid.toString())
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        userRecentList.clear()
+                        for (data in snapshot.children) {
+                            val user = data.getValue(RecentChatModel::class.java)
+                            if (user != null) {
+                                userRecentList.add(user)
+                            }
+                        }
+                        userRecentList.sortByDescending { it.createdAt?.toLong() }
+                        val tmpList = ArrayList(userRecentList)
+                        _recentChatResponse.postValue(tmpList)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
         }
     }
 
@@ -83,7 +114,7 @@ class ChatViewModel @Inject constructor(
     var sendChatResponse = MutableLiveData<Boolean>()
 
     @SuppressLint("SimpleDateFormat")
-    fun sendMessage(message: String, id: String) {
+    fun sendMessage(message: String, id: String, chatName: String, chatImageUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val calendar = Calendar.getInstance()
             val sdf = SimpleDateFormat("hh:mm:ss aa dd/MM/yyyy")
@@ -98,11 +129,40 @@ class ChatViewModel @Inject constructor(
             hm["type"] = "message"
             hm["imageUrl"] = ""
             databaseReference.child("Chats").child(key).setValue(hm).addOnSuccessListener {
+                setRecentChat(id, chatName, chatImageUrl, message, calendar.time.time.toString())
                 sendChatResponse.postValue(true)
+
             }.addOnFailureListener {
                 sendChatResponse.postValue(false)
             }
         }
+    }
+
+    private fun setRecentChat(
+        targetId: String,
+        targetName: String,
+        targetImage: String,
+        lastMessage: String,
+        createdAt: String
+    ) {
+        val fromUserToTarget = "${firebaseUser?.uid.toString()}to$targetId"
+        val fromTargetToUser = "${targetId}to${firebaseUser?.uid.toString()}"
+        val hm = HashMap<String, String>()
+        hm["targetId"] = targetId
+        hm["targetName"] = targetName
+        hm["targetImage"] = targetImage
+        hm["lastMessage"] = lastMessage
+        hm["createdAt"] = createdAt
+        databaseReference.child("ChatRecent").child(firebaseUser?.uid.toString())
+            .child(fromUserToTarget).setValue(hm)
+
+        val hm1 = HashMap<String, String>()
+        hm1["targetId"] = firebaseUser?.uid.toString()
+        hm1["targetName"] = saveShare.getString("user_name")
+        hm1["targetImage"] = saveShare.getString("user_image")
+        hm1["lastMessage"] = lastMessage
+        hm1["createdAt"] = createdAt
+        databaseReference.child("ChatRecent").child(targetId).child(fromTargetToUser).setValue(hm1)
     }
 
     var uploadImageMessageResponse = MutableLiveData<Boolean>()

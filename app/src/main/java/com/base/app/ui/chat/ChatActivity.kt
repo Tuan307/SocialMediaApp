@@ -1,22 +1,28 @@
 package com.base.app.ui.chat
 
 import android.content.Intent
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
+import com.base.app.data.models.chat.RecentChatModel
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.databinding.ActivityChatBinding
+import com.base.app.ui.chat.adapter.ChatFollowerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
 
 @AndroidEntryPoint
-class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClick {
+class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClick,
+    SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel by viewModels<ChatViewModel>()
-    private lateinit var adapter: ChatAdapter
+    private lateinit var recentChatAdapter: ChatAdapter
+    private lateinit var followerAdapter: ChatFollowerAdapter
     private lateinit var prettyTime: PrettyTime
 
     override fun getContentLayout(): Int {
@@ -26,12 +32,30 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
     override fun initView() {
         registerObserverLoadingEvent(viewModel, this@ChatActivity)
         prettyTime = PrettyTime(Locale.getDefault())
-        viewModel.getChatList()
+        viewModel.getChatFollowList()
+        viewModel.getRecentChatUserList()
         with(binding) {
-            rcvChat.layoutManager = LinearLayoutManager(this@ChatActivity)
-            adapter = ChatAdapter(this@ChatActivity, this@ChatActivity)
-            rcvChat.adapter = adapter
+            swipeChat.setOnRefreshListener(this@ChatActivity)
+            recentChatAdapter = ChatAdapter(this@ChatActivity, this@ChatActivity)
+            followerAdapter = ChatFollowerAdapter(::navigateToDetailChat)
+            listOfFollower.apply {
+                layoutManager =
+                    LinearLayoutManager(this@ChatActivity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = followerAdapter
+            }
+            rcvChat.apply {
+                layoutManager = LinearLayoutManager(this@ChatActivity)
+                adapter = recentChatAdapter
+            }
         }
+    }
+
+    private fun navigateToDetailChat(data: DatingUser) {
+        val intent = Intent(this@ChatActivity, DetailChatActivity::class.java)
+        intent.putExtra("chatId", data.userId)
+        intent.putExtra("chatName", data.userName)
+        intent.putExtra("url", data.imageUrl)
+        startActivity(intent)
     }
 
     override fun initListener() {
@@ -43,6 +67,19 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
     }
 
     override fun observerLiveData() = with(viewModel) {
+        recentChatResponse.observe(this@ChatActivity) {
+            val list = it.map { data ->
+                RecentChatModel(
+                    targetId = data.targetId,
+                    targetName = data.targetName,
+                    createdAt = prettyTime.format(data.createdAt?.let { it1 -> Date(it1.toLong()) }),
+                    targetImage = data.targetImage,
+                    lastMessage = "Tin nhắn: ${data.lastMessage}",
+                )
+            }
+            recentChatAdapter.differ.submitList(list)
+        }
+
         chatListUserResponse.observe(this@ChatActivity) {
             val list = it.data?.map { data ->
                 DatingUser(
@@ -64,8 +101,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
                     userInterestProfiles = null
                 )
             }.orEmpty()
-            Log.d("CheckHere",list.toString())
-            adapter.differ.submitList(list)
+            followerAdapter.submitList(list.toList())
         }
     }
 
@@ -75,5 +111,15 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
         intent.putExtra("chatName", name)
         intent.putExtra("url", url)
         startActivity(intent)
+    }
+
+    override fun onRefresh() {
+        followerAdapter.submitList(null)
+        viewModel.getRecentChatUserList()
+        viewModel.getChatFollowList()
+        binding.edtSearch.text = null
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.swipeChat.isRefreshing = false
+        }, 1000)
     }
 }

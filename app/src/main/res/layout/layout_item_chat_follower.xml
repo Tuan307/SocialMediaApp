@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp12">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="@dimen/dp55"
+            android:layout_height="@dimen/dp55"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp5"
+            android:ellipsize="end"
+            android:maxLength="10"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/sp16"
+            app:layout_constraintEnd_toEndOf="@id/image_avatar"
+            app:layout_constraintStart_toStartOf="@id/image_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/image_avatar"
+            tools:text="Tuan" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
