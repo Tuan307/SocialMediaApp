@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBlack">
+        android:background="@color/colorWhite">
 
 
         <TextView
@@ -16,7 +17,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp15"
             android:text="@string/strVideoComment"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorBlack"
             android:textSize="@dimen/sp23"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +28,8 @@
             android:id="@+id/rcvVideoComeent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            tools:itemCount="5"
+            tools:listitem="@layout/comment_item"
             app:layout_constraintBottom_toTopOf="@+id/edtVideoComment"
             android:layout_marginVertical="@dimen/dp15"
             app:layout_constraintTop_toBottomOf="@+id/txtVideoComment" />
@@ -56,6 +59,7 @@
             android:src="@drawable/dmme"
             app:layout_constraintBottom_toBottomOf="@id/edtVideoComment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edtVideoComment" />
+            app:layout_constraintTop_toTopOf="@+id/edtVideoComment"
+            app:tint="@color/colorBlack" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

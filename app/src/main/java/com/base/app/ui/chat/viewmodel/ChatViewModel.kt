@@ -1,4 +1,4 @@
-package com.base.app.ui.chat
+package com.base.app.ui.chat.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -16,6 +16,7 @@ import com.base.app.data.apis.Api
 import com.base.app.data.models.ChatModel
 import com.base.app.data.models.PushNotification
 import com.base.app.data.models.chat.RecentChatModel
+import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.mToken
 import com.base.app.data.models.response.ListFollowResponse
 import com.base.app.data.prefs.AppPreferencesHelper
@@ -29,18 +30,22 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val api: Api,
     private val repository: UserRepository,
-    private val saveShare: AppPreferencesHelper
+    private val saveShare: AppPreferencesHelper,
 ) : BaseViewModel() {
+
+    private var _searchUserResponse: MutableLiveData<List<DatingUser>> = MutableLiveData()
+    val searchUserResponse: LiveData<List<DatingUser>>
+        get() = _searchUserResponse
 
     private var _isLoadingResponse: MutableLiveData<Boolean> = MutableLiveData()
     val isLoadingResponse: LiveData<Boolean>
         get() = _isLoadingResponse
+
     private var followerResponse = MutableLiveData<ArrayList<String>>()
     val getFollowerResponse = followerResponse as LiveData<ArrayList<String>>
     private var followerList: ArrayList<String> = ArrayList()
@@ -52,6 +57,13 @@ class ChatViewModel @Inject constructor(
     private var _recentChatResponse: MutableLiveData<ArrayList<RecentChatModel>> = MutableLiveData()
     val recentChatResponse: LiveData<ArrayList<RecentChatModel>>
         get() = _recentChatResponse
+
+    fun searchUser(s: String, pageCount: Int, pageNumber: Int) {
+        viewModelScope.launch(handler) {
+            val result = repository.searchUsers(s, pageCount, pageNumber)
+            _searchUserResponse.value = result.data
+        }
+    }
 
     fun getChatFollowList() {
         viewModelScope.launch(handler) {

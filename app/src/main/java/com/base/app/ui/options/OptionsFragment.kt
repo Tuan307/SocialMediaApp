@@ -28,7 +28,7 @@ class OptionsFragment : BaseFragment<FragmentOptionsBinding>(), ConfirmDialog.Co
         optionsList.add(OptionViewData("Nhóm du lịch", R.drawable.icon_travel_group))
         optionsList.add(OptionViewData("Tìm bạn bè", R.drawable.icon_find_friend))
         optionsList.add(OptionViewData("Khám phá du lịch", R.drawable.ic_explore_location))
-        optionsList.add(OptionViewData("Chế độ sáng/tối", R.drawable.icon_dark_mode_setting))
+        //optionsList.add(OptionViewData("Chế độ sáng/tối", R.drawable.icon_dark_mode_setting))
         optionsAdapter = OptionsAdapter(optionsList)
         viewModel.getRemoteUserInformation(viewModel.firebaseUser?.uid.toString())
         with(binding) {

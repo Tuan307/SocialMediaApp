@@ -11,7 +11,9 @@ import com.base.app.base.activities.BaseActivity
 import com.base.app.data.models.chat.RecentChatModel
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.databinding.ActivityChatBinding
+import com.base.app.ui.chat.adapter.ChatAdapter
 import com.base.app.ui.chat.adapter.ChatFollowerAdapter
+import com.base.app.ui.chat.viewmodel.ChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
@@ -35,6 +37,9 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
         viewModel.getChatFollowList()
         viewModel.getRecentChatUserList()
         with(binding) {
+            edtSearch.setOnClickListener {
+                startActivity(Intent(this@ChatActivity, SearchChatFriendActivity::class.java))
+            }
             swipeChat.setOnRefreshListener(this@ChatActivity)
             recentChatAdapter = ChatAdapter(this@ChatActivity, this@ChatActivity)
             followerAdapter = ChatFollowerAdapter(::navigateToDetailChat)

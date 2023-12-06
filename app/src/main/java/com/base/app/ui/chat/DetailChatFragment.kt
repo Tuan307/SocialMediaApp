@@ -20,12 +20,13 @@ import com.base.app.R
 import com.base.app.common.EMPTY_STRING
 import com.base.app.data.models.NotificationData
 import com.base.app.data.models.PushNotification
-import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.FragmentDetailChatBinding
+import com.base.app.ui.chat.adapter.DetailChatAdapter
+import com.base.app.ui.chat.adapter.ImagesAdapter
+import com.base.app.ui.chat.viewmodel.ChatViewModel
 import com.base.app.ui.video_call.MainActivity
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.HashMap
 
 @AndroidEntryPoint
 class DetailChatFragment : Fragment(), ImagesAdapter.ChooseImage, DetailChatAdapter.OnMessageClick {
