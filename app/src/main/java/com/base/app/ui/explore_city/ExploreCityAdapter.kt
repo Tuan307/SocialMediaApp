@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.base.app.data.models.city.CityModel
+import com.base.app.data.models.city.LocationModel
 import com.base.app.data.models.response.post.ImagesList
 import com.base.app.databinding.LayoutItemExploreCityBinding
 import com.base.app.ui.main.fragment.home.PostInPostAdapter
@@ -15,10 +15,10 @@ import com.base.app.ui.main.fragment.home.PostInPostAdapter
  * @since 11/9/2023
  */
 class ExploreCityAdapter(private val listener: OnExploreCityClick) :
-    ListAdapter<CityModel, ExploreCityAdapter.ViewHolder>(ExploreCityDiffUtil) {
+    ListAdapter<LocationModel, ExploreCityAdapter.ViewHolder>(ExploreCityDiffUtil) {
     class ViewHolder(private val binding: LayoutItemExploreCityBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: CityModel, listener: OnExploreCityClick) = with(binding) {
+        fun bind(data: LocationModel, listener: OnExploreCityClick) = with(binding) {
             root.setOnClickListener {
                 listener.onCityClick(data)
             }
@@ -27,7 +27,7 @@ class ExploreCityAdapter(private val listener: OnExploreCityClick) :
             val postInPostAdapter =
                 PostInPostAdapter(
                     binding.root.context,
-                    data.cityImages.orEmpty().map { it1 ->
+                    data.locationImages.orEmpty().map { it1 ->
                         ImagesList(
                             id = it1.id,
                             imageUrl = it1.imageUrl
@@ -53,17 +53,17 @@ class ExploreCityAdapter(private val listener: OnExploreCityClick) :
         holder.bind(getItem(position), listener)
     }
 
-    private object ExploreCityDiffUtil : ItemCallback<CityModel>() {
-        override fun areItemsTheSame(oldItem: CityModel, newItem: CityModel): Boolean {
+    private object ExploreCityDiffUtil : ItemCallback<LocationModel>() {
+        override fun areItemsTheSame(oldItem: LocationModel, newItem: LocationModel): Boolean {
             return oldItem.cityId == newItem.cityId
         }
 
-        override fun areContentsTheSame(oldItem: CityModel, newItem: CityModel): Boolean {
+        override fun areContentsTheSame(oldItem: LocationModel, newItem: LocationModel): Boolean {
             return oldItem == newItem
         }
     }
 
     interface OnExploreCityClick {
-        fun onCityClick(data: CityModel)
+        fun onCityClick(data: LocationModel)
     }
 }

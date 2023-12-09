@@ -199,6 +199,17 @@ class GroupRepository @Inject constructor(
                 }
             }
         }
+    suspend fun searchGroup(groupName: String, pageCount: Int, pageNumber: Int) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.searchGroup(groupName, pageCount, pageNumber) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
 
 
     suspend fun getAllGroupMemberByGroupId(groupId: Long) =

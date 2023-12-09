@@ -8,6 +8,7 @@ import com.base.app.data.models.interest.InterestModel
 import com.base.app.data.models.interest.UpdateInterestResponse
 import com.base.app.data.models.interest.request.AddUserInterestRequest
 import com.base.app.data.repositories.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ import javax.inject.Inject
  * @author tuanpham
  * @since 11/29/2023
  */
+@HiltViewModel
 class ChooseInterestViewModel @Inject constructor(
     private val userRepository: UserRepository
 

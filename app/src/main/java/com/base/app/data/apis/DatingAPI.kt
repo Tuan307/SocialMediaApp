@@ -1,6 +1,6 @@
 package com.base.app.data.apis
 
-import com.base.app.data.models.city.GetCityResponse
+import com.base.app.data.models.city.GetLocationResponse
 import com.base.app.data.models.dating_app.BaseApiResponse
 import com.base.app.data.models.dating_app.DatingUser
 import com.base.app.data.models.dating_app.SearchUserResponse
@@ -242,6 +242,13 @@ interface DatingAPI {
         @Query("pageNumber") pageNumber: Int
     ): Response<GetAllGroupResponse>
 
+    @GET("group/search")
+    suspend fun searchGroup(
+        @Query("groupName") groupName: String,
+        @Query("pageCount") pageCount: Int,
+        @Query("pageNumber") pageNumber: Int
+    ): Response<GetAllGroupResponse>
+
     @POST("group/add/post")
     suspend fun addGroupPost(@Body request: CreateGroupPostRequest): Response<AddPostByGroupResponse>
 
@@ -278,8 +285,8 @@ interface DatingAPI {
     ): Response<BaseApiResponse>
 
     @GET("city/all")
-    suspend fun getAllCities(): Response<GetCityResponse>
+    suspend fun getAllCities(): Response<GetLocationResponse>
 
     @GET("city/search")
-    suspend fun searchForCity(@Query("keyword") keyword: String): Response<GetCityResponse>
+    suspend fun searchForCity(@Query("keyword") keyword: String): Response<GetLocationResponse>
 }

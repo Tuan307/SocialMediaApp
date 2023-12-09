@@ -54,6 +54,7 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
         groupName = intent.getStringExtra("groupName").toString()
         viewModel.checkIfRequestToJoinGroup(groupId)
         with(binding) {
+            emptyView.textEmpty.text = resources.getString(R.string.text_empty_view_post)
             swipeDetailGroup.setOnRefreshListener(this@GroupDetailActivity)
             imageBack.setOnClickListener {
                 finish()
@@ -104,9 +105,12 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
             }
         }
         listGroupPostResponse.observe(this@GroupDetailActivity) {
-            if (it.isNotEmpty()) {
+            if (!it.isNullOrEmpty()) {
+                binding.emptyView.linearEmptyView.visibility = View.GONE
                 list.addAll(it)
                 detailAdapter.submitList(list.toList())
+            } else {
+                binding.emptyView.linearEmptyView.visibility = View.VISIBLE
             }
         }
         removeUserFromGroupResponse.observe(this@GroupDetailActivity) {

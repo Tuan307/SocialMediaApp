@@ -1,6 +1,6 @@
 package com.base.app.data.models.recommend
 
-import com.base.app.data.models.city.CityImage
+import com.base.app.data.models.city.LocationImage
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -21,7 +21,7 @@ data class RecommendDataModel(
     val description: String?,
     val tag: String?,
     @SerializedName("image_url")
-    val image_url: List<CityImage>?,
+    val image_url: List<LocationImage>?,
     @SerializedName("similarity_score")
     val similarity_score: String?
 )

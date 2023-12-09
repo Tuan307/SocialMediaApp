@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
-import com.base.app.data.models.city.CityModel
+import com.base.app.data.models.city.LocationModel
 import com.base.app.databinding.ActivityExploreCityBinding
 import com.base.app.ui.explore_city.detail_city.DetailExploreActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +18,7 @@ class ExploreCityActivity : BaseActivity<ActivityExploreCityBinding>(),
     private val viewModel by viewModels<ExploreCityViewModel>()
     private lateinit var cityAdapter: ExploreCityAdapter
 
-    override fun onCityClick(data: CityModel) {
+    override fun onCityClick(data: LocationModel) {
         val intent = Intent(this@ExploreCityActivity, DetailExploreActivity::class.java)
         intent.putExtra("id", data.cityId)
         intent.putExtra("url", data.url)
@@ -35,7 +35,7 @@ class ExploreCityActivity : BaseActivity<ActivityExploreCityBinding>(),
             imageBack.setOnClickListener {
                 finish()
             }
-            viewModel.getAllCities()
+            viewModel.getAllLocation()
             cityAdapter = ExploreCityAdapter(this@ExploreCityActivity)
             listOfCities.apply {
                 layoutManager = LinearLayoutManager(this@ExploreCityActivity)
@@ -58,7 +58,7 @@ class ExploreCityActivity : BaseActivity<ActivityExploreCityBinding>(),
             }
             edtSearch.setOnEditorActionListener { text, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    viewModel.searchForCity(text.text.toString())
+                    viewModel.searchForLocation(text.text.toString())
                 }
                 true
             }

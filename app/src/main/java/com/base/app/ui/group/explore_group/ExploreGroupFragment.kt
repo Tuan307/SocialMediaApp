@@ -8,9 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
@@ -45,19 +46,24 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllGroups(20, 1)
         with(binding) {
+            emptyView.textEmpty.text = resources.getString(R.string.text_empty_view_group)
+            edtSearch.doOnTextChanged { text, _, _, _ ->
+                if (!text.isNullOrEmpty()) {
+                    viewModel.searchGroup(text.toString(), 20, 1)
+                }
+            }
             binding.swipeExploreGroup.setOnRefreshListener(this@ExploreGroupFragment)
             listOfGroups.apply {
-                layoutManager = GridLayoutManager(requireContext(), 2)
+                layoutManager = LinearLayoutManager(requireContext())
                 adapter = exploreGroupAdapter
             }
             endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
-                listOfGroups.layoutManager as GridLayoutManager
+                listOfGroups.layoutManager as LinearLayoutManager
             ) {
                 override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                     if (page > 1) {
-                        viewModel.getAllGroups(20, page)
+                        viewModel.searchGroup(edtSearch.text.toString(), 20, page)
                     }
                 }
             }
@@ -67,10 +73,20 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     private fun observeData() = with(viewModel) {
-        getAllGroupsResponse.observe(viewLifecycleOwner) {
-            listOfGroups.clear()
+        searchAllGroupsResponse.observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                exploreGroupAdapter.submitList(null)
+                binding.emptyView.linearEmptyView.visibility = View.VISIBLE
+            } else {
+                binding.emptyView.linearEmptyView.visibility = View.GONE
+                listOfGroups.clear()
+                listOfGroups.addAll(it)
+                exploreGroupAdapter.submitList(listOfGroups.toList())
+            }
+        }
+        searchMoreAllGroupsResponse.observe(viewLifecycleOwner) {
             listOfGroups.addAll(it)
-            exploreGroupAdapter.submitList(it.toList())
+            exploreGroupAdapter.submitList(listOfGroups.toList())
         }
         joinGroupsResponse.observe(viewLifecycleOwner) {
             if (it.data == null) {
@@ -145,8 +161,8 @@ class ExploreGroupFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
     }
 
     private fun onReload() {
-        viewModel.getAllGroups(20, 1)
         listOfGroups.clear()
+        exploreGroupAdapter.submitList(listOfGroups.toList())
         endlessRecyclerViewScrollListener.resetState()
         Handler(Looper.getMainLooper()).postDelayed({
             binding.swipeExploreGroup.isRefreshing = false

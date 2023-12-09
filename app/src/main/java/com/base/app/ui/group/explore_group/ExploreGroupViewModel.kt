@@ -29,6 +29,16 @@ class ExploreGroupViewModel @Inject constructor(
     val getAllGroupsResponse: LiveData<List<GroupDataViewData>>
         get() = _getAllGroupsResponse
 
+    private var _searchMoreAllGroupsResponse: MutableLiveData<List<GroupDataViewData>> =
+        MutableLiveData()
+    val searchMoreAllGroupsResponse: LiveData<List<GroupDataViewData>>
+        get() = _searchMoreAllGroupsResponse
+
+    private var _searchAllGroupsResponse: MutableLiveData<List<GroupDataViewData>> =
+        MutableLiveData()
+    val searchAllGroupsResponse: LiveData<List<GroupDataViewData>>
+        get() = _searchAllGroupsResponse
+
     private var _joinGroupsResponse: MutableLiveData<GetGroupByGroupIdAndMemberIdResponse> =
         MutableLiveData()
     val joinGroupsResponse: LiveData<GetGroupByGroupIdAndMemberIdResponse>
@@ -64,6 +74,39 @@ class ExploreGroupViewModel @Inject constructor(
         }
     }
 
+    fun searchGroup(name: String, pageCount: Int, page: Int) {
+        viewModelScope.launch(handler) {
+            val result = repository.searchGroup(name, pageCount, page)
+            if (page == 1) {
+                _searchAllGroupsResponse.value = result.data?.map { data ->
+                    GroupDataViewData(
+                        id = data.id ?: 0,
+                        groupName = data.groupName.orEmpty(),
+                        groupDescription = data.groupDescription.orEmpty(),
+                        groupImageUrl = data.groupImageUrl.orEmpty(),
+                        groupCreatedAt = data.groupCreatedAt.orEmpty(),
+                        groupOwner = data.groupOwner,
+                        groupPrivacy = data.groupPrivacy.orEmpty(),
+                        hasJoined = false,
+                    )
+                }
+            } else {
+                _searchMoreAllGroupsResponse.value = result.data?.map { data ->
+                    GroupDataViewData(
+                        id = data.id ?: 0,
+                        groupName = data.groupName.orEmpty(),
+                        groupDescription = data.groupDescription.orEmpty(),
+                        groupImageUrl = data.groupImageUrl.orEmpty(),
+                        groupCreatedAt = data.groupCreatedAt.orEmpty(),
+                        groupOwner = data.groupOwner,
+                        groupPrivacy = data.groupPrivacy.orEmpty(),
+                        hasJoined = false,
+                    )
+                }
+            }
+        }
+    }
+
     fun removeGroupRequest(groupId: Long) {
         viewModelScope.launch(handler) {
             val result = repository.removeGroupRequest(firebaseUser?.uid.toString(), groupId)
@@ -81,7 +124,12 @@ class ExploreGroupViewModel @Inject constructor(
     fun joinGroup(groupId: Long) {
         viewModelScope.launch(handler) {
             val result =
-                repository.addMemberToGroup(JoinGroupRequest(firebaseUser?.uid.toString(), groupId))
+                repository.addMemberToGroup(
+                    JoinGroupRequest(
+                        firebaseUser?.uid.toString(),
+                        groupId
+                    )
+                )
             _joinGroupsResponse.value = result
         }
     }

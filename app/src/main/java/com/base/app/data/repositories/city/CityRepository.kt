@@ -18,7 +18,7 @@ class CityRepository @Inject constructor(
     private val recommendApi: RecommendApi,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : BaseRemoteService() {
-    suspend fun getAllCities() =
+    suspend fun getAllLocation() =
         withContext(dispatcher) {
             when (val result =
                 callApi { api.getAllCities() }) {
@@ -31,7 +31,7 @@ class CityRepository @Inject constructor(
             }
         }
 
-    suspend fun searchForCity(keyword: String) =
+    suspend fun searchForLocation(keyword: String) =
         withContext(dispatcher) {
             when (val result =
                 callApi { api.searchForCity(keyword) }) {
