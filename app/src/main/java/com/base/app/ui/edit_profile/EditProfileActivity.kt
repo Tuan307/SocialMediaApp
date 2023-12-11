@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.activity.viewModels
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.databinding.ActivityEditProfileBinding
 import com.base.app.ui.splash.ChooseInterestActivity
 import com.bumptech.glide.Glide
@@ -17,7 +17,7 @@ class EditProfileActivity : BaseActivity<ActivityEditProfileBinding>() {
     private val viewModel by viewModels<EditProfileViewModel>()
     private var imageUri: Uri? = null
     private var imagePath: String? = null
-    private var currentUser: DatingUser? = null
+    private var currentUser: User? = null
     private val imagePickerLauncher = registerImagePicker {
         imagesPicker.clear()
         imagesPicker.addAll(it)

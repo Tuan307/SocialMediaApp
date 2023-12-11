@@ -1,7 +1,6 @@
 package com.base.app.ui.main.fragment.home
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -20,6 +19,10 @@ class DetailHomePostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_home_post)
         setContentView(binding.root)
+        loadData()
+    }
+
+    private fun loadData() {
         val intent = intent
         val bundle = intent.extras
         val itemPosition = bundle?.getInt("postPosition")

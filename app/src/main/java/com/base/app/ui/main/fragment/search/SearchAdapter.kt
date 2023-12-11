@@ -1,21 +1,20 @@
 package com.base.app.ui.main.fragment.search
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.databinding.SearchItemBinding
 import com.bumptech.glide.Glide
 
 class SearchAdapter(
     val iCallBack: ICallBack,
-) : ListAdapter<DatingUser, SearchAdapter.ViewHolder>(SearchUserDiffUtil) {
+) : ListAdapter<User, SearchAdapter.ViewHolder>(SearchUserDiffUtil) {
 
     inner class ViewHolder(val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DatingUser) = with(binding) {
+        fun bind(data: User) = with(binding) {
             Glide.with(root.context).load(data.imageUrl).into(binding.imgAvatar)
             binding.txtName.text = data.fullName
             binding.txtUserName.text = data.userName
@@ -46,12 +45,12 @@ class SearchAdapter(
         holder.bind(getItem(position))
     }
 
-    private object SearchUserDiffUtil : ItemCallback<DatingUser>() {
-        override fun areItemsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
+    private object SearchUserDiffUtil : ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.userId == newItem.userId
         }
 
-        override fun areContentsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem == newItem
         }
 

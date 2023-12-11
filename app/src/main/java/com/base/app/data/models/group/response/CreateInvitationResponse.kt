@@ -1,7 +1,7 @@
 package com.base.app.data.models.group.response
 
-import com.base.app.data.models.dating_app.DatingUser
-import com.base.app.data.models.dating_app.Status
+import com.base.app.data.models.user.User
+import com.base.app.data.models.user.Status
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -25,7 +25,7 @@ data class InvitationData(
     val type: String,
 
     @SerializedName("requestUserId")
-    val requestUserId: DatingUser,
+    val requestUserId: User,
 
     @SerializedName("groupId")
     val groupId: GroupData

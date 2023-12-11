@@ -40,7 +40,7 @@ class CommentActivity : BaseActivity<ActivityCommentBinding>(), CommentAdapter.O
         publisherId = intent.getStringExtra("publisherId").toString()
         imageUrl = intent.getStringExtra("imageUrl").toString()
         viewModel.getImage()
-        viewModel.readComments(postId, from)
+        viewModel.getPostComments(postId, from)
         commentAdapter =
             CommentAdapter(lists, this@CommentActivity, viewModel, this@CommentActivity, from)
         binding.apply {

@@ -1,6 +1,6 @@
 package com.base.app.data.models.interest.response
 
-import com.base.app.data.models.dating_app.Status
+import com.base.app.data.models.user.Status
 import com.base.app.data.models.interest.request.InterestModelRequest
 import com.google.gson.annotations.SerializedName
 

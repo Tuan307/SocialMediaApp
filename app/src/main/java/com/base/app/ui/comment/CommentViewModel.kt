@@ -78,7 +78,7 @@ class CommentViewModel @Inject constructor(
 
     var getCommentResponse = MutableLiveData<ArrayList<Comment>>()
     private var comments = ArrayList<Comment>()
-    fun readComments(postId: String, from: String) {
+    fun getPostComments(postId: String, from: String) {
         showLoading(true)
         parentJob = viewModelScope.launch(Dispatchers.IO) {
             if (from == "home") {

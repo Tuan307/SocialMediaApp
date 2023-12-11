@@ -9,7 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.data.models.chat.RecentChatModel
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.databinding.ActivityChatBinding
 import com.base.app.ui.chat.adapter.ChatAdapter
 import com.base.app.ui.chat.adapter.ChatFollowerAdapter
@@ -55,7 +55,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
         }
     }
 
-    private fun navigateToDetailChat(data: DatingUser) {
+    private fun navigateToDetailChat(data: User) {
         val intent = Intent(this@ChatActivity, DetailChatActivity::class.java)
         intent.putExtra("chatId", data.userId)
         intent.putExtra("chatName", data.userName)
@@ -87,7 +87,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(), ChatAdapter.OnItemClic
 
         chatListUserResponse.observe(this@ChatActivity) {
             val list = it.data?.map { data ->
-                DatingUser(
+                User(
                     userId = data.targetId?.userId,
                     userName = data.targetId?.userName,
                     lastOnline = prettyTime.format(data.targetId?.lastOnline?.let { it1 ->

@@ -1,7 +1,7 @@
 package com.base.app.ui.group.detail_group.viewdata
 
 import com.base.app.R
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.response.post.ImagesList
 
 /**
@@ -19,7 +19,7 @@ data class DetailGroupPostViewData(
     val type: String,
     val videoUrl: String?,
     val question: String?,
-    val user: DatingUser
+    val user: User
 ) : DetailGroupViewData {
     override val layoutRes: Int
         get() = R.layout.layout_home_adapter

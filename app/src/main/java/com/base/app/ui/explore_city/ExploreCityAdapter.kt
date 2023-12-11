@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.base.app.data.models.city.LocationModel
+import com.base.app.data.models.location.LocationModel
 import com.base.app.data.models.response.post.ImagesList
 import com.base.app.databinding.LayoutItemExploreCityBinding
 import com.base.app.ui.main.fragment.home.PostInPostAdapter

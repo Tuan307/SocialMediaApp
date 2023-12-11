@@ -1,7 +1,7 @@
 package com.base.app.data.models.group.response
 
-import com.base.app.data.models.dating_app.DatingUser
-import com.base.app.data.models.dating_app.Status
+import com.base.app.data.models.user.User
+import com.base.app.data.models.user.Status
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -33,7 +33,7 @@ data class GroupData(
     @SerializedName("groupImageUrl")
     val groupImageUrl: String?,
     val groupCreatedAt: String?,
-    val groupOwner: DatingUser?,
+    val groupOwner: User?,
     val groupPrivacy: String?
 )
 
@@ -50,9 +50,9 @@ data class RequestModel(
     val type: String?,
     val message: String?,
     @SerializedName("requestUserId")
-    val requestUserId: DatingUser?,
+    val requestUserId: User?,
     @SerializedName("fromInvitedUserId")
-    val fromInvitedUserId: DatingUser?,
+    val fromInvitedUserId: User?,
     @SerializedName("groupId")
     val groupId: GroupData?
 )

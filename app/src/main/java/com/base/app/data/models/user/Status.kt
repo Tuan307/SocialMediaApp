@@ -1,4 +1,4 @@
-package com.base.app.data.models.dating_app
+package com.base.app.data.models.user
 
 import com.google.gson.annotations.SerializedName
 

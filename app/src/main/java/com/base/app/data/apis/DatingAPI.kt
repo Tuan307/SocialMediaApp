@@ -1,11 +1,11 @@
 package com.base.app.data.apis
 
-import com.base.app.data.models.city.GetLocationResponse
-import com.base.app.data.models.dating_app.BaseApiResponse
-import com.base.app.data.models.dating_app.DatingUser
-import com.base.app.data.models.dating_app.SearchUserResponse
-import com.base.app.data.models.dating_app.UserProfileResponseResult
-import com.base.app.data.models.dating_app.UserUpdateProfileResponse
+import com.base.app.data.models.location.GetLocationResponse
+import com.base.app.data.models.user.BaseApiResponse
+import com.base.app.data.models.user.User
+import com.base.app.data.models.user.SearchUserResponse
+import com.base.app.data.models.user.UserProfileResponseResult
+import com.base.app.data.models.user.UserUpdateProfileResponse
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
@@ -78,7 +78,7 @@ interface DatingAPI {
     suspend fun getAllNearbyUsers(
         @Query("userId") userId: String, @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double, @Query("limit") limit: Int
-    ): Response<List<DatingUser>>
+    ): Response<List<User>>
 
     @GET("users/interest")
     suspend fun getAllInterests(

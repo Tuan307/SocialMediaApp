@@ -1,4 +1,4 @@
-package com.base.app.data.models.dating_app
+package com.base.app.data.models.user
 
 import com.google.gson.annotations.SerializedName
 
@@ -6,11 +6,11 @@ import com.google.gson.annotations.SerializedName
  * @author tuanpham
  * @since 9/21/2023
  */
-data class SearchUserResponse(
+data class BaseApiResponse(
     @SerializedName("status")
     val status: Status,
     @SerializedName("data")
-    val data: List<DatingUser>,
+    val data: Any?,
     @SerializedName("pageCount")
     val pageCount: Int,
     @SerializedName("page")

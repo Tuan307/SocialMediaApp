@@ -1,6 +1,5 @@
-package com.base.app.data.models.dating_app
+package com.base.app.data.models.user
 
-import androidx.room.PrimaryKey
 import com.base.app.data.models.interest.InterestModel
 import com.google.gson.annotations.SerializedName
 
@@ -8,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  * @author tuanpham
  * @since 9/18/2023
  */
-data class DatingUser(
+data class User(
     @SerializedName("userId")
     val userId: String?,
     val userName: String?,

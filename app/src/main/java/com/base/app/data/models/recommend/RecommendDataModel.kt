@@ -1,6 +1,6 @@
 package com.base.app.data.models.recommend
 
-import com.base.app.data.models.city.LocationImage
+import com.base.app.data.models.location.LocationImage
 import com.google.gson.annotations.SerializedName
 
 /**

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.response.FollowUserResponse
@@ -69,8 +69,8 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private var userRemoteResponse = MutableLiveData<DatingUser?>()
-    val getUserRemoteResponse = userRemoteResponse as LiveData<DatingUser?>
+    private var userRemoteResponse = MutableLiveData<User?>()
+    val getUserRemoteResponse = userRemoteResponse as LiveData<User?>
     fun getRemoteUserInformation(id: String) {
         showLoading(true)
         parentJob = viewModelScope.launch(handler) {

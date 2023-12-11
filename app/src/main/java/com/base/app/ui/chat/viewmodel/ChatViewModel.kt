@@ -16,7 +16,7 @@ import com.base.app.data.apis.Api
 import com.base.app.data.models.ChatModel
 import com.base.app.data.models.PushNotification
 import com.base.app.data.models.chat.RecentChatModel
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.mToken
 import com.base.app.data.models.response.ListFollowResponse
 import com.base.app.data.prefs.AppPreferencesHelper
@@ -38,8 +38,8 @@ class ChatViewModel @Inject constructor(
     private val saveShare: AppPreferencesHelper,
 ) : BaseViewModel() {
 
-    private var _searchUserResponse: MutableLiveData<List<DatingUser>> = MutableLiveData()
-    val searchUserResponse: LiveData<List<DatingUser>>
+    private var _searchUserResponse: MutableLiveData<List<User>> = MutableLiveData()
+    val searchUserResponse: LiveData<List<User>>
         get() = _searchUserResponse
 
     private var _isLoadingResponse: MutableLiveData<Boolean> = MutableLiveData()

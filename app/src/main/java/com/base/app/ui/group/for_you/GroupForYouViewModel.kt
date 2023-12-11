@@ -46,7 +46,7 @@ class GroupForYouViewModel @Inject constructor(private val repository: GroupRepo
                 GroupForYouPostViewData(
                     id = data.groupPostId,
                     description = data.description,
-                    itemList = data.groupPostContentItemList.map { it1 ->
+                    itemList = data.groupPostImagesList.map { it1 ->
                         ImagesList(it1.id, it1.imageUrl)
                     },
                     postUser = data.groupPostUserId,

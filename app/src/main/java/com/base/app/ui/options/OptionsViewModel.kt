@@ -4,17 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.common.ERROR
-import com.base.app.data.models.User
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.response.ListFollowResponse
 import com.base.app.data.repositories.UserRepository
 import com.base.app.data.repositories.profile.UserProfileRepository
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,8 +26,8 @@ class OptionsViewModel @Inject constructor(
     val getFollowerResponse: LiveData<ListFollowResponse>
         get() = _getFollowerResponse
 
-    private var _userRemoteResponse = MutableLiveData<DatingUser?>()
-    val userRemoteResponse = _userRemoteResponse as LiveData<DatingUser?>
+    private var _userRemoteResponse = MutableLiveData<User?>()
+    val userRemoteResponse = _userRemoteResponse as LiveData<User?>
 
     fun getRemoteUserInformation(id: String) {
         showLoading(true)

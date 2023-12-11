@@ -1,7 +1,7 @@
 package com.base.app.ui.group.for_you.viewdata
 
 import com.base.app.R
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.group.response.GroupData
 import com.base.app.data.models.response.post.ImagesList
 
@@ -13,7 +13,7 @@ data class GroupForYouPostViewData(
     override val id: String,
     val description: String,
     val itemList: List<ImagesList>,
-    val postUser: DatingUser,
+    val postUser: User,
     val postGroup: GroupData,
     val createdAt: String,
     val address: String,

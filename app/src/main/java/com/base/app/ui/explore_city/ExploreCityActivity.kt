@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
-import com.base.app.data.models.city.LocationModel
+import com.base.app.data.models.location.LocationModel
 import com.base.app.databinding.ActivityExploreCityBinding
 import com.base.app.ui.explore_city.detail_city.DetailExploreActivity
 import dagger.hilt.android.AndroidEntryPoint

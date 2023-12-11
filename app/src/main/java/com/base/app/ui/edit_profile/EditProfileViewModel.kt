@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.data.models.dating_app.DatingUser
-import com.base.app.data.models.dating_app.UserUpdateProfileResponse
+import com.base.app.data.models.user.User
+import com.base.app.data.models.user.UserUpdateProfileResponse
 import com.base.app.data.models.request.UpdateProfileRequest
 import com.base.app.data.repositories.profile.UserProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +22,8 @@ class EditProfileViewModel @Inject constructor(
     private val repository: UserProfileRepository
 ) : BaseViewModel() {
 
-    private var userInformation = MutableLiveData<DatingUser?>()
-    val getUserInformation = userInformation as LiveData<DatingUser?>
+    private var userInformation = MutableLiveData<User?>()
+    val getUserInformation = userInformation as LiveData<User?>
 
     private var _updateProfileRemote = MutableLiveData<UserUpdateProfileResponse>()
     val updateProfileRemote: LiveData<UserUpdateProfileResponse>

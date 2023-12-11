@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.databinding.SearchItemBinding
 import com.bumptech.glide.Glide
 
@@ -13,10 +13,10 @@ import com.bumptech.glide.Glide
  * @author tuanpham
  * @since 12/6/2023
  */
-class SearchChatFriendAdapter(private val listener: (DatingUser) -> Unit) :
-    ListAdapter<DatingUser, SearchChatFriendAdapter.ViewHolder>(SearchChatFriendDiffUtil) {
+class SearchChatFriendAdapter(private val listener: (User) -> Unit) :
+    ListAdapter<User, SearchChatFriendAdapter.ViewHolder>(SearchChatFriendDiffUtil) {
     inner class ViewHolder(val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DatingUser) = with(binding) {
+        fun bind(data: User) = with(binding) {
             Glide.with(root.context).load(data.imageUrl).into(binding.imgAvatar)
             binding.txtName.text = data.fullName
             binding.txtUserName.text = data.userName
@@ -40,12 +40,12 @@ class SearchChatFriendAdapter(private val listener: (DatingUser) -> Unit) :
         holder.bind(getItem(position))
     }
 
-    private object SearchChatFriendDiffUtil : DiffUtil.ItemCallback<DatingUser>() {
-        override fun areItemsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
+    private object SearchChatFriendDiffUtil : DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.userId == newItem.userId
         }
 
-        override fun areContentsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem == newItem
         }
 

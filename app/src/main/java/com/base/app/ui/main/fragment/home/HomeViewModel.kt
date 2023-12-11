@@ -79,63 +79,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getPublisherInformation(
-        context: Context,
-        imgAvatar: CircleImageView,
-        txtUserName: TextView,
-        txtPublisher: TextView,
-        publisher: String?
-    ) {
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            if (publisher != null) {
-                databaseReference.child("Users").child(publisher)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val user = snapshot.getValue(User::class.java)
-                            if (user != null) {
-                                Glide.with(context).load(user.imageurl).into(imgAvatar)
-                                txtUserName.text = user.username
-                                txtPublisher.text = user.username
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                        }
-                    })
-            }
-        }
-    }
-
-
-    private var dataList = ArrayList<PostItem>()
-    private var listResponse = MutableLiveData<ArrayList<PostItem>>()
-    val getListResponse = listResponse as LiveData<ArrayList<PostItem>>
-    fun getData() {
-        showLoading(true)
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Posts").orderByKey().limitToFirst(20)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        dataList.clear()
-                        for (dataSnapshot in snapshot.children) {
-                            val post = dataSnapshot.getValue(PostItem::class.java)
-                            if (post != null) {
-                                dataList.add(post)
-                            }
-                        }
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            listResponse.postValue(dataList)
-                            registerJobFinish()
-                        }, 1000)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.d("CheckAAA", "Yes Here")
-                    }
-                })
-        }
-    }
-
     fun getNewsFeedData(pageCount: Int, pageNumber: Int) {
         showLoading(true)
         parentJob = viewModelScope.launch(handler) {
@@ -207,18 +150,6 @@ class HomeViewModel @Inject constructor(
                 )
             )
         }
-//        parentJob = viewModelScope.launch(Dispatchers.IO) {
-//            val uid = firebaseUser?.uid
-//            if (status == "save") {
-//                if (uid != null) {
-//                    databaseReference.child("Saves").child(uid).child(postId).setValue(true)
-//                }
-//            } else {
-//                if (uid != null) {
-//                    databaseReference.child("Saves").child(uid).child(postId).removeValue()
-//                }
-//            }
-//        }
     }
 
     fun isLikePost(postId: String, image: ImageView) {
@@ -273,35 +204,6 @@ class HomeViewModel @Inject constructor(
             val result = newsFeedRepository.deleteNewPost(postId)
             _deletePostResponse.value = result.status.message
             registerJobFinish()
-        }
-    }
-
-    private var dataListDetail = ArrayList<PostItem>()
-    private var listResponseDetail = MutableLiveData<ArrayList<PostItem>>()
-    val getListResponseDetail = listResponseDetail as LiveData<ArrayList<PostItem>>
-    fun getDataDetail(id: String) {
-        showLoading(true)
-        parentJob = viewModelScope.launch(Dispatchers.IO) {
-            databaseReference.child("Posts")
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        dataListDetail.clear()
-                        for (dataSnapshot in snapshot.children) {
-                            val post = dataSnapshot.getValue(PostItem::class.java)
-                            if (post != null && post.publicher == id) {
-                                dataListDetail.add(post)
-                            }
-                        }
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            listResponseDetail.postValue(dataListDetail)
-                            registerJobFinish()
-                        }, 1000)
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.d("CheckAAA", "Yes Here")
-                    }
-                })
         }
     }
 

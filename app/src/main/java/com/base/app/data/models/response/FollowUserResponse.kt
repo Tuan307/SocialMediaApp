@@ -1,7 +1,7 @@
 package com.base.app.data.models.response
 
-import com.base.app.data.models.dating_app.DatingUser
-import com.base.app.data.models.dating_app.Status
+import com.base.app.data.models.user.User
+import com.base.app.data.models.user.Status
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -40,7 +40,7 @@ data class UserFollow(
     val type: String?,
     val createdAt: String?,
     @SerializedName("sourceId")
-    val sourceId: DatingUser?,
+    val sourceId: User?,
     @SerializedName("targetId")
-    val targetId: DatingUser?
+    val targetId: User?
 )

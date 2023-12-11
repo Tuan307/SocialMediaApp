@@ -8,7 +8,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.databinding.ActivitySearchChatFriendBinding
 import com.base.app.ui.chat.adapter.SearchChatFriendAdapter
 import com.base.app.ui.chat.viewmodel.ChatViewModel
@@ -49,7 +49,7 @@ class SearchChatFriendActivity : AppCompatActivity() {
         }
     }
 
-    private fun onItemCLick(data: DatingUser) {
+    private fun onItemCLick(data: User) {
         val intent = Intent(this@SearchChatFriendActivity, DetailChatActivity::class.java)
         intent.putExtra("chatId", data.userId)
         intent.putExtra("chatName", data.userName)

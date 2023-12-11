@@ -1,6 +1,6 @@
 package com.base.app.ui.group.explore_group.viewdata
 
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 
 /**
  * @author tuanpham
@@ -12,7 +12,7 @@ data class GroupDataViewData(
     val groupDescription: String,
     val groupImageUrl: String,
     val groupCreatedAt: String,
-    val groupOwner: DatingUser?,
+    val groupOwner: User?,
     val groupPrivacy: String,
     var hasJoined: Boolean = false,
 )

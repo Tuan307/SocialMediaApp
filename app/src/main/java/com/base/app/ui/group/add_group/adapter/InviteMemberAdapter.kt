@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.databinding.ItemInviteMemberBinding
 import com.bumptech.glide.Glide
 
@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide
  */
 class InviteMemberAdapter(
     private val listener: OnInvite
-) : ListAdapter<DatingUser, InviteMemberAdapter.ViewHolder>(InviteMemberDiffUtil) {
+) : ListAdapter<User, InviteMemberAdapter.ViewHolder>(InviteMemberDiffUtil) {
 
     inner class ViewHolder(private val binding: ItemInviteMemberBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -52,12 +52,12 @@ class InviteMemberAdapter(
         holder.bind(position)
     }
 
-    private object InviteMemberDiffUtil : ItemCallback<DatingUser>() {
-        override fun areItemsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
+    private object InviteMemberDiffUtil : ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.userId == newItem.userId
         }
 
-        override fun areContentsTheSame(oldItem: DatingUser, newItem: DatingUser): Boolean {
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem == newItem
         }
 

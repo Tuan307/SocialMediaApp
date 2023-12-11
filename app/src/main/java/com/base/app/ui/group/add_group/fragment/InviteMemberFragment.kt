@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.databinding.FragmentInviteMemberBinding
 import com.base.app.ui.group.add_group.InviteMemberViewModel
@@ -28,7 +28,7 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
     private val args: InviteMemberFragmentArgs by navArgs()
     private var groupId = ""
     private var groupName = ""
-    private var inviteList: ArrayList<DatingUser> = arrayListOf()
+    private var inviteList: ArrayList<User> = arrayListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,7 +77,7 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
         userResponse.observe(viewLifecycleOwner) {
             inviteList.clear()
             inviteList.addAll(it.map { data ->
-                DatingUser(
+                User(
                     userId = data.id.toString(),
                     userName = data.username.toString(),
                     fullName = data.fullname.toString(),
@@ -93,7 +93,7 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
                 )
             })
             inviteMemberAdapter.submitList(it.map { data ->
-                DatingUser(
+                User(
                     userId = data.id.toString(),
                     userName = data.username.toString(),
                     fullName = data.fullname.toString(),

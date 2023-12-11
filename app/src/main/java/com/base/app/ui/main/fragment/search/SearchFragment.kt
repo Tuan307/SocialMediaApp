@@ -10,7 +10,7 @@ import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.common.CommonUtils.hideSoftKeyboard
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.databinding.FragmentSearchBinding
 import com.base.app.ui.profile.ProfileActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +20,7 @@ class SearchForFriendActivity : BaseActivity<FragmentSearchBinding>(),
     SearchAdapter.ICallBack {
     private val viewModel by viewModels<SearchForFriendViewModel>()
     private lateinit var searchAdapter: SearchAdapter
-    private val userList = ArrayList<DatingUser>()
+    private val userList = ArrayList<User>()
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     override fun getContentLayout(): Int {
         return R.layout.fragment_search

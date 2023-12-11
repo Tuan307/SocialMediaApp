@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.group.InviteMember
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.response.CreateInvitationResponse
@@ -28,12 +28,12 @@ class InviteMemberViewModel @Inject constructor(
     private val groupRepository: GroupRepository
 ) : BaseViewModel() {
 
-    private var _searchUserResponse: MutableLiveData<List<DatingUser>> = MutableLiveData()
-    val searchUserResponse: LiveData<List<DatingUser>>
+    private var _searchUserResponse: MutableLiveData<List<User>> = MutableLiveData()
+    val searchUserResponse: LiveData<List<User>>
         get() = _searchUserResponse
 
-    private var _searchUserLoadMoreResponse: MutableLiveData<List<DatingUser>> = MutableLiveData()
-    val searchUserLoadMoreResponse: LiveData<List<DatingUser>>
+    private var _searchUserLoadMoreResponse: MutableLiveData<List<User>> = MutableLiveData()
+    val searchUserLoadMoreResponse: LiveData<List<User>>
         get() = _searchUserLoadMoreResponse
 
     private var _inviteUserResponse: MutableLiveData<CreateInvitationResponse> = MutableLiveData()

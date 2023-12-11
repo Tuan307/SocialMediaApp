@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.R
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.data.models.dating_app.BaseApiResponse
+import com.base.app.data.models.user.BaseApiResponse
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.JoinGroupRequest
 import com.base.app.data.models.group.response.CreateInvitationResponse
@@ -184,7 +184,7 @@ class GroupDetailViewModel @Inject constructor(
                 DetailGroupPostViewData(
                     id = data.groupPostId,
                     description = data.description,
-                    imagesList = data.groupPostContentItemList.map { it1 ->
+                    imagesList = data.groupPostImagesList.map { it1 ->
                         ImagesList(
                             id = it1.id,
                             imageUrl = it1.imageUrl
@@ -322,7 +322,7 @@ class GroupDetailViewModel @Inject constructor(
                 SearchGroupViewData(
                     groupPostId = data.groupPostId,
                     description = data.description,
-                    groupPostContentItemList = data.groupPostContentItemList.map {
+                    groupPostContentItemList = data.groupPostImagesList.map {
                         ImagesList(it.id, it.imageUrl)
                     },
                     groupPostUser = data.groupPostUserId,

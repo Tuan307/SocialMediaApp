@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.data.models.User
-import com.base.app.data.models.dating_app.UserUpdateProfileResponse
+import com.base.app.data.models.user.UserUpdateProfileResponse
 import com.base.app.data.models.mToken
 import com.base.app.data.models.request.UpdateProfileRequest
 import com.base.app.data.repositories.profile.UserProfileRepository

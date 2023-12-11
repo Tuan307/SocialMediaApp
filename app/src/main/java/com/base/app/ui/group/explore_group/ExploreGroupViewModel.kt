@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.data.models.dating_app.BaseApiResponse
+import com.base.app.data.models.user.BaseApiResponse
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.JoinGroupRequest
 import com.base.app.data.models.group.response.CreateInvitationResponse

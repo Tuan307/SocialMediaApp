@@ -1,7 +1,7 @@
 package com.base.app.data.models.response.post
 
 import android.os.Parcelable
-import com.base.app.data.models.dating_app.Status
+import com.base.app.data.models.user.Status
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

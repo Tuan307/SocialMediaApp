@@ -1,7 +1,7 @@
 package com.base.app.data.models.response
 
-import com.base.app.data.models.dating_app.DatingUser
-import com.base.app.data.models.dating_app.Status
+import com.base.app.data.models.user.User
+import com.base.app.data.models.user.Status
 import com.base.app.data.models.group.response.GroupData
 import com.base.app.data.models.response.post.Pageable
 import com.base.app.data.models.response.post.Sort
@@ -45,7 +45,7 @@ data class NotificationContent(
     @SerializedName("notificationOwnerId")
     val notificationOwnerId: String?,
     @SerializedName("notificationUserId")
-    val notificationUserId: DatingUser?,
+    val notificationUserId: User?,
     @SerializedName("notificationGroupId")
     val notificationGroupId: GroupData?
 )

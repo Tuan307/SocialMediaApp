@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.common.IMAGE_URL
-import com.base.app.data.models.dating_app.UserProfileResponseResult
+import com.base.app.data.models.user.UserProfileResponseResult
 import com.base.app.data.models.request.RegisterRequest
 import com.base.app.data.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.app.R
-import com.base.app.data.models.dating_app.DatingUser
+import com.base.app.data.models.user.User
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.databinding.ActivityInviteMemberBinding
 import com.base.app.ui.group.add_group.InviteMemberViewModel
@@ -24,7 +24,7 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
     private lateinit var inviteMemberAdapter: InviteMemberAdapter
     private var groupId = 0.toLong()
     private var groupName = ""
-    private var inviteList: ArrayList<DatingUser> = arrayListOf()
+    private var inviteList: ArrayList<User> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_invite_member)
@@ -64,7 +64,7 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
         userResponse.observe(this@InviteMemberActivity) {
             inviteList.clear()
             inviteList.addAll(it.map { data ->
-                DatingUser(
+                User(
                     userId = data.id.toString(),
                     userName = data.username.toString(),
                     fullName = data.fullname.toString(),
@@ -80,7 +80,7 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
                 )
             })
             inviteMemberAdapter.submitList(it.map { data ->
-                DatingUser(
+                User(
                     userId = data.id.toString(),
                     userName = data.username.toString(),
                     fullName = data.fullname.toString(),
