@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 /**
  * @author tuanpham
- * @since 9/20/2023
+ * @since 10/20/2023
  */
 data class PostResponse(
     @SerializedName("status")

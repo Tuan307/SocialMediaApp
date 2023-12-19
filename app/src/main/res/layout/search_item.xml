@@ -15,6 +15,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgAvatar"
             android:layout_width="@dimen/dp45"
+            android:src="@drawable/ic_dialog_astronaut"
             android:layout_height="@dimen/dp45"
             android:layout_marginStart="@dimen/dp10"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +33,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/imgAvatar"
             app:layout_constraintTop_toTopOf="@+id/imgAvatar"
-            tools:text="Hello" />
+            tools:text="Tuan Pham" />
 
         <TextView
             android:id="@+id/txtName"
@@ -44,7 +45,7 @@
             android:textSize="@dimen/sp18"
             app:layout_constraintStart_toStartOf="@+id/txtUserName"
             app:layout_constraintTop_toBottomOf="@+id/txtUserName"
-            tools:text="Hello" />
+            tools:text="callmetuan" />
 
         <ImageView
             android:id="@+id/imgRemove"

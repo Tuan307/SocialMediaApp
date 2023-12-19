@@ -64,6 +64,7 @@
                         android:layout_height="@dimen/dp24"
                         android:layout_marginTop="@dimen/dp12"
                         android:layout_marginEnd="@dimen/dp12"
+                        android:visibility="gone"
                         android:src="@drawable/ic_search"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

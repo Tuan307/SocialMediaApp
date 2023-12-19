@@ -392,6 +392,7 @@
     <string name="text_description">Bạn đang nghĩ gì vậy?</string>
     <string name="upload">Upload</string>
     <string name="notifications">Notifications</string>
+    <string name="notifications_vn">Thông báo</string>
     <string name="all_users">All users</string>
     <string name="choose_video">Choose Video</string>
     <string name="post_video">Post Video</string>

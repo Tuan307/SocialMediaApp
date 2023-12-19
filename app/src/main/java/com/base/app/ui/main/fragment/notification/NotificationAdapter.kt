@@ -28,6 +28,8 @@ class NotificationAdapter(private val listener: OnNotificationClick) :
                     txtNotification.text = "${data.text} ${data.notificationGroupId?.groupName}"
                 } else if (data.isPost == true) {
                     txtNotification.text = data.text.toString()
+                }else{
+                    txtNotification.text = data.text.toString()
                 }
                 textTimeAgo.text = data.notificationTimeStamp
                 if (data.isInvitation == true || data.isRequest == true) {
