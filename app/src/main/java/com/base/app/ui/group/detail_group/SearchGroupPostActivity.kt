@@ -111,9 +111,6 @@ class SearchGroupPostActivity : AppCompatActivity(), GroupFeedAdapter.ISearchGro
     override fun doubleClickLikePost(postId: String, status: String, publisherId: String) {
     }
 
-    override fun downloadImage(fileName: String, postId: String) {
-    }
-
     override fun editImage(postId: String, view: View) {
     }
 

@@ -176,10 +176,6 @@ class GroupForYouFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
 
     }
 
-    override fun downloadImage(fileName: String, postId: String) {
-        downloadImageByUri(fileName, postId)
-    }
-
     override fun editImage(postId: String, view: View) {
     }
 

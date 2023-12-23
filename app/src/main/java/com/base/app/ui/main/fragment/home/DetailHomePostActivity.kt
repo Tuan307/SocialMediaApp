@@ -1,10 +1,12 @@
 package com.base.app.ui.main.fragment.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.base.app.R
+import com.base.app.common.CommonUtils.downloadImageByUri
 import com.base.app.data.models.response.post.ImagesList
 import com.base.app.databinding.ActivityDetailHomePostBinding
 import com.base.app.ui.main.fragment.home.adapter.DetailHomePostAdapter
@@ -36,10 +38,20 @@ class DetailHomePostActivity : AppCompatActivity() {
                 currentItem = itemPosition
             }
         }
-
+        binding.imageDownload.setOnClickListener {
+            Log.d(
+                "CheckListItem",
+                list?.get(binding.viewPagerImageDetail.currentItem)?.imageUrl.toString()
+            );
+            this@DetailHomePostActivity.downloadImageByUri(
+                "ảnh được tải từ TravelGo",
+                list?.get(binding.viewPagerImageDetail.currentItem)?.imageUrl.toString()
+            )
+        }
         binding.imageClose.setOnClickListener {
             finish()
         }
     }
+
 
 }

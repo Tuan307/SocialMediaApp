@@ -133,16 +133,6 @@ class NewsFeedAdapter(
                         R.id.edit -> {
                             data.postId?.let { it1 -> iPostCallBack.editImage(it1, it) }
                         }
-                        R.id.download -> {
-                            if (data.imagesList != null) {
-                                data.imagesList[0].imageUrl.let { it1 ->
-                                    iPostCallBack.downloadImage(
-                                        "ảnh được tải từ social app",
-                                        it1.toString()
-                                    )
-                                }
-                            }
-                        }
                     }
                     true
                 }
@@ -301,7 +291,6 @@ class NewsFeedAdapter(
         fun savePost(postId: String)
         fun sharePost(post: Drawable)
         fun doubleClickLikePost(postId: String, status: String, publisherId: String)
-        fun downloadImage(fileName: String, postId: String)
         fun editImage(postId: String, view: View)
         fun deleteImage(postId: String)
     }

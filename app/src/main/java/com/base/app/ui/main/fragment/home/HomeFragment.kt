@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
+import com.base.app.common.CommonUtils.downloadImageByUri
 import com.base.app.common.EMPTY_STRING
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.NotificationData
@@ -267,10 +268,6 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
         }
     }
 
-    override fun downloadImage(fileName: String, postId: String) {
-        downloadImageByUri(fileName, postId)
-    }
-
     override fun editImage(postId: String, view: View) {
 //        val alertDialog = AlertDialog.Builder(requireContext())
 //        alertDialog.setTitle("Edit Post")
@@ -298,34 +295,6 @@ class HomeFragment : BaseFragment<FragmentHome2Binding>(),
 
     override fun deleteImage(postId: String) {
         viewModel.deletePost(postId)
-    }
-
-    private fun downloadImageByUri(fileName: String, postImage: String) {
-        try {
-            val downloadManager: DownloadManager =
-                requireContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-            val uri = Uri.parse(postImage)
-            val request = DownloadManager.Request(uri)
-            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-                .setAllowedOverRoaming(false)
-                .setTitle(fileName)
-                .setMimeType("image/jpeg")
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
-                .setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_PICTURES,
-                    File.separator + fileName + ".jpg"
-                )
-            downloadManager.enqueue(request)
-            showToast(
-                requireContext(),
-                resources.getString(R.string.str_success),
-            )
-        } catch (e: Exception) {
-            showToast(
-                requireContext(),
-                resources.getString(R.string.str_error),
-            )
-        }
     }
 
     override fun onRefresh() {

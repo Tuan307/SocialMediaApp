@@ -13,6 +13,7 @@ data class ExploreViewData(
 data class ExploreItemViewData(
     val id: String,
     val name: String,
+    val userName: String,
     val image: String,
     val type: Int,
     val groupMember: String?

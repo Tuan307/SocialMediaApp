@@ -91,6 +91,10 @@ class GroupAllRequestActivity : AppCompatActivity(), GroupRequestAdapter.OnGroup
                     it,
                     it1
                 )
+                viewModel.removeGroupRequest(
+                    it,
+                    it1
+                )
             }
         }
     }

@@ -74,6 +74,7 @@ class ExploreFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             name = data.userName.toString(),
                             image = data.imageUrl.toString(),
                             type = 0,
+                            userName = data.userName.toString(),
                             groupMember = null
                         )
                     }
@@ -94,6 +95,7 @@ class ExploreFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         name = it[i].groupName,
                         image = it[i].groupImageUrl,
                         type = 1,
+                        userName = "",
                         groupMember = null
                     )
                 )
@@ -115,6 +117,7 @@ class ExploreFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     name = data.city_name.toString(),
                     image = data.image_url?.get(0)?.imageUrl ?: "",
                     type = 2,
+                    userName = "",
                     groupMember = null
                 )
             }

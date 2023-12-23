@@ -115,14 +115,6 @@ class GroupFeedAdapter(
                         R.id.edit -> {
                             data.groupPostId.let { it1 -> listener.editImage(it1, it) }
                         }
-                        R.id.download -> {
-                            data.groupPostContentItemList[0].imageUrl.let { it1 ->
-                                listener.downloadImage(
-                                    "ảnh được tải từ social app",
-                                    it1.toString()
-                                )
-                            }
-                        }
                     }
                     true
                 }
@@ -236,7 +228,6 @@ class GroupFeedAdapter(
         fun savePost(postId: String)
         fun sharePost(post: Drawable)
         fun doubleClickLikePost(postId: String, status: String, publisherId: String)
-        fun downloadImage(fileName: String, postId: String)
         fun editImage(postId: String, view: View)
         fun deleteImage(postId: String)
     }

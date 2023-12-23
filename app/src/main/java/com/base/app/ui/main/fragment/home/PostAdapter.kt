@@ -57,14 +57,6 @@ class PostAdapter(
                             R.id.edit -> {
                                 data.postid?.let { it1 -> iPostCallBack.editImage(it1, it) }
                             }
-                            R.id.download -> {
-                                data.postimage?.let { it1 ->
-                                    iPostCallBack.downloadImage(
-                                        "ảnh được tải từ social app",
-                                        it1
-                                    )
-                                }
-                            }
                         }
                         true
                     }
@@ -146,7 +138,6 @@ class PostAdapter(
         fun savePost(postId: String, status: String)
         fun sharePost(post: Drawable)
         fun doubleClickLikePost(postId: String, status: String, publisherId: String)
-        fun downloadImage(fileName: String, postId: String)
         fun editImage(postId: String, view: View)
         fun deleteImage(postId: String)
     }

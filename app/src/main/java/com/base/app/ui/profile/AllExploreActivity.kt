@@ -7,21 +7,20 @@ import android.os.Looper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.R
 import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.ActivityAllExploreBinding
-import com.base.app.ui.main.fragment.explore.adapter.ItemExploreAdapter
+import com.base.app.ui.main.fragment.explore.adapter.ExploreAllNearbyFriendAdapter
 import com.base.app.ui.main.fragment.explore.viewdata.ExploreItemViewData
 import com.base.app.ui.main.fragment.explore.viewmodel.ExploreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AllExploreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener,
-    ItemExploreAdapter.OnItemExploreClick {
+class AllExploreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: ActivityAllExploreBinding
-    private lateinit var userAdapter: ItemExploreAdapter
+    private lateinit var userAdapter: ExploreAllNearbyFriendAdapter
     private val viewModel by viewModels<ExploreViewModel>()
     private val userList: ArrayList<ExploreItemViewData> = arrayListOf()
     private var type: String = ""
@@ -45,14 +44,20 @@ class AllExploreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
                 lat = saveShare.getString("lat").toDouble()
                 lng = saveShare.getString("lng").toDouble()
                 viewModel.getAllNearByUsers(lat, lng, 100)
-                userAdapter = ItemExploreAdapter(userList, this@AllExploreActivity)
+                userAdapter = ExploreAllNearbyFriendAdapter(::onFriendItemClick)
                 listOfGroups.apply {
-                    layoutManager = GridLayoutManager(this@AllExploreActivity, 2)
+                    layoutManager = LinearLayoutManager(this@AllExploreActivity)
                     adapter = userAdapter
                 }
             }
         }
         observeData()
+    }
+
+    private fun onFriendItemClick(data: ExploreItemViewData) {
+        val intent = Intent(this@AllExploreActivity, ProfileActivity::class.java)
+        intent.putExtra("userId", data.id)
+        startActivity(intent)
     }
 
     private fun observeData() = with(viewModel) {
@@ -64,32 +69,19 @@ class AllExploreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
                     name = data.userName.toString(),
                     image = data.imageUrl.toString(),
                     type = 0,
+                    userName = data.userName.toString(),
                     groupMember = null
                 )
             })
-            userAdapter.notifyDataSetChanged()
+            userAdapter.submitList(userList.toList())
         }
     }
 
     override fun onRefresh() {
         viewModel.getAllNearByUsers(lat, lng, 100)
-        userList.clear()
         Handler(Looper.getMainLooper()).postDelayed({
             binding.swipeExploreAll.isRefreshing = false
         }, 1500)
-    }
-
-    override fun onCLickFriend(data: ExploreItemViewData) {
-        val intent = Intent(this@AllExploreActivity, ProfileActivity::class.java)
-        intent.putExtra("userId", data.id)
-        startActivity(intent)
-    }
-
-    override fun onCLickGroup(data: ExploreItemViewData) {
-
-    }
-
-    override fun onCLickDestination(data: ExploreItemViewData) {
     }
 
 }

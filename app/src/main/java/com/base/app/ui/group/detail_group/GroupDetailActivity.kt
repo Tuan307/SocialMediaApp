@@ -231,10 +231,6 @@ class GroupDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
     override fun doubleClickLikePost(postId: String, status: String, publisherId: String) {
     }
 
-    override fun downloadImage(fileName: String, postId: String) {
-        downloadImageByUri(fileName, postId)
-    }
-
     override fun editImage(postId: String, view: View) {
     }
 

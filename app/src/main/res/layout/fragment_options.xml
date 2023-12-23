@@ -6,6 +6,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         tools:context=".ui.options.OptionsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,9 +48,9 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_marginStart="15dp"
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -73,8 +74,8 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginEnd="15dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -98,11 +99,11 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="0dp"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/text_number_post"
@@ -127,7 +128,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_my_profile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="@dimen/dp16"
                 android:layout_marginTop="@dimen/dp18"
                 android:background="@drawable/bg_btn_white"
@@ -153,7 +154,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_of_shortcut"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginHorizontal="@dimen/dp12"
                 android:layout_marginVertical="@dimen/dp10"
                 app:layout_constraintBottom_toTopOf="@+id/btnLogOut"

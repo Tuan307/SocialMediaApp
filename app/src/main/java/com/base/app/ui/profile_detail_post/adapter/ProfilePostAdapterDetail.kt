@@ -70,14 +70,6 @@ class ProfilePostAdapterDetail(
                             R.id.edit -> {
                                 data.postId?.let { it1 -> iPostCallBack.editImage(it1, it) }
                             }
-                            R.id.download -> {
-                                data.imagesList?.get(position)?.let { it1 ->
-                                    iPostCallBack.downloadImage(
-                                        "Post from meme app",
-                                        it1.imageUrl.toString()
-                                    )
-                                }
-                            }
                         }
                         true
                     }
@@ -157,7 +149,6 @@ class ProfilePostAdapterDetail(
         fun savePost(postId: String, status: String)
         fun sharePost(postId: String)
         fun doubleClickLikePost(postId: String, status: String, publisherId: String)
-        fun downloadImage(fileName: String, postId: String)
         fun editImage(postId: String, view: View)
         fun deleteImage(postId: String)
     }

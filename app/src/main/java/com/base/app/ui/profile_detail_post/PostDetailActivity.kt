@@ -161,10 +161,6 @@ class PostDetailActivity : BaseActivity<FragmentPostDetailBinding>(),
         }
     }
 
-    override fun downloadImage(fileName: String, postId: String) {
-        downloadImageByUri(fileName, postId)
-    }
-
     override fun editImage(postId: String, view: View) {
         val alertDialog = AlertDialog.Builder(this@PostDetailActivity)
         alertDialog.setTitle("Edit Post")

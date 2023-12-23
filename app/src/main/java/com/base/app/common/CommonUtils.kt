@@ -2,6 +2,7 @@ package com.base.app.common
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageInfo
@@ -28,10 +29,12 @@ import android.view.inputmethod.InputMethodManager
 import android.webkit.SslErrorHandler
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.exifinterface.media.ExifInterface
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
 import com.base.app.R
@@ -55,6 +58,63 @@ import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 object CommonUtils {
+
+     fun Activity.downloadImageByUri(fileName: String, postImage: String) {
+        try {
+            val downloadManager: DownloadManager =
+                this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val uri = Uri.parse(postImage)
+            val request = DownloadManager.Request(uri)
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverRoaming(false)
+                .setTitle(fileName)
+                .setMimeType("image/jpeg")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+                .setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_PICTURES,
+                    File.separator + fileName + ".jpg"
+                )
+            downloadManager.enqueue(request)
+            Toast.makeText(
+                this,
+                resources.getString(R.string.str_success), Toast.LENGTH_SHORT
+            ).show()
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                resources.getString(R.string.str_error), Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
+    fun Fragment.downloadImageByUri(fileName: String, postImage: String) {
+        try {
+            val downloadManager: DownloadManager =
+                this.requireContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val uri = Uri.parse(postImage)
+            val request = DownloadManager.Request(uri)
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverRoaming(false)
+                .setTitle(fileName)
+                .setMimeType("image/jpeg")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
+                .setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_PICTURES,
+                    File.separator + fileName + ".jpg"
+                )
+            downloadManager.enqueue(request)
+            Toast.makeText(
+                this.requireContext(),
+                resources.getString(R.string.str_success), Toast.LENGTH_SHORT
+            ).show()
+        } catch (e: Exception) {
+            Toast.makeText(
+                this.requireContext(),
+                resources.getString(R.string.str_error), Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     var isFirstLogin = true
 

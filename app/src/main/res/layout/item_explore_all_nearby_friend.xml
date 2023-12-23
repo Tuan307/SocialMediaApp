@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_nearby_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp10"
+        android:background="@color/colorWhite"
+        android:paddingVertical="@dimen/dp8"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_friend_avatar"
+            android:layout_width="@dimen/dp45"
+            android:layout_height="@dimen/dp45"
+            android:layout_marginStart="@dimen/dp10"
+            android:src="@drawable/ic_dialog_astronaut"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_friend_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp10"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_app_text"
+            android:textSize="@dimen/sp16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/image_friend_avatar"
+            app:layout_constraintTop_toTopOf="@+id/image_friend_avatar"
+            tools:text="Tuan Pham" />
+
+        <TextView
+            android:id="@+id/text_friend_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_app_text"
+            android:textSize="@dimen/sp18"
+            app:layout_constraintStart_toStartOf="@+id/text_friend_name"
+            app:layout_constraintTop_toBottomOf="@+id/text_friend_name"
+            tools:text="callmetuan" />
+
+        <ImageView
+            android:id="@+id/imgRemove"
+            android:layout_width="@dimen/dp35"
+            android:layout_height="@dimen/dp35"
+            android:layout_marginEnd="@dimen/dp10"
+            android:src="@drawable/ic_delete_product"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divine_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginTop="@dimen/dp8"
+            android:background="@color/color_message_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_friend_user_name" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -24,6 +24,14 @@
                 android:layout_gravity="start"
                 app:srcCompat="@drawable/ic_close_white" />
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_download"
+                android:layout_marginStart="@dimen/dp30"
+                android:layout_width="@dimen/dp32"
+                android:layout_height="@dimen/dp32"
+                android:layout_gravity="start"
+                app:srcCompat="@drawable/ic_download_24" />
+
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.viewpager2.widget.ViewPager2
