@@ -113,8 +113,12 @@ class ChooseInterestActivity : AppCompatActivity(), InterestAdapter.OnInterestIt
 
         addInterestResponse.observe(this@ChooseInterestActivity) {
             if (it) {
-                startActivity(Intent(this@ChooseInterestActivity, MainActivity::class.java))
-                finish()
+                if (from == "update") {
+                    finish()
+                } else {
+                    startActivity(Intent(this@ChooseInterestActivity, MainActivity::class.java))
+                    finish()
+                }
             } else {
                 Toast.makeText(
                     this@ChooseInterestActivity,

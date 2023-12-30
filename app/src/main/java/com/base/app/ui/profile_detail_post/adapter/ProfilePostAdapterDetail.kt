@@ -50,7 +50,7 @@ class ProfilePostAdapterDetail(
                 data.postId?.let { viewModel.isLikePost(it, imgHeart) }
                 data.postId?.let { viewModel.isSavedPost(it, imgSave) }
                 viewModel.getPublisherInformation(
-                    context,
+                    root.context,
                     imgAvatar,
                     txtUserName,
                     txtPublisher,

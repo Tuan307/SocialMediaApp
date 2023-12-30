@@ -2,7 +2,7 @@ package com.base.app.data.repositories.feed
 
 import com.base.app.base.network.BaseRemoteService
 import com.base.app.base.network.NetworkResult
-import com.base.app.data.apis.DatingAPI
+import com.base.app.data.apis.APIService
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.SavedPostRequest
 import com.base.app.di.IoDispatcher
@@ -15,7 +15,7 @@ import javax.inject.Inject
  * @since 9/20/2023
  */
 class NewsFeedRepository @Inject constructor(
-    private val api: DatingAPI,
+    private val api: APIService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : BaseRemoteService() {
 

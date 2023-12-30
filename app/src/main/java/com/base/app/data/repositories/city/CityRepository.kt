@@ -2,7 +2,7 @@ package com.base.app.data.repositories.city
 
 import com.base.app.base.network.BaseRemoteService
 import com.base.app.base.network.NetworkResult
-import com.base.app.data.apis.DatingAPI
+import com.base.app.data.apis.APIService
 import com.base.app.data.apis.RecommendApi
 import com.base.app.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * @since 11/2/2023
  */
 class CityRepository @Inject constructor(
-    private val api: DatingAPI,
+    private val api: APIService,
     private val recommendApi: RecommendApi,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : BaseRemoteService() {

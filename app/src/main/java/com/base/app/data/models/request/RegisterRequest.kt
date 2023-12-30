@@ -7,8 +7,8 @@ import com.google.gson.annotations.SerializedName
  * @since 9/18/2023
  */
 data class RegisterRequest(
-    @SerializedName("id")
-    val id: String,
+    @SerializedName("userId")
+    val userId: String,
     @SerializedName("userName")
     val userName: String,
     @SerializedName("fullName")

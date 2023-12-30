@@ -1,6 +1,9 @@
 package com.base.app.ui.main.fragment.profile
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
@@ -8,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
@@ -26,7 +30,7 @@ import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostAdapter.iCallBack {
+class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostAdapter.iCallBack,SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel by viewModels<ProfileViewModel>()
     private val mainViewModel by activityViewModels<MainViewModel>()
@@ -51,6 +55,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         if (postList.isNotEmpty()) {
             postList.clear()
         }
+        Log.d("CheckHere", "Yeah")
         viewModel.getRemoteUserInformation(idKey)
         if (tabType == 0) {
             viewModel.getProfilePost(idKey, 20, 1)
@@ -61,6 +66,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
     }
 
     override fun initView() {
+        binding.swipeMyProfile.setOnRefreshListener(this@MyProfileFragment)
         viewModel.getProfilePost(idKey, 20, 1)
         binding.rcvProfile.layoutManager =
             GridLayoutManager(requireContext(), 3)
@@ -256,26 +262,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                 }
                 profileAdapter.notifyDataSetChanged()
             }
-//            followResponse.observe(this@MyProfileFragment) {
-//                if (it) {
-//                    binding.btnFollowProfile.text = resources.getString(R.string.un_follow)
-//                } else {
-//                    binding.btnFollowProfile.text = resources.getString(R.string.follow)
-//                }
-//            }
-//            getKey.observe(this@MyProfileFragment) {
-//                idKey = it ?: viewModel.firebaseUser?.uid.toString()
-//                viewModel.isFollowing(idKey)
-//                viewModel.setId(idKey)
-//                viewModel.getRemoteUserInformation(idKey)
-//                viewModel.getFollowing(idKey)
-//                viewModel.getFollower(idKey)
-//                if (tabType == 0) {
-//                    viewModel.getProfilePost(idKey, 20, 1)
-//                } else {
-//                    viewModel.getSavePost(idKey, 20, 1)
-//                }
-//            }
         }
     }
 
@@ -285,6 +271,14 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         intent.putExtra("imagePosition", position)
         startActivity(intent)
 
+    }
+
+    override fun onRefresh() {
+        viewModel.getRemoteUserInformation(idKey)
+        viewModel.isLoading.postValue(false)
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.swipeMyProfile.isRefreshing = false
+        }, 1500)
     }
 
 }

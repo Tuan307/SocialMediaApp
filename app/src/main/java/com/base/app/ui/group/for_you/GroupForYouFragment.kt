@@ -106,6 +106,7 @@ class GroupForYouFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener,
             }
             viewModel.getGroupNewsFeed(10, 1)
             forYouAdapter.submitList(list.toList())
+            forYouAdapter.notifyDataSetChanged()
         }
         groupGroupNewsFeedResponse.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {

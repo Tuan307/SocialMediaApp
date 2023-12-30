@@ -32,7 +32,7 @@ android {
             try {
                 minifyEnabled false
                 buildConfigField("String", "API_URL", apikeyProperties['API_URL_DEV'])
-                buildConfigField("String", "DATING_API_URL", apikeyProperties['DATING_API_URL_DEV'])
+                buildConfigField("String", "WEBSERVICE_API_URL", apikeyProperties['WEBSERVICE_API_URL_DEV'])
                 buildConfigField("String", "RECOMMEND_API_URL_DEV", apikeyProperties['RECOMMEND_API_URL_DEV'])
                 debuggable true
             } catch (e) {

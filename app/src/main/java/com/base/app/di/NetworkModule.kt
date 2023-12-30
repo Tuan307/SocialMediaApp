@@ -1,7 +1,5 @@
 package com.base.app.di
 
-import android.app.Application
-import android.content.Context
 import com.base.app.BuildConfig
 import com.base.app.data.apis.*
 
@@ -10,7 +8,6 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,8 +29,32 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideDatingApi(@Named("DatingSite") retrofit: Retrofit): DatingAPI {
-        return retrofit.create(DatingAPI::class.java)
+    fun provideWebServiceApi(@Named("WebServiceApiSite") retrofit: Retrofit): APIService {
+        return retrofit.create(APIService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("WebServiceApiSite")
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory
+    ): Retrofit {
+
+        val httpClient = OkHttpClient.Builder()
+        httpClient.connectTimeout(10, TimeUnit.SECONDS);
+        httpClient.readTimeout(10, TimeUnit.SECONDS);
+
+        if (BuildConfig.DEBUG) {
+            val logging = HttpLoggingInterceptor()
+            logging.level = HttpLoggingInterceptor.Level.BODY
+            httpClient.addInterceptor(logging) // <-- this is the important line!
+        }
+
+        return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
+            .baseUrl(BuildConfig.WEBSERVICE_API_URL)
+            .client(okHttpClient)
+            .build()
     }
 
     @Provides
@@ -64,29 +85,7 @@ object NetworkModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    @Named("DatingSite")
-    fun provideDatingRetrofit(
-        okHttpClient: OkHttpClient,
-        moshiConverterFactory: MoshiConverterFactory
-    ): Retrofit {
 
-        val httpClient = OkHttpClient.Builder()
-        httpClient.connectTimeout(10, TimeUnit.SECONDS);
-        httpClient.readTimeout(10, TimeUnit.SECONDS);
-
-        if (BuildConfig.DEBUG) {
-            val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BODY
-            httpClient.addInterceptor(logging) // <-- this is the important line!
-        }
-
-        return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
-            .baseUrl(BuildConfig.DATING_API_URL)
-            .client(okHttpClient)
-            .build()
-    }
 
     @Provides
     @Singleton

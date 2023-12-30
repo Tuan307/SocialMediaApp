@@ -3,281 +3,288 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
+        android:id="@+id/swipe_my_profile"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite"
         tools:context=".ui.main.fragment.profile.MyProfileFragment">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarProfile"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWhite">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <RelativeLayout
+                <androidx.appcompat.widget.Toolbar
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorWhite">
 
-                    <ImageView
-                        android:id="@+id/imgBackProfile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_back"
-                        android:visibility="gone" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/txtUserName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/dp10"
-                        android:layout_toEndOf="@+id/imgBackProfile"
-                        android:maxLines="1"
-                        android:textColor="@color/color_app_text"
-                        android:textSize="@dimen/sp18"
-                        android:textStyle="bold"
-                        tools:text="Username" />
+                        <ImageView
+                            android:id="@+id/imgBackProfile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_back"
+                            android:visibility="gone" />
 
-                    <ImageView
-                        android:id="@+id/imgOptions"
-                        android:layout_width="@dimen/dp32"
-                        android:layout_height="@dimen/dp32"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp20"
-                        android:src="@drawable/ic_menu"
-                        android:visibility="gone"
-                        app:tint="@color/color_app_text" />
+                        <TextView
+                            android:id="@+id/txtUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/dp10"
+                            android:layout_toEndOf="@+id/imgBackProfile"
+                            android:maxLines="1"
+                            android:textColor="@color/color_app_text"
+                            android:textSize="@dimen/sp18"
+                            android:textStyle="bold"
+                            tools:text="Username" />
 
-                    <ImageView
-                        android:id="@+id/imgAddImage"
-                        android:layout_width="@dimen/dp32"
-                        android:layout_height="@dimen/dp32"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp20"
-                        android:src="@drawable/addimage" />
+                        <ImageView
+                            android:id="@+id/imgOptions"
+                            android:layout_width="@dimen/dp32"
+                            android:layout_height="@dimen/dp32"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/dp20"
+                            android:src="@drawable/ic_menu"
+                            android:visibility="gone"
+                            app:tint="@color/color_app_text" />
+
+                        <ImageView
+                            android:id="@+id/imgAddImage"
+                            android:layout_width="@dimen/dp32"
+                            android:layout_height="@dimen/dp32"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/dp20"
+                            android:src="@drawable/addimage" />
 
 
-                </RelativeLayout>
+                    </RelativeLayout>
 
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.AppBarLayout>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgAvatar"
-            android:layout_width="@dimen/dp80"
-            android:layout_height="@dimen/dp80"
-            android:layout_marginStart="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp10"
-            android:src="@drawable/damsen"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarProfile" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="@dimen/dp20"
-            android:orientation="vertical"
-            android:weightSum="3"
-            app:layout_constraintBottom_toBottomOf="@+id/imgAvatar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgAvatar"
-            app:layout_constraintTop_toTopOf="@+id/imgAvatar">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="@dimen/dp80"
+                android:layout_height="@dimen/dp80"
+                android:layout_marginStart="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp10"
+                android:src="@drawable/damsen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appBarProfile" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/dp20"
+                android:orientation="vertical"
+                android:weightSum="3"
+                app:layout_constraintBottom_toBottomOf="@+id/imgAvatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgAvatar"
+                app:layout_constraintTop_toTopOf="@+id/imgAvatar">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/posts"
-                        android:textColor="@color/color_app_text"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/txtPostNumber"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/posts"
+                            android:textColor="@color/color_app_text"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtPostNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_app_text"
+                            android:textSize="@dimen/sp15"
+                            tools:text="10" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/txtFollower"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_app_text"
-                        android:textSize="@dimen/sp15"
-                        tools:text="10" />
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/followers"
+                            android:textColor="@color/color_app_text"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtFollowerNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_app_text"
+                            android:textSize="@dimen/sp15"
+                            tools:text="Follower" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/txtFollowing"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/following"
+                            android:textColor="@color/color_app_text"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtFollowingNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/color_app_text"
+                            android:textSize="@dimen/sp15"
+                            tools:text="Following" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/txtFollower"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/followers"
-                        android:textColor="@color/color_app_text"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtFollowerNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/color_app_text"
-                        android:textSize="@dimen/sp15"
-                        tools:text="Follower" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/txtFollowing"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/following"
-                        android:textColor="@color/color_app_text"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtFollowingNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textColor="@color/color_app_text"
-                        android:textSize="@dimen/sp15"
-                        tools:text="Following" />
-                </LinearLayout>
             </LinearLayout>
 
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtFullName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/color_app_text"
-            android:textSize="@dimen/sp18"
-            app:layout_constraintStart_toStartOf="@+id/imgAvatar"
-            app:layout_constraintTop_toBottomOf="@+id/imgAvatar"
-            tools:text="FullName" />
-
-        <TextView
-            android:id="@+id/txtBio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/color_app_text"
-            android:textSize="@dimen/sp15"
-            app:layout_constraintStart_toStartOf="@+id/imgAvatar"
-            app:layout_constraintTop_toBottomOf="@+id/txtFullName"
-            tools:text="Something is written here" />
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/linear_profile_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/txtBio">
-
-            <Button
-                android:id="@+id/btnEditProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp10"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="@drawable/edit_btn"
-                android:text="@string/edit_profile"
-                android:textAllCaps="false"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/sp15"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/txtBio" />
-
-            <Button
-                android:id="@+id/btnFollowProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp10"
-                android:layout_marginTop="@dimen/dp10"
-                android:background="@drawable/edit_btn"
-                android:text="@string/follow"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp15"
-                android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@+id/txtBio" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayoutProfile"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp36"
-            android:layout_marginHorizontal="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear_profile_button"
-            app:tabIconTint="@color/tab_color"
-            app:tabIndicatorColor="@color/color_app_text">
-
-            <com.google.android.material.tabs.TabItem
+            <TextView
+                android:id="@+id/txtFullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_grid" />
+                android:layout_marginTop="@dimen/dp10"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/color_app_text"
+                android:textSize="@dimen/sp18"
+                app:layout_constraintStart_toStartOf="@+id/imgAvatar"
+                app:layout_constraintTop_toBottomOf="@+id/imgAvatar"
+                tools:text="FullName" />
 
-            <com.google.android.material.tabs.TabItem
+            <TextView
+                android:id="@+id/txtBio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:icon="@drawable/ic_bookmark_border" />
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/color_app_text"
+                android:textSize="@dimen/sp15"
+                app:layout_constraintStart_toStartOf="@+id/imgAvatar"
+                app:layout_constraintTop_toBottomOf="@+id/txtFullName"
+                tools:text="Something is written here" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_profile_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/txtBio">
+
+                <Button
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:background="@drawable/edit_btn"
+                    android:text="@string/edit_profile"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/sp15"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/txtBio" />
+
+                <Button
+                    android:id="@+id/btnFollowProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:background="@drawable/edit_btn"
+                    android:text="@string/follow"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp15"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@+id/txtBio" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayoutProfile"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp36"
+                android:layout_marginHorizontal="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear_profile_button"
+                app:tabIconTint="@color/tab_color"
+                app:tabIndicatorColor="@color/color_app_text">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_grid" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:icon="@drawable/ic_bookmark_border" />
 
 
-        </com.google.android.material.tabs.TabLayout>
+            </com.google.android.material.tabs.TabLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvProfile"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp8"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayoutProfile"
-            tools:itemCount="1"
-            tools:listitem="@layout/profile_post_item" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvProfile"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tabLayoutProfile"
+                tools:itemCount="1"
+                tools:listitem="@layout/profile_post_item" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </layout>

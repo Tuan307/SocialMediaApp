@@ -2,7 +2,7 @@ package com.base.app.data.repositories.notification
 
 import com.base.app.base.network.BaseRemoteService
 import com.base.app.base.network.NetworkResult
-import com.base.app.data.apis.DatingAPI
+import com.base.app.data.apis.APIService
 import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * @since 10/4/2023
  */
 class NotificationRepository @Inject constructor(
-    private val api: DatingAPI,
+    private val api: APIService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : BaseRemoteService() {
 

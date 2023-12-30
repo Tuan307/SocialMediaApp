@@ -57,7 +57,7 @@ import retrofit2.http.Query
  * @author tuanpham
  * @since 9/18/2023
  */
-interface DatingAPI {
+interface APIService {
 
     @GET("users/{id}")
     suspend fun getUserProfile(@Path("id") id: String): Response<UserProfileResponseResult>

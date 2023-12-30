@@ -2,6 +2,7 @@ package com.base.app.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -245,6 +246,12 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
             profileAdapter.notifyDataSetChanged()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Check1", "Yeah")
+        viewModel.getRemoteUserInformation(userId)
     }
 
     override fun onCLick(position: Int) {

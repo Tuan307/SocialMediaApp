@@ -72,13 +72,15 @@ class UpdateGroupViewModel @Inject constructor(
                 }.addOnFailureListener {
                 }
             }
+        } else {
+            _uploadImageToStorage.value = Event("no photo")
         }
     }
 
-    fun updateGroup(groupId: Long,request: UpdateGroupRequest) {
+    fun updateGroup(groupId: Long, request: UpdateGroupRequest) {
         showLoading(true)
         parentJob = viewModelScope.launch(handler) {
-            val result = repository.updateGroup(groupId,request)
+            val result = repository.updateGroup(groupId, request)
             _updateGroupResponse.value = Event(result.status?.message.toString())
             registerJobFinish()
         }

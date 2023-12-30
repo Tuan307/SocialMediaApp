@@ -2,7 +2,7 @@ package com.base.app.data.repositories.group
 
 import com.base.app.base.network.BaseRemoteService
 import com.base.app.base.network.NetworkResult
-import com.base.app.data.apis.DatingAPI
+import com.base.app.data.apis.APIService
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
@@ -18,7 +18,7 @@ import javax.inject.Inject
  * @since 10/10/2023
  */
 class GroupRepository @Inject constructor(
-    private val api: DatingAPI,
+    private val api: APIService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : BaseRemoteService() {
 

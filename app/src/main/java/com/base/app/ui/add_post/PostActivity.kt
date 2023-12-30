@@ -137,11 +137,11 @@ class PostActivity : BaseActivity<ActivityPostBinding>(), ShowImageAdapter.ShowI
                 if (it) {
                     showToast(this@PostActivity, resources.getString(R.string.str_success))
                     if (from == "group") {
-                        startActivity(Intent(this@PostActivity, GroupActivity::class.java))
+                        finish()
                     } else {
                         startActivity(Intent(this@PostActivity, MainActivity::class.java))
+                        finishAffinity()
                     }
-                    finishAffinity()
                 } else {
                     showToast(this@PostActivity, resources.getString(R.string.error))
                     if (from == "group") {

@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.base.app.R
 import com.base.app.base.activities.BaseActivity
 import com.base.app.common.EventObserver
@@ -77,15 +76,24 @@ class UpdateGroupActivity : BaseActivity<ActivityUpdateGroupBinding>() {
 
     override fun observerLiveData() {
         with(viewModel) {
-
             uploadImageToStorage.observe(this@UpdateGroupActivity, EventObserver {
-                val request = UpdateGroupRequest(
-                    binding.textInputGroupName.getText().toString(),
-                    binding.textInputGroupDescription.getText().toString(),
-                    it,
-                    itemsValue[binding.spinnerGroupPrivacy.selectedItemPosition]
-                )
-                viewModel.updateGroup(viewModel.groupId, request)
+                if (it == "no photo") {
+                    val request = UpdateGroupRequest(
+                        binding.textInputGroupName.getText().toString(),
+                        binding.textInputGroupDescription.getText().toString(),
+                        "",
+                        itemsValue[binding.spinnerGroupPrivacy.selectedItemPosition]
+                    )
+                    viewModel.updateGroup(viewModel.groupId, request)
+                } else {
+                    val request = UpdateGroupRequest(
+                        binding.textInputGroupName.getText().toString(),
+                        binding.textInputGroupDescription.getText().toString(),
+                        it,
+                        itemsValue[binding.spinnerGroupPrivacy.selectedItemPosition]
+                    )
+                    viewModel.updateGroup(viewModel.groupId, request)
+                }
             })
 
             updateGroupResponse.observe(this@UpdateGroupActivity, EventObserver {
