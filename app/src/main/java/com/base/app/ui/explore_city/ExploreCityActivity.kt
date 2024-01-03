@@ -38,6 +38,7 @@ class ExploreCityActivity : BaseActivity<ActivityExploreCityBinding>(),
             viewModel.getAllLocation()
             cityAdapter = ExploreCityAdapter(this@ExploreCityActivity)
             listOfCities.apply {
+                setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(this@ExploreCityActivity)
                 adapter = cityAdapter
             }

@@ -124,7 +124,7 @@ class ExploreFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             exploreList.add(
                 ExploreViewData(
                     "city",
-                    "Địa điểm du lịch",
+                    "Địa điểm du lịch được gợi ý cho bạn",
                     list.toList()
                 )
             )

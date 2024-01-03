@@ -284,7 +284,7 @@ interface APIService {
         @Query("groupId") groupId: Long
     ): Response<BaseApiResponse>
 
-    @GET("city/all")
+    @GET("city/all/sorted")
     suspend fun getAllCities(): Response<GetLocationResponse>
 
     @GET("city/search")

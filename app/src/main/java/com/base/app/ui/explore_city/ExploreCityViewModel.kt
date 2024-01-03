@@ -30,7 +30,7 @@ class ExploreCityViewModel @Inject constructor(
     fun getAllLocation() {
         viewModelScope.launch(handler) {
             val result = cityRepository.getAllLocation()
-            _allCityResponse.value = result.data.orEmpty()
+            _allCityResponse.value = result.data?.content.orEmpty()
         }
     }
 
@@ -38,7 +38,7 @@ class ExploreCityViewModel @Inject constructor(
         showLoading(true)
         parentJob = viewModelScope.launch(handler) {
             val result = cityRepository.searchForLocation(keyword)
-            _allCityResponse.value = result.data.orEmpty()
+            _allCityResponse.value = result.data?.content.orEmpty()
             android.os.Handler(Looper.getMainLooper()).postDelayed({
                 registerJobFinish()
             }, 1200)

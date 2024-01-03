@@ -31,6 +31,9 @@ class DetailExploreActivity : AppCompatActivity() {
         cityId = intent.getStringExtra("id").toString()
         url = intent.getStringExtra("url").toString()
         binding.progressBarDetailCity.visibility = View.VISIBLE
+        binding.imageBack.setOnClickListener {
+            finish()
+        }
         setUpWebView()
     }
 

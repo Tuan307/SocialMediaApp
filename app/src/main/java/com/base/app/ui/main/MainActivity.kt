@@ -51,8 +51,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             bottomNav.setOnNavigationItemSelectedListener(this@MainActivity)
         }
         saveShare = AppPreferencesHelper(this@MainActivity)
-        val lat = saveShare.getString("lat").toDouble()
-        val lng = saveShare.getString("lng").toDouble()
+        val lat = (saveShare.getString("lat") ?: "0").toDouble()
+        val lng = (saveShare.getString("lng") ?: "0").toDouble()
         viewModel.updateProfile(
             UpdateProfileRequest(
                 userId = viewModel.firebaseUser?.uid.toString(),
