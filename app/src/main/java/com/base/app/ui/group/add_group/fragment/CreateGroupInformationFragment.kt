@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.base.app.R
 import com.base.app.common.EventObserver
 import com.base.app.data.models.group.request.CreateGroupRequest
+import com.base.app.data.models.group.request.JoinGroupRequest
 import com.base.app.databinding.FragmentCreateGroupInformationBinding
 import com.base.app.ui.group.add_group.CreateGroupInformationViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,15 +85,21 @@ class CreateGroupInformationFragment : Fragment() {
                 viewModel.firebaseUser?.uid.toString(),
                 itemsValue[binding.spinnerGroupPrivacy.selectedItemPosition]
             )
-            viewModel.createGroup(request)
+            createGroup(request)
         })
         createGroupResponse.observe(viewLifecycleOwner, EventObserver {
+            if (it.data != null) {
+                groupName = it.data.groupName.toString()
+                addAdminGroup(JoinGroupRequest(firebaseUser?.uid.toString(), it.data.id ?: 0))
+            }
+        })
+        addAdminMemberResponse.observe(viewLifecycleOwner, EventObserver {
             if (it.data != null) {
                 val action =
                     CreateGroupInformationFragmentDirections.actionCreateGroupInformationFragmentToInviteMemberFragment(
                         it.data.id.toString(),
                         "invite",
-                        it.data.groupName.toString()
+                        groupName
                     )
                 findNavController().navigate(action)
             } else {

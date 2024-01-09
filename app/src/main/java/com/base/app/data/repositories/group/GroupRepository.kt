@@ -248,6 +248,18 @@ class GroupRepository @Inject constructor(
             }
         }
 
+    suspend fun addAdminMemberToGroup(request: JoinGroupRequest) =
+        withContext(dispatcher) {
+            when (val result = callApi { api.addAdminMemberToGroup(request) }) {
+                is NetworkResult.Success -> {
+                    result.data
+                }
+                is NetworkResult.Error -> {
+                    throw result.exception
+                }
+            }
+        }
+
     suspend fun deleteGroup(groupId: Long) =
         withContext(dispatcher) {
             when (val result = callApi { api.deleteGroup(groupId) }) {

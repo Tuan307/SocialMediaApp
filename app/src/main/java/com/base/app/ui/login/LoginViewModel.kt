@@ -49,6 +49,7 @@ class LoginViewModel @Inject constructor(
                     registerJobFinish()
                 } else {
                     loginResponse.postValue(false)
+                    registerJobFinish()
                 }
             }
         }

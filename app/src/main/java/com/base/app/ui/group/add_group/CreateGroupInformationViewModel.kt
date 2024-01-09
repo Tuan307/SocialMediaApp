@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.base.viewmodel.BaseViewModel
 import com.base.app.common.Event
-import com.base.app.data.models.group.response.CreateGroupResponse
 import com.base.app.data.models.group.request.CreateGroupRequest
+import com.base.app.data.models.group.request.JoinGroupRequest
+import com.base.app.data.models.group.response.CreateGroupResponse
+import com.base.app.data.models.group.response.GetGroupByGroupIdAndMemberIdResponse
 import com.base.app.data.repositories.group.GroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,9 +24,16 @@ import javax.inject.Inject
 class CreateGroupInformationViewModel @Inject constructor(
     private val repository: GroupRepository
 ) : BaseViewModel() {
+
+    var groupName: String = ""
     private var _uploadImageToStorage: MutableLiveData<Event<String>> = MutableLiveData()
     val uploadImageToStorage: LiveData<Event<String>>
         get() = _uploadImageToStorage
+
+    private var _addAdminMemberResponse: MutableLiveData<Event<GetGroupByGroupIdAndMemberIdResponse>> =
+        MutableLiveData()
+    val addAdminMemberResponse: LiveData<Event<GetGroupByGroupIdAndMemberIdResponse>>
+        get() = _addAdminMemberResponse
 
     private var _createGroupResponse: MutableLiveData<Event<CreateGroupResponse>> =
         MutableLiveData()
@@ -59,6 +68,13 @@ class CreateGroupInformationViewModel @Inject constructor(
         viewModelScope.launch(handler) {
             val result = repository.createGroup(request)
             _createGroupResponse.value = Event(result)
+        }
+    }
+
+    fun addAdminGroup(request: JoinGroupRequest) {
+        viewModelScope.launch(handler) {
+            val result = repository.addAdminMemberToGroup(request)
+            _addAdminMemberResponse.value = Event(result)
         }
     }
 }

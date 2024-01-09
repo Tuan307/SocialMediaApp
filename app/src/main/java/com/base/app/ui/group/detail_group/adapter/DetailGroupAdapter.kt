@@ -48,9 +48,11 @@ class DetailGroupAdapter(
                 if (viewModel.firebaseUser?.uid.toString() == data.groupOwnerId) {
                     buttonJoinGroup.visibility = View.GONE
                     buttonManageGroup.visibility = View.VISIBLE
+                    buttonInviteGroup.visibility = View.VISIBLE
                 } else {
                     buttonJoinGroup.visibility = View.VISIBLE
                     buttonManageGroup.visibility = View.GONE
+                    buttonInviteGroup.visibility = View.VISIBLE
                 }
                 buttonInviteGroup.setOnClickListener {
                     listener.inviteFriend(data.id)
@@ -72,18 +74,25 @@ class DetailGroupAdapter(
                 } else {
                     "Công khai"
                 }
-                textMemberNumber.text = data.groupMemberNumber
-                if (data.hasJoined) {
-                    buttonInviteGroup.visibility = View.VISIBLE
-                    buttonJoinGroup.text = "Đã tham gia"
-                } else {
-                    buttonInviteGroup.visibility = View.GONE
-                    buttonJoinGroup.text = "Tham gia"
-                }
                 buttonJoinGroup.text = if (data.hasRequested) {
                     "Đã gửi yêu cầu"
                 } else {
                     "Tham gia"
+                }
+                textMemberNumber.text = data.groupMemberNumber
+                if (data.hasJoined) {
+                    buttonInviteGroup.visibility = View.VISIBLE
+                    if (viewModel.firebaseUser?.uid.toString() == data.groupOwnerId) {
+                        buttonJoinGroup.visibility = View.GONE
+                    } else {
+                        buttonJoinGroup.visibility = View.VISIBLE
+                        buttonJoinGroup.text = "Đã tham gia"
+                    }
+                } else {
+                    buttonInviteGroup.visibility = View.GONE
+                    buttonJoinGroup.visibility = View.VISIBLE
+                    buttonJoinGroup.text = "Tham gia"
+                    buttonManageGroup.visibility = View.GONE
                 }
                 inputThinking.setOnClickListener {
                     listener.onPostAction()

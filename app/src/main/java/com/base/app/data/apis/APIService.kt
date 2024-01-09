@@ -255,6 +255,9 @@ interface APIService {
     @POST("group/add/member")
     suspend fun addMemberToGroup(@Body request: JoinGroupRequest): Response<GetGroupByGroupIdAndMemberIdResponse>
 
+    @POST("group/add/member/admin")
+    suspend fun addAdminMemberToGroup(@Body request: JoinGroupRequest): Response<GetGroupByGroupIdAndMemberIdResponse>
+
     @DELETE("group/delete/group")
     suspend fun deleteGroup(@Query("groupId") groupId: Long): Response<BaseApiResponse>
 

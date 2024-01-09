@@ -1,5 +1,6 @@
 package com.base.app.ui.login
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -78,8 +79,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             }
             getUserRemoteResponse.observe(this@LoginActivity) {
                 if (it?.isBlock == true) {
-                    Toast.makeText(this@LoginActivity, "tai khoan da bi khoa", Toast.LENGTH_SHORT)
-                        .show()
+                    val builder = AlertDialog.Builder(this@LoginActivity)
+                    builder.setMessage("Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên theo email: admintravelgo@gmail.com để biết thêm chi tiết")
+                    builder.setNegativeButton(
+                        "Đóng"
+                    ) { dialog, _ -> dialog?.dismiss() }
+                    val dialog = builder.create()
+                    dialog.show()
                 } else {
                     if (it?.userInterestProfiles?.isEmpty() == true) {
                         val intent = Intent(this@LoginActivity, ChooseInterestActivity::class.java)
