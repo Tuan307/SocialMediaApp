@@ -3,12 +3,14 @@ package com.base.app.ui.main.fragment.explore.adapter
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.base.app.databinding.LayoutItemExploreBinding
 import com.base.app.ui.explore_city.ExploreCityActivity
+import com.base.app.ui.explore_city.detail_city.DetailExploreActivity
 import com.base.app.ui.group.GroupActivity
 import com.base.app.ui.group.detail_group.GroupDetailActivity
 import com.base.app.ui.main.fragment.explore.viewdata.ExploreItemViewData
@@ -42,7 +44,10 @@ class ExploreAdapter :
                     }
 
                     override fun onCLickDestination(data: ExploreItemViewData) {
-
+                        val intent = Intent(root.context, DetailExploreActivity::class.java)
+                        intent.putExtra("id", data.id)
+                        intent.putExtra("url", data.url)
+                        root.context.startActivity(intent)
                     }
                 })
             textExploreTitle.text = data.title

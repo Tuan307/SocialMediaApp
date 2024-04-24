@@ -22,6 +22,7 @@ data class RecommendDataModel(
     val tag: String?,
     @SerializedName("image_url")
     val image_url: List<LocationImage>?,
+    val url: String?,
     @SerializedName("similarity_score")
     val similarity_score: String?
 )

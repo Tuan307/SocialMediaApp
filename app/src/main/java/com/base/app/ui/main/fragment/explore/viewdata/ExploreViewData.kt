@@ -16,5 +16,6 @@ data class ExploreItemViewData(
     val userName: String,
     val image: String,
     val type: Int,
-    val groupMember: String?
+    val groupMember: String?,
+    val url:String?
 )

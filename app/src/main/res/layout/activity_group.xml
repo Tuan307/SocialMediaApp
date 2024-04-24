@@ -6,6 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".ui.group.GroupActivity">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -83,7 +84,7 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.base.app.ui.custom.ViewPagerWithoutSwipe
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/group_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"

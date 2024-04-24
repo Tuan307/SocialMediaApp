@@ -69,7 +69,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
 
 
     private fun initPagerFragment() {
-        mPagerAdapter = PagerFragmentAdapter(supportFragmentManager)
+        mPagerAdapter = PagerFragmentAdapter(this@MainActivity)
         //add all fragment in main
         mPagerAdapter.addFragment(homeFragment)
         mPagerAdapter.addFragment(exploreFragment)
@@ -77,7 +77,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         mPagerAdapter.addFragment(notificationFragment)
         mPagerAdapter.addFragment(optionsFragment)
         binding.mainViewPager.adapter = mPagerAdapter
-        binding.mainViewPager.offscreenPageLimit = mPagerAdapter.count
+        binding.mainViewPager.isUserInputEnabled = false
+        binding.mainViewPager.offscreenPageLimit = mPagerAdapter.itemCount
     }
 
     override fun initListener() {

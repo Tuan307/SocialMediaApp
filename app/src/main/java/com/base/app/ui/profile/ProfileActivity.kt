@@ -15,17 +15,20 @@ import com.base.app.R
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.models.story.StoryModel
 import com.base.app.data.prefs.AppPreferencesHelper
 import com.base.app.databinding.ActivityProfileBinding
 import com.base.app.ui.edit_profile.EditProfileActivity
 import com.base.app.ui.follow.FollowerActivity
 import com.base.app.ui.main.fragment.profile.ProfileViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
+import com.base.app.ui.main.fragment.profile.adapter.StoryPostAdapter
 import com.base.app.ui.profile_detail_post.PostDetailActivity
+import com.base.app.ui.story.create_story_folder.CreateStoryFolderFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import java.util.Calendar
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
@@ -35,8 +38,10 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     private lateinit var profileAdapter: ProfilePostAdapter
     private var postList = ArrayList<PostContent>()
+    private lateinit var storyPostAdapter: StoryPostAdapter
     private var tabType: Int = 0
     private lateinit var saveShare: AppPreferencesHelper
+    private var listOfStories = arrayListOf<StoryModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@ProfileActivity, R.layout.activity_profile)
@@ -49,7 +54,15 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
         viewModel.isFollowing(FollowUserRequest(userId, viewModel.firebaseUser?.uid.toString(), ""))
         viewModel.getFollow(userId, "follow")
         viewModel.getFollow(userId, "follower")
+        listOfStories.add(StoryModel(1, null, null, null))
+        storyPostAdapter = StoryPostAdapter(::handleOnStoryClick)
         with(binding) {
+            listOfStory.apply {
+                layoutManager =
+                    LinearLayoutManager(this@ProfileActivity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = storyPostAdapter
+            }
+            storyPostAdapter.submitList(listOfStories)
             imgBackProfile.setOnClickListener {
                 finish()
             }
@@ -119,6 +132,7 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
                             endlessRecyclerViewScrollListener.resetState()
                             viewModel.getProfilePost(userId, 50, 1)
                         }
+
                         1 -> {
                             tabType = 1
                             if (postList.isNotEmpty()) {
@@ -138,6 +152,13 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
             })
         }
         observeData()
+    }
+
+    private fun handleOnStoryClick(position: Int) {
+        if (position == 0) {
+            val fragment = CreateStoryFolderFragment.newInstance()
+            fragment.show(supportFragmentManager, "CreateStoryBottomDialog")
+        }
     }
 
     private fun observeData() = with(viewModel) {

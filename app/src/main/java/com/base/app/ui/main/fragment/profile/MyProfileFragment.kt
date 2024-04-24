@@ -17,6 +17,7 @@ import com.base.app.R
 import com.base.app.base.fragment.BaseFragment
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.models.story.StoryModel
 import com.base.app.databinding.FragmentMyProfileBinding
 import com.base.app.ui.add_post.PostActivity
 import com.base.app.ui.add_video_post.AddVideoActivity
@@ -24,21 +25,25 @@ import com.base.app.ui.edit_profile.EditProfileActivity
 import com.base.app.ui.follow.FollowerActivity
 import com.base.app.ui.main.MainViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
+import com.base.app.ui.main.fragment.profile.adapter.StoryPostAdapter
 import com.base.app.ui.profile_detail_post.PostDetailActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostAdapter.iCallBack,SwipeRefreshLayout.OnRefreshListener {
+class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostAdapter.iCallBack,
+    SwipeRefreshLayout.OnRefreshListener {
 
     private val viewModel by viewModels<ProfileViewModel>()
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var endlessRecyclerViewScrollListener: EndlessRecyclerViewScrollListener
     private lateinit var profileAdapter: ProfilePostAdapter
+    private lateinit var storyPostAdapter: StoryPostAdapter
     private var postList = ArrayList<PostContent>()
     private var idKey: String = ""
     private var tabType: Int = 0
+    private var listOfStory = arrayListOf<StoryModel>()
 
     companion object {
         fun newInstance(): MyProfileFragment {
@@ -55,7 +60,6 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         if (postList.isNotEmpty()) {
             postList.clear()
         }
-        Log.d("CheckHere", "Yeah")
         viewModel.getRemoteUserInformation(idKey)
         if (tabType == 0) {
             viewModel.getProfilePost(idKey, 20, 1)
@@ -66,12 +70,14 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
     }
 
     override fun initView() {
+        listOfStory.add(StoryModel(1, null, null, null))
         binding.swipeMyProfile.setOnRefreshListener(this@MyProfileFragment)
         viewModel.getProfilePost(idKey, 20, 1)
         binding.rcvProfile.layoutManager =
             GridLayoutManager(requireContext(), 3)
         binding.rcvProfile.setHasFixedSize(true)
         profileAdapter = ProfilePostAdapter(requireContext(), postList, this)
+        storyPostAdapter = StoryPostAdapter(::handleOnStoryClick)
         binding.rcvProfile.adapter = profileAdapter
         endlessRecyclerViewScrollListener = object : EndlessRecyclerViewScrollListener(
             binding.rcvProfile.layoutManager as LinearLayoutManager
@@ -88,6 +94,15 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         }
         binding.rcvProfile.addOnScrollListener(endlessRecyclerViewScrollListener)
         viewModel.getKey(true)
+
+        with(binding) {
+            listOfStory.apply {
+                layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = storyPostAdapter
+            }
+        }
+        storyPostAdapter.submitList(listOfStory.toList())
     }
 
     override fun initListener() {
@@ -99,6 +114,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                     R.id.postVideo -> {
                         startActivity(Intent(requireContext(), AddVideoActivity::class.java))
                     }
+
                     R.id.postImage -> {
                         val intent = Intent(requireContext(), PostActivity::class.java)
                         intent.putExtra("from", "home")
@@ -149,6 +165,7 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
                         endlessRecyclerViewScrollListener.resetState()
                         viewModel.getProfilePost(idKey, 50, 1)
                     }
+
                     1 -> {
                         tabType = 1
                         if (postList.isNotEmpty()) {
@@ -271,6 +288,10 @@ class MyProfileFragment : BaseFragment<FragmentMyProfileBinding>(), ProfilePostA
         intent.putExtra("imagePosition", position)
         startActivity(intent)
 
+    }
+
+    private fun handleOnStoryClick(position: Int) {
+        Log.d("CheckStoryClick", "Yeah $position")
     }
 
     override fun onRefresh() {

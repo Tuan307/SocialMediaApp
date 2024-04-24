@@ -70,7 +70,8 @@ class AllExploreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshList
                     image = data.imageUrl.toString(),
                     type = 0,
                     userName = data.userName.toString(),
-                    groupMember = null
+                    groupMember = null,
+                    url = null
                 )
             })
             userAdapter.submitList(userList.toList())

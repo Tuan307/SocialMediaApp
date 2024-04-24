@@ -92,7 +92,7 @@ data class PostUserID(
     @SerializedName("lastOnline")
     val lastOnline: String?,
     @SerializedName("isBlock")
-    val isBlock: Boolean
+    val isBlock: Boolean?
 )
 
 @Parcelize

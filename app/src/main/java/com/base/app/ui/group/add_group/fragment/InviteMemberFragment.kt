@@ -110,6 +110,23 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
             })
         }
         searchUserResponse.observe(viewLifecycleOwner) {
+            inviteList.clear()
+            inviteList.addAll(it.map { data ->
+                User(
+                    userId = data.userId.toString(),
+                    userName = data.userName.toString(),
+                    fullName = data.fullName.toString(),
+                    imageUrl = data.imageUrl.toString(),
+                    bio = data.bio,
+                    email = data.email,
+                    latitude = data.latitude ?: 0.0,
+                    longitude = data.longitude ?:0.0,
+                    hasChosen = data.hasChosen ?: false,
+                    lastOnline = data.lastOnline,
+                    isBlock = data.isBlock,
+                    userInterestProfiles = null
+                )
+            })
             inviteMemberAdapter.submitList(it.toList())
         }
         inviteUserResponse.observe(viewLifecycleOwner) {
@@ -118,19 +135,21 @@ class InviteMemberFragment : Fragment(), InviteMemberAdapter.OnInvite {
     }
 
     override fun onInviteClick(position: Int) {
-        val user = inviteList[position]
-        viewModel.inviteMember(
-            CreateGroupInvitationRequest(
-                groupId.toLong(),
-                Calendar.getInstance().time.time.toString(),
-                "Mời bạn tham gia nhóm $groupName",
-                user.userId.toString(),
-                "invite",
-                viewModel.firebaseUser?.uid.toString(),
+        if(inviteList.isNotEmpty()){
+            val user = inviteList[position]
+            viewModel.inviteMember(
+                CreateGroupInvitationRequest(
+                    groupId.toLong(),
+                    Calendar.getInstance().time.time.toString(),
+                    "Mời bạn tham gia nhóm $groupName",
+                    user.userId.toString(),
+                    "invite",
+                    viewModel.firebaseUser?.uid.toString(),
+                )
             )
-        )
-        val check = inviteList[position].hasChosen
-        inviteList[position].hasChosen = !check!!
-        inviteMemberAdapter.submitList(inviteList.toList())
+            val check = inviteList[position].hasChosen
+            inviteList[position].hasChosen = !check!!
+            inviteMemberAdapter.submitList(inviteList.toList())
+        }
     }
 }

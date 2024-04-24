@@ -33,7 +33,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     }
 
     override fun initListener() {
-        binding.apply {
+        with(binding) {
             imgBack.setOnClickListener {
                 finish()
             }

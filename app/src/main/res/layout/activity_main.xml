@@ -11,7 +11,7 @@
         android:orientation="vertical"
         tools:context=".ui.main.MainActivity">
 
-        <com.base.app.ui.custom.ViewPagerWithoutSwipe
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/main_view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"

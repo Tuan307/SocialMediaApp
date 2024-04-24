@@ -1,5 +1,6 @@
 package com.base.app.base.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.base.app.base.network.BaseNetworkException
@@ -15,7 +16,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
@@ -96,9 +100,11 @@ abstract class BaseViewModel : ViewModel() {
             is BaseNetworkException -> {
                 baseNetworkException.postValue(Event(e))
             }
+
             is NetworkErrorException -> {
                 networkException.postValue(Event(e))
             }
+
             else -> {
                 val unknowException = BaseNetworkException()
                 unknowException.mainMessage = e.message ?: "Something went wrong"
@@ -107,6 +113,42 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
+    fun uploadImageToFireBaseStorage(
+        uri: Uri?,
+        path: String?,
+        description: String?,
+        viewModelScopePatcher: CoroutineScope,
+        onSuccessUploaded: (serverUrlPath: String) -> Unit,
+        onErrorUploaded: (error: String) -> Unit,
+    ) {
+        if (uri != null && path != null) {
+            viewModelScopePatcher.launch(Dispatchers.IO) {
+                val postId = databaseReference.push().key.toString()
+                val ref = storageRef.child("new_posts").child(
+                    System.currentTimeMillis().toString() + "." +
+                            path
+                )
+                uploadTask = ref.putFile(uri)
+                uploadTask!!.continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                    ref.downloadUrl
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUri = task.result.toString()
+                        onSuccessUploaded(downloadUri)
+                    } else {
+                        onErrorUploaded(task.exception?.message.toString())
+                    }
+                }.addOnFailureListener {
+                    onErrorUploaded(it.message.toString())
+                }
+            }
+        }
+    }
 
     open fun fetchData() {
 

@@ -48,13 +48,14 @@ class GroupActivity : AppCompatActivity(), GroupScreenListAdapter.OnGroupScreenT
     }
 
     private fun initViewPagerFragment() = with(binding) {
-        mPagerAdapter = PagerFragmentAdapter(supportFragmentManager)
+        mPagerAdapter = PagerFragmentAdapter(this@GroupActivity)
         //add all fragment in main
         mPagerAdapter.addFragment(GroupForYouFragment.newInstance())
         mPagerAdapter.addFragment(GroupYourGroupFragment.newInstance())
         mPagerAdapter.addFragment(ExploreGroupFragment.newInstance())
         groupFragmentContainer.adapter = mPagerAdapter
-        groupFragmentContainer.offscreenPageLimit = mPagerAdapter.count
+        groupFragmentContainer.isUserInputEnabled = false
+        groupFragmentContainer.offscreenPageLimit = mPagerAdapter.itemCount
         groupFragmentContainer.currentItem = 0
     }
 

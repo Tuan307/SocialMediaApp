@@ -1,12 +1,11 @@
 package com.base.app.base.fragment
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
-import java.util.*
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class PagerFragmentAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class PagerFragmentAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
     private val fragmentList: MutableList<Fragment> =
         ArrayList()
     private val fragmentTitleList: MutableList<String> =
@@ -26,19 +25,11 @@ class PagerFragmentAdapter(fragmentManager: FragmentManager) : FragmentStatePage
         fragmentTitleList.add(title)
     }
 
-    override fun getItem(position: Int): Fragment {
-        return fragmentList[position]
-    }
-
-    override fun getCount(): Int {
+    override fun getItemCount(): Int {
         return fragmentList.size
     }
 
-    override fun getPageTitle(position: Int): String? {
-        return fragmentTitleList[position]
-    }
-
-    override fun getItemPosition(`object`: Any): Int {
-        return PagerAdapter.POSITION_NONE
+    override fun createFragment(position: Int): Fragment {
+        return fragmentList[position]
     }
 }

@@ -97,6 +97,23 @@ class InviteMemberActivity : AppCompatActivity(), InviteMemberAdapter.OnInvite {
             })
         }
         searchUserResponse.observe(this@InviteMemberActivity) {
+            inviteList.clear()
+            inviteList.addAll(it.map { data ->
+                User(
+                    userId = data.userId.toString(),
+                    userName = data.userName.toString(),
+                    fullName = data.fullName.toString(),
+                    imageUrl = data.imageUrl.toString(),
+                    bio = data.bio,
+                    email = data.email,
+                    latitude = data.latitude ?: 0.0,
+                    longitude = data.longitude ?:0.0,
+                    hasChosen = data.hasChosen ?: false,
+                    lastOnline = data.lastOnline,
+                    isBlock = data.isBlock,
+                    userInterestProfiles = null
+                )
+            })
             inviteMemberAdapter.submitList(it.toList())
         }
         inviteUserResponse.observe(this@InviteMemberActivity) {
