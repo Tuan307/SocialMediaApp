@@ -1,11 +1,5 @@
 package com.base.app.data.apis
 
-import com.base.app.data.models.location.GetLocationResponse
-import com.base.app.data.models.user.BaseApiResponse
-import com.base.app.data.models.user.User
-import com.base.app.data.models.user.SearchUserResponse
-import com.base.app.data.models.user.UserProfileResponseResult
-import com.base.app.data.models.user.UserUpdateProfileResponse
 import com.base.app.data.models.group.request.CreateGroupInvitationRequest
 import com.base.app.data.models.group.request.CreateGroupPostRequest
 import com.base.app.data.models.group.request.CreateGroupRequest
@@ -26,7 +20,9 @@ import com.base.app.data.models.interest.InterestResponse
 import com.base.app.data.models.interest.UpdateInterestResponse
 import com.base.app.data.models.interest.request.AddUserInterestRequest
 import com.base.app.data.models.interest.response.AddInterestResponse
+import com.base.app.data.models.location.GetLocationResponse
 import com.base.app.data.models.request.AddNotificationRequest
+import com.base.app.data.models.request.AddStoryFolderRequest
 import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
 import com.base.app.data.models.request.RegisterRequest
@@ -43,6 +39,13 @@ import com.base.app.data.models.response.post.GetAllSavedPostResponse
 import com.base.app.data.models.response.post.ImageUserProfilePost
 import com.base.app.data.models.response.post.PostResponse
 import com.base.app.data.models.response.post.SavedPostResponse
+import com.base.app.data.models.story.AddStoryFolderResponse
+import com.base.app.data.models.story.StoryFolderResponse
+import com.base.app.data.models.user.BaseApiResponse
+import com.base.app.data.models.user.SearchUserResponse
+import com.base.app.data.models.user.User
+import com.base.app.data.models.user.UserProfileResponseResult
+import com.base.app.data.models.user.UserUpdateProfileResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -292,4 +295,14 @@ interface APIService {
 
     @GET("city/search")
     suspend fun searchForCity(@Query("keyword") keyword: String): Response<GetLocationResponse>
+
+    @GET("story")
+    suspend fun getAllStoryFolder(): StoryFolderResponse
+
+    @POST("story")
+    suspend fun addStoryFolder(@Body body: AddStoryFolderRequest): Response<AddStoryFolderResponse>
+
+    @DELETE("story/delete/{id}")
+    suspend fun deleteStoryFolder(@Path("id") id: Int): Response<BaseApiResponse>
+
 }

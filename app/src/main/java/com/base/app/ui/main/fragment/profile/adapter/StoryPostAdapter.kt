@@ -22,12 +22,12 @@ class StoryPostAdapter(
     inner class ViewHolder(val binding: LayoutItemStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: StoryModel) = with(binding) {
-            if (absoluteAdapterPosition == currentList.size - 1) {
+            if (absoluteAdapterPosition == 0) {
                 textName.text = "Thêm mới +"
                 imageStory.setImageResource(R.drawable.ic_add_chat_photo)
             } else {
                 textName.text = data.name
-                Glide.with(root.context).load(data.imageUrl).into(imageStory)
+                Glide.with(root.context).load(data.folderAvatar).into(imageStory)
             }
             imageStory.setOnClickListener {
                 onStoryClick(absoluteAdapterPosition)

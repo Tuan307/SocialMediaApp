@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.base.app.R
+import com.base.app.common.EventObserver
 import com.base.app.common.recycleview_utils.EndlessRecyclerViewScrollListener
 import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.response.post.PostContent
@@ -49,12 +50,13 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
         saveShare = AppPreferencesHelper(this@ProfileActivity)
         val intent = intent
         userId = intent.getStringExtra("userId").toString()
+        listOfStories.add(StoryModel(0, null, null, null))
+        viewModel.fetchAllStoryFolders()
         viewModel.getRemoteUserInformation(userId)
         viewModel.getProfilePost(userId, 20, 1)
         viewModel.isFollowing(FollowUserRequest(userId, viewModel.firebaseUser?.uid.toString(), ""))
         viewModel.getFollow(userId, "follow")
         viewModel.getFollow(userId, "follower")
-        listOfStories.add(StoryModel(1, null, null, null))
         storyPostAdapter = StoryPostAdapter(::handleOnStoryClick)
         with(binding) {
             listOfStory.apply {
@@ -62,7 +64,6 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
                     LinearLayoutManager(this@ProfileActivity, LinearLayoutManager.HORIZONTAL, false)
                 adapter = storyPostAdapter
             }
-            storyPostAdapter.submitList(listOfStories)
             imgBackProfile.setOnClickListener {
                 finish()
             }
@@ -267,7 +268,20 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
             profileAdapter.notifyDataSetChanged()
         }
 
+        addStorySuccessfully.observe(this@ProfileActivity, EventObserver {
+            if (it) {
+                listOfStories.clear()
+                listOfStories.add(StoryModel(0, null, null, null))
+                viewModel.fetchAllStoryFolders()
+            }
+        })
+
+        storyFolderResponse.observe(this@ProfileActivity) {
+            listOfStories.addAll(it)
+            storyPostAdapter.submitList(listOfStories.toList())
+        }
     }
+
 
     override fun onResume() {
         super.onResume()

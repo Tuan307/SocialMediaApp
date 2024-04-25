@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.app.CustomApplication.Companion.dataManager
 import com.base.app.base.viewmodel.BaseViewModel
-import com.base.app.data.models.user.User
+import com.base.app.common.Event
 import com.base.app.data.models.request.AddNotificationRequest
 import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.response.FollowUserResponse
@@ -13,19 +13,23 @@ import com.base.app.data.models.response.ListFollowResponse
 import com.base.app.data.models.response.UnFollowUserResponse
 import com.base.app.data.models.response.post.GetAllSavedPostResponse
 import com.base.app.data.models.response.post.PostContent
+import com.base.app.data.models.story.StoryModel
+import com.base.app.data.models.user.User
 import com.base.app.data.repositories.UserRepository
 import com.base.app.data.repositories.notification.NotificationRepository
 import com.base.app.data.repositories.profile.UserProfileRepository
+import com.base.app.data.repositories.story.StoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val repository: UserProfileRepository,
     private val userRepository: UserRepository,
-    private val notificationRepository: NotificationRepository
+    private val notificationRepository: NotificationRepository,
+    private val storyRepository: StoryRepository,
 ) : BaseViewModel() {
 
     private var _followUserResponse: MutableLiveData<FollowUserResponse> = MutableLiveData()
@@ -50,6 +54,21 @@ class ProfileViewModel @Inject constructor(
 
     private var key = MutableLiveData<String?>()
     val getKey = key as LiveData<String?>
+
+    private var _storyFolderResponse: MutableLiveData<List<StoryModel>> = MutableLiveData()
+    val storyFolderResponse: LiveData<List<StoryModel>>
+        get() = _storyFolderResponse
+
+    private var _addStorySuccessfully: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val addStorySuccessfully: LiveData<Event<Boolean>>
+        get() = _addStorySuccessfully
+
+    fun setAddStoryResponse(value: Boolean) {
+        viewModelScope.launch {
+            _addStorySuccessfully.value = Event(value)
+        }
+    }
+
     fun getKey(t: Boolean) {
         if (t) {
             if (dataManager.getString("id") != null) {
@@ -66,6 +85,14 @@ class ProfileViewModel @Inject constructor(
             statusId.postValue(true)
         } else {
             statusId.postValue(false)
+        }
+    }
+
+    fun fetchAllStoryFolders() {
+        viewModelScope.launch {
+            storyRepository.getAllStoryFolder.collect {
+                _storyFolderResponse.value = it.data ?: emptyList()
+            }
         }
     }
 
@@ -151,7 +178,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun addNotifications(profileId: String,userName:String) {
+    fun addNotifications(profileId: String, userName: String) {
         viewModelScope.launch(handler) {
             notificationRepository.addNotification(
                 AddNotificationRequest(

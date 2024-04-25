@@ -10,16 +10,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.base.app.R
 import com.base.app.databinding.FragmentCreateStoryFolderBinding
+import com.base.app.ui.main.fragment.profile.ProfileViewModel
 import com.base.app.ui.utils.FileUtils.getFileExtension
 import com.base.app.ui.utils.FileUtils.openImageFile
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateStoryFolderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentCreateStoryFolderBinding
     private val viewModel by viewModels<CreateStoryFolderViewModel>()
+    private val postActivityViewModel by activityViewModels<ProfileViewModel>()
     private var folderUri: Uri? = null
     private var folderPath: String? = null
     override fun onCreateView(
@@ -40,9 +45,24 @@ class CreateStoryFolderFragment : BottomSheetDialogFragment() {
             imageFolder.setOnClickListener {
                 attachFilePermissionLauncher.launch(ATTACH_FILE_PERMISSION)
             }
+            imageClose.setOnClickListener {
+                dismiss()
+            }
             buttonCreateFolder.setOnClickListener {
                 val name = inputFolderName.text.toString()
                 viewModel.uploadImageToCloud(folderUri, folderPath, name)
+            }
+        }
+        observeData()
+    }
+
+    private fun observeData() = with(viewModel) {
+        addStoryFolderResponse.observe(viewLifecycleOwner) {
+            if (it.data != null) {
+                postActivityViewModel.setAddStoryResponse(true)
+                dismiss()
+            } else {
+                Toast.makeText(requireContext(), it.status?.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
