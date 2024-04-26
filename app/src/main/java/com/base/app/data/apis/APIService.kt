@@ -40,6 +40,7 @@ import com.base.app.data.models.response.post.ImageUserProfilePost
 import com.base.app.data.models.response.post.PostResponse
 import com.base.app.data.models.response.post.SavedPostResponse
 import com.base.app.data.models.story.AddStoryFolderResponse
+import com.base.app.data.models.story.StoryContentModelResponse
 import com.base.app.data.models.story.StoryFolderResponse
 import com.base.app.data.models.user.BaseApiResponse
 import com.base.app.data.models.user.SearchUserResponse
@@ -298,6 +299,9 @@ interface APIService {
 
     @GET("story")
     suspend fun getAllStoryFolder(): StoryFolderResponse
+
+    @GET("story/content")
+    suspend fun getStoryContentFolder(@Query("id") id: Int): StoryContentModelResponse
 
     @POST("story")
     suspend fun addStoryFolder(@Body body: AddStoryFolderRequest): Response<AddStoryFolderResponse>

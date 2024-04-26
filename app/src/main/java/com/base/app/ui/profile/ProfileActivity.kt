@@ -25,6 +25,7 @@ import com.base.app.ui.main.fragment.profile.ProfileViewModel
 import com.base.app.ui.main.fragment.profile.adapter.ProfilePostAdapter
 import com.base.app.ui.main.fragment.profile.adapter.StoryPostAdapter
 import com.base.app.ui.profile_detail_post.PostDetailActivity
+import com.base.app.ui.story.content_story.StoryContentActivity
 import com.base.app.ui.story.create_story_folder.CreateStoryFolderFragment
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
@@ -159,6 +160,10 @@ class ProfileActivity : AppCompatActivity(), ProfilePostAdapter.iCallBack {
         if (position == 0) {
             val fragment = CreateStoryFolderFragment.newInstance()
             fragment.show(supportFragmentManager, "CreateStoryBottomDialog")
+        } else {
+            val intent = Intent(this@ProfileActivity, StoryContentActivity::class.java)
+            intent.putExtra("id", listOfStories[position].id)
+            startActivity(intent)
         }
     }
 

@@ -25,13 +25,14 @@
             android:id="@+id/card_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10"
             android:layout_marginEnd="@dimen/dp10"
             app:cardBackgroundColor="@color/color_search_bar"
             app:cardCornerRadius="@dimen/dp15"
             app:cardElevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/image_detail">
+            app:layout_constraintTop_toTopOf="@+id/image_detail"
+            app:layout_constraintVertical_bias="0.08">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_position"
@@ -43,5 +44,19 @@
                 android:textSize="@dimen/sp15"
                 tools:text="3/5" />
         </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_add_more_content"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:background="@drawable/bg_button"
+            android:text="Thêm tin của bạn"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

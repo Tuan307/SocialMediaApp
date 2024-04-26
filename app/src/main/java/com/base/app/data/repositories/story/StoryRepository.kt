@@ -4,6 +4,7 @@ import com.base.app.base.network.BaseRemoteService
 import com.base.app.base.network.NetworkResult
 import com.base.app.data.apis.APIService
 import com.base.app.data.models.request.AddStoryFolderRequest
+import com.base.app.data.models.story.StoryContentModelResponse
 import com.base.app.data.models.story.StoryFolderResponse
 import com.base.app.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,6 +27,13 @@ class StoryRepository @Inject constructor(
 
     val getAllStoryFolder: Flow<StoryFolderResponse> = flow {
         val result = api.getAllStoryFolder()
+        emit(result)
+    }.catch {
+        throw it.cause ?: it
+    }.flowOn(dispatcher)
+
+    fun getAllStoryContentFolder(id: Int): Flow<StoryContentModelResponse> = flow {
+        val result = api.getStoryContentFolder(id)
         emit(result)
     }.catch {
         throw it.cause ?: it
