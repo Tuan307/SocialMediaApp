@@ -3,6 +3,7 @@ package com.base.app.data.repositories.story
 import com.base.app.base.network.BaseRemoteService
 import com.base.app.base.network.NetworkResult
 import com.base.app.data.apis.APIService
+import com.base.app.data.models.request.AddStoryContentRequest
 import com.base.app.data.models.request.AddStoryFolderRequest
 import com.base.app.data.models.story.StoryContentModelResponse
 import com.base.app.data.models.story.StoryFolderResponse
@@ -41,6 +42,18 @@ class StoryRepository @Inject constructor(
 
     suspend fun saveStoryFolder(request: AddStoryFolderRequest) = withContext(dispatcher) {
         when (val result = callApi { api.addStoryFolder(request) }) {
+            is NetworkResult.Success -> {
+                result.data
+            }
+
+            is NetworkResult.Error -> {
+                throw result.exception
+            }
+        }
+    }
+
+    suspend fun saveStoryContentFolder(request: AddStoryContentRequest) = withContext(dispatcher) {
+        when (val result = callApi { api.addStoryContentFolder(request) }) {
             is NetworkResult.Success -> {
                 result.data
             }

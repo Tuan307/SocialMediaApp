@@ -1,31 +1,56 @@
 package com.base.app.ui.story.content_story
 
-import android.os.Bundle
+import android.net.Uri
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.base.app.R
+import com.base.app.base.activities.BaseActivity
 import com.base.app.data.models.story.StoryContentModel
 import com.base.app.databinding.ActivityStoryContentBinding
+import com.esafirm.imagepicker.features.registerImagePicker
+import com.esafirm.imagepicker.model.Image
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StoryContentActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityStoryContentBinding
+class StoryContentActivity : BaseActivity<ActivityStoryContentBinding>() {
     private val viewModel by viewModels<StoryContentViewModel>()
     private lateinit var storyContentAdapter: StoryContentAdapter
     private val listOfStoryContent = arrayListOf<StoryContentModel>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(
-            this@StoryContentActivity,
-            R.layout.activity_story_content
-        )
-        setContentView(binding.root)
+    private var imageUri: ArrayList<Uri> = arrayListOf()
+    private var imagePath: ArrayList<String> = arrayListOf()
+    private val showImageList = ArrayList<Uri>()
+    private var storyFolderId = 0
+    private val imagePickerLauncher = registerImagePicker {
+        imagesPicker.clear()
+        imagesPicker.addAll(it)
+        handleImagePicker(imagesPicker)
+    }
+
+    private fun handleImagePicker(data: List<Image>) {
+        if (data.isEmpty()) {
+            showToast(this@StoryContentActivity, "Ban chua chon anh nao")
+        } else {
+            imageUri.clear()
+            imagePath.clear()
+            showImageList.clear()
+            for (i in data.indices) {
+                showImageList.add(data[i].uri)
+                imageUri.add(data[i].uri)
+                imagePath.add(getFileExtension(data[i].uri).toString())
+            }
+            viewModel.uploadStoryContent(storyFolderId, imageUri, imagePath)
+        }
+    }
+
+    override fun getContentLayout(): Int {
+        return R.layout.activity_story_content
+    }
+
+    override fun initView() {
         val intent = intent
+        storyFolderId = intent.getIntExtra("id", 0)
         viewModel.fetchStoryContent(intent.getIntExtra("id", 0))
         storyContentAdapter = StoryContentAdapter(::handleAddStoryContent)
         with(binding) {
@@ -61,7 +86,19 @@ class StoryContentActivity : AppCompatActivity() {
                 finish()
             }
         }
+        registerObserverLoadingEvent(viewModel, this@StoryContentActivity)
+    }
+
+    override fun initListener() {
+    }
+
+    override fun observerLiveData() {
         with(viewModel) {
+            addStoryContentResponse.observe(this@StoryContentActivity) {
+                if (it) {
+                    finish()
+                }
+            }
             storyContentResponse.observe(this@StoryContentActivity) {
                 if (it.isNotEmpty()) {
                     binding.viewPagerImageDetail.offscreenPageLimit = it.size
@@ -74,11 +111,9 @@ class StoryContentActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleAddStoryContent(id: Int) {
-        if (id != -1) {
-
-        } else {
-            Toast.makeText(this@StoryContentActivity, "Error", Toast.LENGTH_SHORT).show()
-        }
+    private fun handleAddStoryContent() {
+        Toast.makeText(this@StoryContentActivity, "Yesa", Toast.LENGTH_SHORT).show()
+        imagePickerLauncher.launch(createConfig(false, 10))
     }
+
 }

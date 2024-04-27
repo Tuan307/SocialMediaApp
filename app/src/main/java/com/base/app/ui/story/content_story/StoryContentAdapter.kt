@@ -21,7 +21,7 @@ import java.net.URL
  * @author tuanpham
  * @since 4/27/2024
  */
-class StoryContentAdapter(private val listener: (id: Int) -> Unit) :
+class StoryContentAdapter(private val listener: () -> Unit) :
     ListAdapter<StoryContentModel, StoryContentAdapter.ViewHolder>(StoryContentDiffUtil) {
 
     inner class ViewHolder(val binding: ItemDetailHomePostBinding) :
@@ -50,7 +50,7 @@ class StoryContentAdapter(private val listener: (id: Int) -> Unit) :
                 imageDetail.visibility = View.GONE
                 buttonAddMoreContent.visibility = View.VISIBLE
                 buttonAddMoreContent.setOnClickListener {
-                    listener(data.id ?: -1)
+                    listener()
                 }
             }
         }

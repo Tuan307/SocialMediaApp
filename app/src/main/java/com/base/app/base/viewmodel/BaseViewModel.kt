@@ -3,6 +3,7 @@ package com.base.app.base.viewmodel
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.base.app.base.network.BaseNetworkException
 import com.base.app.base.network.NetworkErrorException
 import com.base.app.common.Event
@@ -145,6 +146,44 @@ abstract class BaseViewModel : ViewModel() {
                     }
                 }.addOnFailureListener {
                     onErrorUploaded(it.message.toString())
+                }
+            }
+        }
+    }
+
+    fun uploadMultipleImageToFireBaseStorage(
+        uri: List<Uri>,
+        path: List<String>,
+        uploadToBackend: (list: List<String>) -> Unit,
+    ) {
+        showLoading(true)
+        if (uri.isNotEmpty() && path.isNotEmpty()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val updateList = arrayListOf<String>()
+                for (i in uri.indices) {
+                    val ref = storageRef.child("new_posts").child(
+                        System.currentTimeMillis().toString() + "." +
+                                path
+                    )
+                    uploadTask = ref.putFile(uri[i])
+                    uploadTask!!.continueWithTask { task ->
+                        if (!task.isSuccessful) {
+                            task.exception?.let {
+                                throw it
+                            }
+                        }
+                        ref.downloadUrl
+                    }.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val downloadUri = task.result.toString()
+                            updateList.add(downloadUri)
+                            if (i == uri.size - 1) {
+                                uploadToBackend(updateList)
+                            }
+                        }
+                    }.addOnFailureListener {
+                        throw it
+                    }
                 }
             }
         }

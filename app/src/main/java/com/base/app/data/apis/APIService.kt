@@ -22,6 +22,7 @@ import com.base.app.data.models.interest.request.AddUserInterestRequest
 import com.base.app.data.models.interest.response.AddInterestResponse
 import com.base.app.data.models.location.GetLocationResponse
 import com.base.app.data.models.request.AddNotificationRequest
+import com.base.app.data.models.request.AddStoryContentRequest
 import com.base.app.data.models.request.AddStoryFolderRequest
 import com.base.app.data.models.request.FollowUserRequest
 import com.base.app.data.models.request.PostNewsFeedRequest
@@ -305,6 +306,9 @@ interface APIService {
 
     @POST("story")
     suspend fun addStoryFolder(@Body body: AddStoryFolderRequest): Response<AddStoryFolderResponse>
+
+    @POST("story/content")
+    suspend fun addStoryContentFolder(@Body body: AddStoryContentRequest): Response<AddStoryFolderResponse>
 
     @DELETE("story/delete/{id}")
     suspend fun deleteStoryFolder(@Path("id") id: Int): Response<BaseApiResponse>
