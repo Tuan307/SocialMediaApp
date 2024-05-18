@@ -31,7 +31,6 @@
                 app:tabIndicator="@drawable/tab_indicator_bg"
                 app:tabIndicatorGravity="center"
                 app:tabIndicatorHeight="@dimen/dp32"
-                app:tabRippleColor="@android:color/transparent"
                 app:tabSelectedTextColor="@color/colorWhite"
                 app:tabTextAppearance="@style/TabLayout">
 
@@ -42,6 +41,8 @@
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="0dp"
+                    android:checked="true"
+
                     android:layout_height="wrap_content"
                     android:text="@string/str_not_seen" />
 
