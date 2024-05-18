@@ -18,6 +18,9 @@ jobs:
           distribution: 'temurin'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Set up Gradle Wrapper
+        run: |
+            ./gradlew wrapper --gradle-version 7.2
       - name: Install dependencies
         run: ./gradlew dependencies
       - name: Build with Gradle
