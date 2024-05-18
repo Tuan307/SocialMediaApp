@@ -17,7 +17,7 @@ import javax.inject.Inject
 class NewsFeedRepository @Inject constructor(
     private val api: APIService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
-) : BaseRemoteService() {
+) : BaseRemoteService(),NewsRepo {
 
     suspend fun getNewsFeed(pageCount: Int, pageNumber: Int) =
         withContext(dispatcher) {

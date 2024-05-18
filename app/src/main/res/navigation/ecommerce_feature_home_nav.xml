@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ecommerce_feature_home_nav"
+    app:startDestination="@id/shopHomeAllProductFragment">
+
+    <fragment
+        android:id="@+id/shopHomeAllProductFragment"
+        android:name="com.base.app.ui.ecommerce_shop.home_all_product.ShopHomeAllProductFragment"
+        android:label="fragment_shop_home_all_product"
+        tools:layout="@layout/fragment_shop_home_all_product" />
+    <fragment
+        android:id="@+id/shopHomeElectronicDeviceFragment"
+        android:name="com.base.app.ui.ecommerce_shop.home_electronic_device.ShopHomeElectronicDeviceFragment"
+        android:label="fragment_shop_home_electronic_device"
+        tools:layout="@layout/fragment_shop_home_electronic_device" />
+    <fragment
+        android:id="@+id/shopHomeFemaleClotheFragment"
+        android:name="com.base.app.ui.ecommerce_shop.home_female_cloth.ShopHomeFemaleClothFragment"
+        android:label="fragment_shop_home_female_clothe"
+        tools:layout="@layout/fragment_shop_home_female_clothe" />
+    <fragment
+        android:id="@+id/shopHomeMaleClothFragment"
+        android:name="com.base.app.ui.ecommerce_shop.home_male_clothe.ShopHomeMaleClothFragment"
+        android:label="fragment_shop_home_male_cloth"
+        tools:layout="@layout/fragment_shop_home_male_cloth" />
+</navigation>
