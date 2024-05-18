@@ -80,7 +80,7 @@ object NetworkModule {
         }
 
         return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
-            .baseUrl(BuildConfig.DATING_API_URL)
+            .baseUrl(BuildConfig.API_URL)
             .client(okHttpClient)
             .build()
     }
