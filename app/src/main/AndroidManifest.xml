@@ -43,6 +43,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.custom_view_study.CutomsViewActivity"
+            android:exported="true" >
+        </activity>
+        <activity
             android:name=".ui.group.update_group.UpdateGroupActivity"
             android:exported="false">
             <meta-data

@@ -1,0 +1,84 @@
+default_platform(:android)
+
+platform :android do
+
+  before_all do
+            ENV["TELEGRAM_BOT_TOKEN"] = "6913798135:AAGDQ7t5WBWPvv6ld0l81_QfpfF6O9qnnUo"
+            ENV["TELEGRAM_CHAT_ID"] = "-1002075421658"
+  end
+  desc "Build and Distribute Android App"
+    lane :build_and_distribute do |options|
+      build_type = options[:build_type] || 'debug'
+      if build_type.downcase == "debug"
+        build_debug_and_send_to_telegram
+      elsif build_type.downcase == "release"
+        build_release_and_distribute_to_store
+      else
+        UI.error "Invalid build type. Please specify either 'debug' or 'release'."
+      end
+    end
+
+    private_lane :build_debug_and_send_to_telegram do
+      output_dir = "D:\aabfile" # Replace with your desired output directory
+      gradle(task: "clean")
+      gradle(
+        task: "bundle",
+        build_type: "debug",
+        properties: {
+          "android.injected.apksigner.output.dir" => output_dir
+        }
+      )
+      apk_path = File.join(output_dir, "app-debug.aab")
+      UI.message("Debug APK file path: #{apk_path}") # Debugging step to print the path
+      send_to_telegram(apk_path: apk_path)
+    end
+
+    private_lane :build_release_and_distribute_to_store do
+      output_dir = "D:/aabfile" # Replace with your desired output directory
+      gradle(task: "clean")
+      gradle(
+        task: "bundle",
+        build_type: "release",
+        properties: {
+          "android.injected.apksigner.output.dir" => output_dir
+        }
+      )
+      apk_path = File.join(output_dir, "app-release.aab")
+      UI.message("Release APK file path: #{apk_path}") # Debugging step to print the path
+      distribute_to_firebase(apk_path: apk_path)
+      send_release_notification_to_telegram
+    end
+
+    private_lane :send_to_telegram do |options|
+      apk_path = options[:apk_path]
+      UI.message("Sending APK file to Telegram: #{apk_path}") # Debugging step to print the path
+      telegram_token = ENV["TELEGRAM_BOT_TOKEN"]
+      telegram_chat_id = ENV["TELEGRAM_CHAT_ID"]
+      telegram(
+              token: ENV['TELEGRAM_BOT_TOKEN'], # get token from @BotFather
+              chat_id: ENV['TELEGRAM_CHAT_ID'], # https://stackoverflow.com/questions/33858927/how-to-obtain-the-chat-id-of-a-private-telegram-channel
+              text: "Ban build Android: ", # Required
+      )
+      sh("curl -F chat_id=#{telegram_chat_id} -F document=@#{apk_path} https://api.telegram.org/bot#{telegram_token}/sendDocument")
+    end
+
+    private_lane :distribute_to_firebase do |options|
+      apk_path = options[:apk_path]
+      firebase_app_id = ENV["FIREBASE_APP_ID"]
+      firebase_token = ENV["FIREBASE_TOKEN"]
+      firebase_app_distribution(
+        app: firebase_app_id,
+        firebase_cli_token: firebase_token,
+        groups: "your_group_name",
+        release_notes: "Release notes here"
+      )
+    end
+
+    private_lane :send_release_notification_to_telegram do
+      telegram_token = ENV["TELEGRAM_BOT_TOKEN"]
+      telegram_chat_id = ENV["TELEGRAM_CHAT_ID"]
+      message = "A new release has been distributed!"
+      sh("curl -X POST https://api.telegram.org/bot#{telegram_token}/sendMessage -d chat_id=#{telegram_chat_id} -d text=\"#{message}\"")
+    end
+
+  end
